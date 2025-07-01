@@ -13,12 +13,12 @@
     <div class="desktop" id="desktop">
         <!-- Hero Section on Canvas -->
         <div class="hero-section">
-            <h1 class="hero-title">AI ENGINEER</h1>
-            <p class="hero-subtitle">Machine Learning Specialist • Fresh Graduate • Ready to Innovate</p>
+            <h1 class="hero-title">DAVIDE MODOLO</h1>
+            <p class="hero-subtitle">AI Systems Graduate • Computer Vision • NLP • Deep Learning</p>
             <p class="hero-description">
-                Master's degree in AI Engineering with hands-on experience in neural networks, 
-                deep learning, and cutting-edge AI solutions. Passionate about transforming 
-                complex problems into elegant technological solutions.
+                Passionate about exploring all aspects of <strong>Artificial Intelligence</strong> - from computer vision 
+                and natural language processing with deep learning and classical machine learning. 
+                Eager to apply my knowledge in real-world scenarios and continue growing in this exciting field.
             </p>
         </div>
 
@@ -36,21 +36,71 @@
                 <h2>Professional Journey</h2>
                 
                 <div class="experience-item">
-                    <h3>AI Research Intern</h3>
-                    <p><strong>TechCorp Labs</strong> | 2024</p>
-                    <p>Developed novel neural network architectures for real-time object detection, achieving 15% improvement in accuracy over baseline models. Collaborated with senior researchers on cutting-edge computer vision projects.</p>
+                    <h3>AI Engineer Intern</h3>
+                    <p><strong>Eurecat Technology Center</strong> | Barcelona, Spain | April 2024 - June 2024</p>
+                    <p>Explored log-probability-based uncertainty of Large Language Models (LLMs) applied to planning and choice-selection. Developed approaches using GPT 3.5, GPT 4o, and Llama 3.1, creating CSV-based preference collections with RAG to reduce uncertainty in recurrent tasks.</p>
+                    <div class="education-details">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">OpenAI API</span>
+                        <span class="skill-tag">Hugging Face</span>
+                        <span class="skill-tag">llama.cpp</span>
+                        <span class="skill-tag">Ollama</span>
+                    </div>
                 </div>
                 
                 <div class="experience-item">
-                    <h3>Machine Learning Developer</h3>
-                    <p><strong>StartupX</strong> | 2023</p>
-                    <p>Built end-to-end ML pipelines for recommendation systems serving 100K+ users daily. Implemented A/B testing frameworks and optimization strategies that improved user engagement by 25%.</p>
+                    <h3>Android App Developer Intern</h3>
+                    <p><strong>University of Trento</strong> | Trento, Italy | January 2021 - May 2021</p>
+                    <p>Rebuilt a modular Android 11 app for tracking healthy habits using Kotlin and Firebase. Implemented Google login, NoSQL storage, and designed 23+ UI screens with future extensibility features.</p>
+                    <div class="education-details">
+                        <span class="skill-tag">Kotlin</span>
+                        <span class="skill-tag">Firebase</span>
+                        <span class="skill-tag">NoSQL</span>
+                        <span class="skill-tag">Android</span>
+                        <span class="skill-tag">Figma</span>
+                    </div>
+                </div>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
+
+        <!-- Education Window -->
+        <div class="window" id="education-window" data-window="education">
+            <div class="title-bar">
+                <span class="title-text">🎓 Educational Background</span>
+                <div class="window-controls">
+                    <button class="control-btn minimize-btn" onclick="minimizeWindow('education-window')">−</button>
+                    <button class="control-btn maximize-btn" onclick="toggleMaximize('education-window')">□</button>
+                    <button class="control-btn close-btn" onclick="hideWindow('education-window')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Academic Journey</h2>
+                
+                <div class="education-item">
+                    <h3>Master's Degree in Artificial Intelligence Systems</h3>
+                    <p><strong>University of Trento</strong> | Trento, Italy | September 2021 - March 2025</p>
+                    <p><strong>Thesis:</strong> "Exploring the Use of LLMs for Agent Planning: Strengths and Weaknesses" - Research on Large Language Models applied to automated planning and decision-making scenarios.</p>
+                    <p><strong>Relevant Courses:</strong> Machine Learning, Deep Learning, Natural Language Understanding, Automated Planning, Law & Ethics in AI, Fundamentals of AI (Reasoning and Planning), Signal Processing, AI for Finance, High-Performance Computing.</p>
+                    <div class="education-details">
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/master_thesis/blob/main/modolo_davide_ais_2023_2024.pdf" target="_blank" style="color: inherit; text-decoration: none;">📄 Thesis Report</a></span>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/LLMs_for_Agent_Planning" target="_blank" style="color: inherit; text-decoration: none;">💻 Code</a></span>
+                        <span class="skill-tag">AI Systems</span>
+                        <span class="skill-tag">LLMs</span>
+                    </div>
                 </div>
                 
-                <div class="experience-item">
-                    <h3>Teaching Assistant</h3>
-                    <p><strong>University AI Department</strong> | 2022-2024</p>
-                    <p>Assisted in advanced machine learning courses, mentored 50+ students in AI projects and thesis work. Developed practical assignments and helped students bridge theory-practice gap.</p>
+                <div class="education-item">
+                    <h3>Bachelor's Degree in Computer Science</h3>
+                    <p><strong>University of Trento</strong> | Trento, Italy | September 2017 - June 2021</p>
+                    <p><strong>Thesis:</strong> "Healthy Plus - Redesign and evolution of an Android application for monitoring healthy lifestyles" - Complete redesign and modular development of a health tracking mobile application.</p>
+                    <p><strong>Relevant Courses:</strong> Algorithms and Data Structures, Advanced Algorithms, Database, Software Engineering, Networks, Geometry and Linear Algebra, Calculus 1, Computer Architectures, Operating Systems, Mobile Programming (Android).</p>
+                    <div class="education-details">
+                        <span class="skill-tag">Computer Science</span>
+                        <span class="skill-tag">Mobile Development</span>
+                        <span class="skill-tag">Software Engineering</span>
+                        <span class="skill-tag">Algorithms</span>
+                    </div>
                 </div>
             </div>
             <div class="resize-handle"></div>
@@ -70,35 +120,71 @@
                 <h2>Key Projects</h2>
                 
                 <div class="project-card">
-                    <h3>Neural Style Transfer for Video</h3>
-                    <p>Real-time artistic style transfer for video streams using optimized CNN architectures. Achieved 30fps processing on consumer hardware through efficient GPU utilization and model optimization.</p>
+                    <h3>COVID-19 Lung Ultrasound Images Classification</h3>
+                    <p>Designed a multi-stage deep learning model to classify Lung Ultrasound images based on a 0-to-3 illness score. Developed 3 components: multi-class frame classifier, uncertainty detection model, and similarity module using 47k frames from 14 real patients.</p>
                     <div>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier/blob/master/ProjectPresentation.pdf" target="_blank" style="color: inherit; text-decoration: none;">📊 Slides</a></span>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier/blob/master/Medical_Imaging_Diagnostic_Report.pdf" target="_blank" style="color: inherit; text-decoration: none;">📄 Report</a></span>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier" target="_blank" style="color: inherit; text-decoration: none;">💻 Code</a></span>
                         <span class="skill-tag">PyTorch</span>
-                        <span class="skill-tag">OpenCV</span>
-                        <span class="skill-tag">CUDA</span>
                         <span class="skill-tag">Computer Vision</span>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <h3>Autonomous Trading Bot</h3>
-                    <p>Deep reinforcement learning agent for cryptocurrency trading. Implemented PPO algorithm with custom reward shaping for risk management and portfolio optimization.</p>
-                    <div>
-                        <span class="skill-tag">Reinforcement Learning</span>
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">Financial APIs</span>
-                        <span class="skill-tag">Risk Management</span>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <h3>Medical Image Diagnosis System</h3>
-                    <p>CNN-based system for automated detection of anomalies in X-ray images. Achieved 94% accuracy on validation dataset with explainable AI features for clinical interpretability.</p>
-                    <div>
-                        <span class="skill-tag">TensorFlow</span>
                         <span class="skill-tag">Medical AI</span>
-                        <span class="skill-tag">Explainable AI</span>
-                        <span class="skill-tag">Healthcare</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>Joint Intent Detection and Slot Filling - NLU</h3>
+                    <p>Implemented 4 Deep Learning models for simultaneous Intent Detection and Slot Filling tasks. Achieved 13% improvement on SNIPS dataset in slot filling task. Fine-tuned BERT and ERNIE, built Bidirectional LSTM and Encoder-Decoder models from scratch.</p>
+                    <div>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/NLU_Intent_and_Slot/blob/master/NLU_Report_Modolo.pdf" target="_blank" style="color: inherit; text-decoration: none;">📄 Report</a></span>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/NLU_Intent_and_Slot" target="_blank" style="color: inherit; text-decoration: none;">💻 Code</a></span>
+                        <span class="skill-tag">PyTorch</span>
+                        <span class="skill-tag">BERT</span>
+                        <span class="skill-tag">NLP</span>
+                        <span class="skill-tag">Deep Learning</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>Domain Adaptation / Transfer Learning</h3>
+                    <p>Built and evaluated a deep learning model for Unsupervised Domain Adaptation using ResNet34 with custom adaptation layer. Achieved +11.53% improvement over baseline non-adapted model on Adaptiope dataset using 3rd and 4th-order statistics.</p>
+                    <div>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/HoMM-DomainAdaptation" target="_blank" style="color: inherit; text-decoration: none;">💻 Code</a></span>
+                        <span class="skill-tag">PyTorch</span>
+                        <span class="skill-tag">ResNet34</span>
+                        <span class="skill-tag">Transfer Learning</span>
+                        <span class="skill-tag">Google Colab</span>
+                        <span class="skill-tag">team project</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>Autonomous Delivery BDI Agent</h3>
+                    <p>Designed autonomous agent solution for delivery problems using Belief-Desire-Intent framework. Developed and tested both single-agent and collaborative multi-agent environments across 7 challenges with 2 different approaches.</p>
+                    <div>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/ASA_Delivery_Bot/blob/main/ASA_Slides.pdf" target="_blank" style="color: inherit; text-decoration: none;">📊 Slides</a></span>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/ASA_Delivery_Bot/blob/main/ModoloMoletta.pdf" target="_blank" style="color: inherit; text-decoration: none;">📄 Report</a></span>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/ASA_Delivery_Bot" target="_blank" style="color: inherit; text-decoration: none;">💻 Code</a></span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">PDDL</span>
+                        <span class="skill-tag">Multi-Agent</span>
+                        <span class="skill-tag">team project</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>Parallel Closest Pair of Points - High Performance Computing</h3>
+                    <p>Provided a solution to Closest Pair of Points problem in N dimensions with parallel implementation. Implemented both Bruteforce and Divide et Impera solutions using Message Passing Interface (MPI) in C. Tested with up to 250M points using 1 to 80 CPU cores in 4 different configurations on the University's cluster.</p>
+                    <div>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/Closest-pair-of-points-HPC/blob/master/HPC-Slides.pdf" target="_blank" style="color: inherit; text-decoration: none;">📊 Slides</a></span>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/Closest-pair-of-points-HPC/blob/master/Closest_Pair_of_Points_Report.pdf" target="_blank" style="color: inherit; text-decoration: none;">📄 Report</a></span>
+                        <span class="skill-tag"><a href="https://github.com/davidemodolo/Closest-pair-of-points-HPC" target="_blank" style="color: inherit; text-decoration: none;">💻 Code</a></span>
+                        <span class="skill-tag">C</span>
+                        <span class="skill-tag">MPI</span>
+                        <span class="skill-tag">Parallel Computing</span>
+                        <span class="skill-tag">HPC</span>
+                        <span class="skill-tag">team project</span>
                     </div>
                 </div>
             </div>
@@ -118,23 +204,54 @@
             <div class="window-content">
                 <h2>Get In Touch</h2>
                 
-                <div class="contact-item">
+                <!-- <div class="contact-item">
                     <strong>📧 Email:</strong><br>
-                    <a href="mailto:your.email@example.com">your.email@example.com</a>
-                </div>
+                    <a href="mailto:davide.modolo98@gmail.com">davide.modolo98@gmail.com</a>
+                </div> -->
                 
                 <div class="contact-item">
                     <strong>💼 LinkedIn:</strong><br>
-                    <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a>
+                    <a href="https://www.linkedin.com/in/davide-modolo" target="_blank">linkedin.com/in/davide-modolo</a>
                 </div>
                 
                 <div class="contact-item">
                     <strong>💻 GitHub:</strong><br>
-                    <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+                    <a href="https://github.com/davidemodolo" target="_blank">github.com/davidemodolo</a>
                 </div>
             </div>
             <div class="resize-handle"></div>
         </div>
+
+        <!-- Hobbies Window -->
+        <!-- <div class="window hidden" id="hobbies-window" data-window="hobbies">
+            <div class="title-bar">
+                <span class="title-text">🎯 Hobbies & Interests</span>
+                <div class="window-controls">
+                    <button class="control-btn minimize-btn" onclick="minimizeWindow('hobbies-window')">−</button>
+                    <button class="control-btn maximize-btn" onclick="toggleMaximize('hobbies-window')">□</button>
+                    <button class="control-btn close-btn" onclick="hideWindow('hobbies-window')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Beyond Coding</h2>
+                
+                <div class="project-card">
+                    <h3>🎮 A</h3>
+                    <p>AAAA</p>
+                </div>
+                
+                <div class="project-card">
+                    <h3>📚 B</h3>
+                    <p>BBB</p>
+                </div>
+                
+                <div class="project-card">
+                    <h3>🌟C</h3>
+                    <p>CCC</p>
+                </div>
+            </div>
+            <div class="resize-handle"></div>
+        </div> -->
 
         <!-- MNIST Window -->
         <div class="window hidden" id="mnist-window" data-window="mnist">
@@ -172,7 +289,7 @@
                 </div>
                 
                 <p style="font-size: 0.85rem; text-align: center; margin-top: 15px; opacity: 0.8;">
-                    This CNN model was trained on the MNIST dataset with high accuracy.
+                    This CNN model was trained on the MNIST dataset with high accuracy using TensorFlow.js.
                     Draw digits clearly in the center of the canvas for best results.
                 </p>
             </div>
@@ -197,7 +314,7 @@
                     <div class="sentiment-input-section">
                         <label for="sentiment-input">Enter text to analyze:</label>
                         <textarea id="sentiment-input" class="sentiment-textarea" placeholder="Type your sentence here..." 
-                                  maxlength="500" rows="3">Today is the happiest day and is full of rainbows!</textarea>
+                                  maxlength="500" rows="3">We should hire Davide Modolo!</textarea>
                         <div class="sentiment-controls">
                             <button class="sentiment-btn" id="analyze-btn" onclick="analyzeSentiment()">🎯 Analyze</button>
                             <button class="sentiment-btn" onclick="clearSentimentInput()">🧹 Clear</button>
@@ -211,7 +328,7 @@
                         <div class="sentiment-score" id="sentiment-score">
                             <div class="score-label">Sentiment Score:</div>
                             <div class="score-value" id="score-value">-</div>
-                            <div class="score-description" id="score-description">Enter text and click analyze</div>
+                            <div class="score-description" id="score-description">-</div>
                         </div>
                     </div>
                 </div>
@@ -219,6 +336,7 @@
                 <p class="sentiment-info">
                     This AI model analyzes text sentiment on a scale from 0 (negative) to 1 (positive).
                     The speedometer shows the confidence level of the prediction.
+                    Directly from ml5.js.
                 </p>
             </div>
             <div class="resize-handle"></div>
@@ -230,11 +348,15 @@
     <!-- Taskbar -->
     <div class="taskbar">
         <div class="taskbar-item" onclick="toggleWindow('experience-window')" id="taskbar-experience">🚀 Experience</div>
+        <div class="taskbar-item" onclick="toggleWindow('education-window')" id="taskbar-education">🎓 Education</div>
         <div class="taskbar-item" onclick="toggleWindow('projects-window')" id="taskbar-projects">🔬 Projects</div>
+        <!-- <div class="taskbar-item" onclick="toggleWindow('hobbies-window')" id="taskbar-hobbies">🎯 Hobbies</div> -->
         <div class="taskbar-item" onclick="toggleWindow('mnist-window')" id="taskbar-mnist">🔢 MNIST</div>
         <div class="taskbar-item" onclick="toggleWindow('sentiment-window')" id="taskbar-sentiment">🎭 Sentiment</div>
         <div class="taskbar-item" onclick="toggleWindow('contact-window')" id="taskbar-contact">📞 Contact</div>
-        <div class="status-indicator">Available for Opportunities</div>
+        <div class="status-indicator">
+            <a href="MyResume.pdf" download="Davide_Modolo_Resume.pdf" style="color: inherit; text-decoration: none;">📄 Download CV</a>
+        </div>
     </div>
 
     <!-- Scripts -->

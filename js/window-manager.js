@@ -47,6 +47,9 @@ class WindowManager {
                 window.style.top = 'auto';
                 window.classList.remove('fullscreen');
                 
+                // Ensure window is visible in mobile
+                window.classList.add('positioned');
+                
                 // Update maximized state but preserve minimized
                 state.maximized = false;
                 
@@ -58,7 +61,7 @@ class WindowManager {
                 }
             });
         } else {
-            // Desktop layout: restore original positioning
+            // Desktop layout: restore original positioning with new random positions
             this.initializeWindows();
         }
     }
@@ -73,11 +76,12 @@ class WindowManager {
 
     initializeWindows() {
         const defaultSizes = {
-            'experience-window': { width: 500, height: 400 },
-            'projects-window': { width: 550, height: 450 },
+            'experience-window': { width: 560, height: 440 },
+            'education-window': { width: 735, height: 500 },
+            'projects-window': { width: 750, height: 420 },
             'contact-window': { width: 400, height: 280 },
             'mnist-window': { width: 705, height: 600 },
-            'sentiment-window': { width: 650, height: 500 },
+            'sentiment-window': { width: 625, height: 545 },
         };
 
         document.querySelectorAll('.window').forEach(window => {
@@ -85,10 +89,18 @@ class WindowManager {
             const size = defaultSizes[windowId] || { width: 500, height: 400 };
             const position = this.getRandomPosition(size.width, size.height);
             
+            // Ensure absolute positioning is set for desktop
+            if (!this.isMobile) {
+                window.style.position = 'absolute';
+            }
+            
             window.style.left = position.x + 'px';
             window.style.top = position.y + 'px';
             window.style.width = size.width + 'px';
             window.style.height = size.height + 'px';
+            
+            // Add positioned class to make window visible
+            window.classList.add('positioned');
             
             this.windowStates[windowId] = {
                 minimized: window.classList.contains('minimized'),
