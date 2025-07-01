@@ -22,49 +22,6 @@
             </p>
         </div>
 
-        <!-- MNIST Window -->
-        <div class="window hidden" id="mnist-window" data-window="mnist">
-            <div class="title-bar">
-                <span class="title-text">🔢 MNIST Digit Classifier</span>
-                <div class="window-controls">
-                    <button class="control-btn minimize-btn" onclick="minimizeWindow('mnist-window')">−</button>
-                    <button class="control-btn maximize-btn" onclick="toggleMaximize('mnist-window')">□</button>
-                    <button class="control-btn close-btn" onclick="hideWindow('mnist-window')">×</button>
-                </div>
-            </div>
-            <div class="window-content">
-                <h2>Neural Network Digit Recognition</h2>
-                <div class="mnist-status" id="mnist-status">Loading MNIST model...</div>
-                
-                <div class="mnist-container">
-                    <div class="mnist-canvas-section">
-                        <canvas id="mnist-canvas" class="mnist-canvas" width="280" height="280"></canvas>
-                        
-                        <div class="mnist-controls">
-                            <button class="mnist-btn" onclick="classifyDigit()">🔍 Classify</button>
-                            <button class="mnist-btn" onclick="clearMnistCanvas()">🧹 Clear</button>
-                        </div>
-                    </div>
-                    
-                    <div class="mnist-prediction-section">
-                        <div class="mnist-prediction" id="mnist-prediction">
-                            <div style="font-size: 1.5rem; margin-bottom: 15px;">
-                                Predicted Digit: <span style="font-size: 2.5rem; color: var(--primary-green);">-</span>
-                            </div>
-                            <div style="font-size: 0.9rem; margin-bottom: 10px;">All Probabilities:</div>
-                            <div style="font-size: 0.8rem; opacity: 0.7;">Draw a digit and click classify to see results</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <p style="font-size: 0.85rem; text-align: center; margin-top: 15px; opacity: 0.8;">
-                    This CNN model was trained on the MNIST dataset with high accuracy.
-                    Draw digits clearly in the center of the canvas for best results.
-                </p>
-            </div>
-            <div class="resize-handle"></div>
-        </div>
-
         <!-- Experience Window -->
         <div class="window" id="experience-window" data-window="experience">
             <div class="title-bar">
@@ -175,6 +132,49 @@
                     <strong>💻 GitHub:</strong><br>
                     <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
                 </div>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
+
+        <!-- MNIST Window -->
+        <div class="window hidden" id="mnist-window" data-window="mnist">
+            <div class="title-bar">
+                <span class="title-text">🔢 MNIST Digit Classifier</span>
+                <div class="window-controls">
+                    <button class="control-btn minimize-btn" onclick="minimizeWindow('mnist-window')">−</button>
+                    <button class="control-btn maximize-btn" onclick="toggleMaximize('mnist-window')">□</button>
+                    <button class="control-btn close-btn" onclick="hideWindow('mnist-window')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Neural Network Digit Recognition</h2>
+                <div class="mnist-status" id="mnist-status">Loading MNIST model...</div>
+                
+                <div class="mnist-container">
+                    <div class="mnist-canvas-section">
+                        <canvas id="mnist-canvas" class="mnist-canvas" width="280" height="280"></canvas>
+                        
+                        <div class="mnist-controls">
+                            <button class="mnist-btn" onclick="classifyDigit()">🔍 Classify</button>
+                            <button class="mnist-btn" onclick="clearMnistCanvas()">🧹 Clear</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mnist-prediction-section">
+                        <div class="mnist-prediction" id="mnist-prediction">
+                            <div style="font-size: 1.5rem; margin-bottom: 15px;">
+                                Predicted Digit: <span style="font-size: 2.5rem; color: var(--primary-green);">-</span>
+                            </div>
+                            <div style="font-size: 0.9rem; margin-bottom: 10px;">All Probabilities:</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Draw a digit and click classify to see results</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 0.85rem; text-align: center; margin-top: 15px; opacity: 0.8;">
+                    This CNN model was trained on the MNIST dataset with high accuracy.
+                    Draw digits clearly in the center of the canvas for best results.
+                </p>
             </div>
             <div class="resize-handle"></div>
         </div>

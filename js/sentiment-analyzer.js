@@ -224,9 +224,20 @@ function drawSpeedometer(value) {
     }
     
     const ctx = canvas.getContext('2d');
+    
+    // Make canvas responsive
+    const container = canvas.parentElement;
+    const containerWidth = container.clientWidth;
+    const canvasSize = Math.min(containerWidth - 40, 200); // Max 200px, responsive
+    
+    if (canvas.width !== canvasSize || canvas.height !== canvasSize * 0.6) {
+        canvas.width = canvasSize;
+        canvas.height = canvasSize * 0.6;
+    }
+    
     const centerX = canvas.width / 2;
     const centerY = canvas.height - 20;
-    const radius = 80;
+    const radius = Math.min(centerX, centerY) - 20;
     
     // Validate value
     if (isNaN(value) || value < 0 || value > 1) {
@@ -243,7 +254,7 @@ function drawSpeedometer(value) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, Math.PI, 0);
     ctx.strokeStyle = '#333';
-    ctx.lineWidth = 8;
+    ctx.lineWidth = Math.max(4, radius / 20);
     ctx.stroke();
     
     // Draw colored segments
@@ -261,7 +272,7 @@ function drawSpeedometer(value) {
         const endAngle = Math.PI + (segment.end * Math.PI);
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
         ctx.strokeStyle = segment.color;
-        ctx.lineWidth = 8;
+        ctx.lineWidth = Math.max(4, radius / 20);
         ctx.stroke();
     });
     
@@ -277,13 +288,13 @@ function drawSpeedometer(value) {
     ctx.moveTo(centerX, centerY);
     ctx.lineTo(needleX, needleY);
     ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 4;
+    ctx.lineWidth = Math.max(2, radius / 40);
     ctx.lineCap = 'round';
     ctx.stroke();
     
     // Draw center circle
     ctx.beginPath();
-    ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+    ctx.arc(centerX, centerY, Math.max(4, radius / 20), 0, 2 * Math.PI);
     ctx.fillStyle = '#ffffff';
     ctx.fill();
     ctx.strokeStyle = '#333';
@@ -292,7 +303,7 @@ function drawSpeedometer(value) {
     
     // Draw scale labels
     ctx.fillStyle = '#ffffff';
-    ctx.font = '12px Courier New';
+    ctx.font = `${Math.max(10, radius / 8)}px Courier New`;
     ctx.textAlign = 'center';
     ctx.fillText('0', centerX - radius + 10, centerY + 15);
     ctx.fillText('0.5', centerX, centerY - radius + 15);
@@ -300,7 +311,7 @@ function drawSpeedometer(value) {
     
     // Draw title
     ctx.fillStyle = '#00ff88';
-    ctx.font = '14px Courier New';
+    ctx.font = `${Math.max(12, radius / 7)}px Courier New`;
     ctx.fillText('Sentiment Score', centerX, 25);
 }
 
@@ -333,9 +344,20 @@ function initializeSpeedometer() {
     }
     
     const ctx = canvas.getContext('2d');
+    
+    // Make canvas responsive
+    const container = canvas.parentElement;
+    const containerWidth = container.clientWidth;
+    const canvasSize = Math.min(containerWidth - 40, 200); // Max 200px, responsive
+    
+    if (canvas.width !== canvasSize || canvas.height !== canvasSize * 0.6) {
+        canvas.width = canvasSize;
+        canvas.height = canvasSize * 0.6;
+    }
+    
     const centerX = canvas.width / 2;
     const centerY = canvas.height - 20;
-    const radius = 80;
+    const radius = Math.min(centerX, centerY) - 20;
     
     console.log('Initializing speedometer'); // Debug log
     
@@ -346,7 +368,7 @@ function initializeSpeedometer() {
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, Math.PI, 0);
     ctx.strokeStyle = '#333';
-    ctx.lineWidth = 8;
+    ctx.lineWidth = Math.max(4, radius / 20);
     ctx.stroke();
     
     // Draw colored segments (faded)
@@ -364,13 +386,13 @@ function initializeSpeedometer() {
         const endAngle = Math.PI + (segment.end * Math.PI);
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
         ctx.strokeStyle = segment.color;
-        ctx.lineWidth = 6;
+        ctx.lineWidth = Math.max(3, radius / 25);
         ctx.stroke();
     });
     
     // Draw center circle
     ctx.beginPath();
-    ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+    ctx.arc(centerX, centerY, Math.max(4, radius / 20), 0, 2 * Math.PI);
     ctx.fillStyle = '#666';
     ctx.fill();
     ctx.strokeStyle = '#333';
@@ -379,7 +401,7 @@ function initializeSpeedometer() {
     
     // Draw scale labels
     ctx.fillStyle = '#ffffff';
-    ctx.font = '12px Courier New';
+    ctx.font = `${Math.max(10, radius / 8)}px Courier New`;
     ctx.textAlign = 'center';
     ctx.fillText('0', centerX - radius + 10, centerY + 15);
     ctx.fillText('0.5', centerX, centerY - radius + 15);
@@ -387,7 +409,7 @@ function initializeSpeedometer() {
     
     // Draw title
     ctx.fillStyle = '#00ff88';
-    ctx.font = '14px Courier New';
+    ctx.font = `${Math.max(12, radius / 7)}px Courier New`;
     ctx.fillText('Sentiment Score', centerX, 25);
 }
 

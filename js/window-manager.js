@@ -5,12 +5,62 @@ class WindowManager {
         this.dragData = null;
         this.resizeData = null;
         this.windowStates = {};
+        this.isMobile = this.detectMobile();
         this.init();
+    }
+
+    detectMobile() {
+        return window.innerWidth <= 768;
     }
 
     init() {
         this.setupEventListeners();
         this.initializeWindows();
+        this.handleResponsiveLayout();
+    }
+
+    handleResponsiveLayout() {
+        // Listen for window resize to handle orientation changes
+        window.addEventListener('resize', () => {
+            const wasMobile = this.isMobile;
+            this.isMobile = this.detectMobile();
+            
+            // If switching between mobile and desktop, reinitialize
+            if (wasMobile !== this.isMobile) {
+                this.reinitializeForLayout();
+            }
+        });
+    }
+
+    reinitializeForLayout() {
+        if (this.isMobile) {
+            // Mobile layout: adjust window styles for stacking
+            document.querySelectorAll('.window').forEach(window => {
+                const windowId = window.id;
+                const state = this.windowStates[windowId];
+                
+                // Reset window styles for mobile (but preserve minimized state)
+                window.style.position = 'static';
+                window.style.width = 'calc(100% - 20px)';
+                window.style.height = 'auto';
+                window.style.left = 'auto';
+                window.style.top = 'auto';
+                window.classList.remove('fullscreen');
+                
+                // Update maximized state but preserve minimized
+                state.maximized = false;
+                
+                // Show hidden windows on mobile (except explicitly hidden ones)
+                if (state.hidden && !window.hasAttribute('data-keep-hidden')) {
+                    window.classList.remove('hidden');
+                    state.hidden = false;
+                    this.updateTaskbar(windowId, false);
+                }
+            });
+        } else {
+            // Desktop layout: restore original positioning
+            this.initializeWindows();
+        }
     }
 
     setupEventListeners() {
@@ -104,6 +154,12 @@ class WindowManager {
     }
 
     makeWindowInteractive(window) {
+        // Skip drag/resize setup for mobile
+        if (this.isMobile) {
+            window.addEventListener('mousedown', () => this.setActiveWindow(window));
+            return;
+        }
+
         const titleBar = window.querySelector('.title-bar');
         const resizeHandle = window.querySelector('.resize-handle');
         
@@ -123,6 +179,7 @@ class WindowManager {
 
     startDrag(e) {
         if (e.target.classList.contains('control-btn')) return;
+        if (this.isMobile) return; // Disable dragging on mobile
         
         const window = e.target.closest('.window');
         if (this.windowStates[window.id].maximized || this.windowStates[window.id].minimized) return;
@@ -157,6 +214,8 @@ class WindowManager {
     }
 
     startResize(e) {
+        if (this.isMobile) return; // Disable resizing on mobile
+        
         const window = e.target.closest('.window');
         if (this.windowStates[window.id].maximized || this.windowStates[window.id].minimized) return;
         

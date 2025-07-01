@@ -375,4 +375,214 @@ a:hover { color: var(--white); border-bottom-color: var(--white); text-shadow: 0
     .mnist-prediction-section, .sentiment-input-section, .sentiment-result-section { width: 100%; min-width: unset; }
     .mnist-prediction { min-height: 150px; text-align: center; }
     .speedometer-container { margin-bottom: 15px; }
+    
+    /* Mobile-specific overrides */
+    body {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .desktop {
+        height: auto;
+        min-height: 100vh;
+        padding-bottom: 120px; /* Extra space to ensure collapsed windows stay above taskbar */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Hero section becomes top section on mobile */
+    .hero-section {
+        position: static;
+        transform: none;
+        padding: 40px 20px;
+        background: rgba(0, 20, 40, 0.8);
+        border-bottom: 3px solid var(--primary-green);
+        margin-bottom: 20px;
+        z-index: 1;
+        pointer-events: auto;
+        order: 0;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero-description {
+        font-size: 0.9rem;
+        max-width: none;
+    }
+    
+    /* Windows become cards in vertical stack */
+    .window {
+        position: static !important;
+        width: calc(100% - 20px) !important;
+        max-width: none !important;
+        min-width: unset !important;
+        height: auto !important;
+        min-height: unset !important;
+        margin: 10px auto !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        z-index: 1 !important;
+        order: 1;
+        display: block !important; /* Override hidden class on mobile */
+    }
+    
+    .window.hidden {
+        display: none !important; /* Keep hidden behavior for explicitly hidden windows */
+    }
+    
+    .window.minimized {
+        height: 50px !important;
+        min-height: 50px !important;
+        overflow: hidden !important;
+        margin-bottom: 10px;
+    }
+    
+    .window.minimized .window-content {
+        display: none;
+    }
+    
+    .window.fullscreen {
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        position: fixed !important;
+        z-index: 1000 !important;
+    }
+    
+    /* Disable dragging and resizing on mobile */
+    .title-bar {
+        cursor: default;
+    }
+    
+    .resize-handle {
+        display: none;
+    }
+    
+    /* Window controls remain functional */
+    .window-controls {
+        pointer-events: auto;
+    }
+    
+    .control-btn {
+        pointer-events: auto;
+        cursor: pointer;
+    }
+    
+    /* Taskbar adjustments for mobile */
+    .taskbar {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 60px;
+        padding: 10px;
+        gap: 8px;
+        justify-content: center;
+    }
+    
+    .taskbar-item {
+        flex: 0 0 auto;
+        padding: 8px 12px;
+        font-size: 12px;
+        min-width: 80px;
+        text-align: center;
+    }
+    
+    .status-indicator {
+        flex: 1 0 100%;
+        text-align: center;
+        margin: 5px 0 0 0;
+        font-size: 10px;
+    }
+    
+    /* Mobile-specific content adjustments */
+    .window-content {
+        padding: 15px;
+    }
+    
+    /* MNIST canvas adjustments for mobile */
+    .mnist-canvas {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Sentiment speedometer adjustments */
+    #sentiment-speedometer {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .speedometer-container {
+        padding: 15px;
+    }
+    
+    /* Text adjustments for mobile */
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .project-card, .experience-item {
+        margin: 10px 0;
+        padding: 12px;
+    }
+    
+    /* Better touch targets */
+    .taskbar-item,
+    .control-btn,
+    .mnist-btn,
+    .sentiment-btn {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero-description {
+        font-size: 0.85rem;
+    }
+    
+    .window {
+        margin: 5px auto !important;
+        width: calc(100% - 10px) !important;
+    }
+    
+    .window-content {
+        padding: 10px;
+    }
+    
+    .taskbar {
+        padding: 5px;
+        gap: 5px;
+    }
+    
+    .taskbar-item {
+        padding: 6px 8px;
+        font-size: 10px;
+        min-width: 70px;
+    }
 }
