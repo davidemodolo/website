@@ -81,7 +81,7 @@ class MnistClassifier {
     clearCanvas() {
         this.ctx.fillStyle = 'white';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        document.getElementById('mnist-prediction').innerHTML = 'Draw a digit (0-9) and click Classify!';
+        this.resetPredictionDisplay();
     }
 
     async loadModel() {
@@ -89,10 +89,95 @@ class MnistClassifier {
             document.getElementById('mnist-status').innerText = 'Loading MNIST model...';
             this.model = await tf.loadLayersModel('./mnist-model.json');
             document.getElementById('mnist-status').innerText = 'Model loaded successfully! Ready to classify digits.';
+            this.initializePredictionDisplay();
             console.log('MNIST model loaded successfully');
+            this.inspectModel(); // Debug the model structure
         } catch (error) {
             console.error('Error loading MNIST model:', error);
             document.getElementById('mnist-status').innerText = 'Error loading model. Please ensure mnist-model.json and mnist-model.weights.bin are in the same directory.';
+        }
+    }
+
+    initializePredictionDisplay() {
+        let html = `
+            <div id="predicted-digit" style="font-size: 1.5rem; margin-bottom: 15px;">
+                Predicted Digit: <span id="digit-result" style="font-size: 2.5rem; color: var(--primary-green);">-</span>
+            </div>
+            <div style="font-size: 0.9rem; margin-bottom: 10px;">All Probabilities:</div>
+        `;
+        
+        // Create all digit rows with empty bars
+        for (let i = 0; i < 10; i++) {
+            html += `
+                <div class="prediction-item" style="margin: 4px 0; display: flex; align-items: center; gap: 10px;">
+                    <span id="digit-${i}" style="color: var(--primary-yellow); font-weight: normal; min-width: 15px;">
+                        ${i}
+                    </span>
+                    <div style="flex: 1; display: flex; align-items: center; gap: 8px;">
+                        <div class="confidence-bar" style="flex: 1;">
+                            <div id="confidence-fill-${i}" class="confidence-fill" style="width: 0%;"></div>
+                        </div>
+                        <span id="percentage-${i}" style="font-size: 0.8rem; min-width: 35px; text-align: right;">0.0%</span>
+                    </div>
+                </div>
+            `;
+        }
+        
+        document.getElementById('mnist-prediction').innerHTML = html;
+    }
+
+    resetPredictionDisplay() {
+        // Reset predicted digit
+        const digitResult = document.getElementById('digit-result');
+        if (digitResult) {
+            digitResult.textContent = '-';
+        }
+        
+        // Reset all bars and percentages
+        for (let i = 0; i < 10; i++) {
+            const digitLabel = document.getElementById(`digit-${i}`);
+            const confidenceFill = document.getElementById(`confidence-fill-${i}`);
+            const percentage = document.getElementById(`percentage-${i}`);
+            
+            if (digitLabel) {
+                digitLabel.style.color = 'var(--primary-yellow)';
+                digitLabel.style.fontWeight = 'normal';
+            }
+            if (confidenceFill) {
+                confidenceFill.style.width = '0%';
+            }
+            if (percentage) {
+                percentage.textContent = '0.0%';
+            }
+        }
+    }
+
+    updatePredictionDisplay(predictedDigit, probabilities) {
+        // Update predicted digit
+        const digitResult = document.getElementById('digit-result');
+        if (digitResult) {
+            digitResult.textContent = predictedDigit;
+        }
+        
+        // Update all bars and percentages
+        for (let i = 0; i < 10; i++) {
+            const prob = (probabilities[i] * 100).toFixed(1);
+            const isMax = i === predictedDigit;
+            
+            const digitLabel = document.getElementById(`digit-${i}`);
+            const confidenceFill = document.getElementById(`confidence-fill-${i}`);
+            const percentage = document.getElementById(`percentage-${i}`);
+            
+            if (digitLabel) {
+                digitLabel.style.color = isMax ? 'var(--primary-green)' : 'var(--primary-yellow)';
+                digitLabel.style.fontWeight = isMax ? 'bold' : 'normal';
+            }
+            if (confidenceFill) {
+                confidenceFill.style.width = `${prob}%`;
+            }
+            if (percentage) {
+                percentage.textContent = `${prob}%`;
+            }
         }
     }
 
@@ -132,9 +217,6 @@ class MnistClassifier {
             <div style="font-size: 1.5rem; margin-bottom: 15px;">
                 Predicted Digit: <span style="font-size: 2.5rem; color: var(--primary-green);">${predictedDigit}</span>
             </div>
-            <div style="font-size: 1rem; margin-bottom: 15px;">
-                Confidence: ${confidence}%
-            </div>
             <div style="font-size: 0.9rem;">All Probabilities:</div>
         `;
         
@@ -143,15 +225,15 @@ class MnistClassifier {
             const prob = (probabilities[i] * 100).toFixed(1);
             const isMax = i === predictedDigit;
             html += `
-                <div class="prediction-item" style="margin: 2px 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: ${isMax ? 'var(--primary-green)' : 'var(--primary-yellow)'}; font-weight: ${isMax ? 'bold' : 'normal'};">
-                            ${i}
-                        </span>
-                        <span style="font-size: 0.8rem;">${prob}%</span>
-                    </div>
-                    <div class="confidence-bar">
-                        <div class="confidence-fill" style="width: ${prob}%;"></div>
+                <div class="prediction-item" style="margin: 4px 0; display: flex; align-items: center; gap: 10px;">
+                    <span style="color: ${isMax ? 'var(--primary-green)' : 'var(--primary-yellow)'}; font-weight: ${isMax ? 'bold' : 'normal'}; min-width: 15px;">
+                        ${i}
+                    </span>
+                    <div style="flex: 1; display: flex; align-items: center; gap: 8px;">
+                        <div class="confidence-bar" style="flex: 1;">
+                            <div class="confidence-fill" style="width: ${prob}%;"></div>
+                        </div>
+                        <span style="font-size: 0.8rem; min-width: 35px; text-align: right;">${prob}%</span>
                     </div>
                 </div>
             `;
@@ -167,7 +249,11 @@ class MnistClassifier {
         }
 
         try {
-            document.getElementById('mnist-prediction').innerHTML = 'Classifying...';
+            // Show loading state on predicted digit only
+            const digitResult = document.getElementById('digit-result');
+            if (digitResult) {
+                digitResult.textContent = '...';
+            }
             
             const inputData = this.preprocessImage();
             const inputTensor = tf.tensor2d([inputData], [1, 784]);
@@ -176,13 +262,11 @@ class MnistClassifier {
             const prediction = this.model.predict(inputTensor);
             const probabilities = await prediction.data();
             
-            // Get the predicted digit and confidence
+            // Get the predicted digit
             const predictedDigit = tf.argMax(prediction, 1).dataSync()[0];
-            const confidence = (Math.max(...probabilities) * 100).toFixed(1);
             
-            // Display results
-            const predictionHTML = this.generatePredictionHTML(predictedDigit, confidence, probabilities);
-            document.getElementById('mnist-prediction').innerHTML = predictionHTML;
+            // Update the display
+            this.updatePredictionDisplay(predictedDigit, probabilities);
             
             // Clean up tensors
             inputTensor.dispose();
@@ -190,7 +274,10 @@ class MnistClassifier {
             
         } catch (error) {
             console.error('Error during prediction:', error);
-            document.getElementById('mnist-prediction').innerHTML = 'Error during prediction. Please try again.';
+            const digitResult = document.getElementById('digit-result');
+            if (digitResult) {
+                digitResult.textContent = 'Error';
+            }
         }
     }
 }

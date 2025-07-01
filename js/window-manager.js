@@ -26,7 +26,7 @@ class WindowManager {
             'experience-window': { width: 500, height: 400 },
             'projects-window': { width: 550, height: 450 },
             'contact-window': { width: 400, height: 280 },
-            'mnist-window': { width: 450, height: 650 },
+            'mnist-window': { width: 705, height: 600 },
         };
 
         document.querySelectorAll('.window').forEach(window => {

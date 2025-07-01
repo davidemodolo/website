@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST Neural Network Trainer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.10.0/tf.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .file-input {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+        }
+        .file-input label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        button:disabled {
+            background: rgba(100, 100, 100, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+        .progress {
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 25px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .log {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .sample-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        .sample-image {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 MNIST Neural Network Trainer</h1>
+        
+        <div class="file-input">
+            <label for="trainImages">Training Images (train-images.idx3-ubyte):</label>
+            <input type="file" id="trainImages" accept=".idx3-ubyte">
+        </div>
+        
+        <div class="file-input">
+            <label for="trainLabels">Training Labels (train-labels.idx1-ubyte):</label>
+            <input type="file" id="trainLabels" accept=".idx1-ubyte">
+        </div>
+        
+        <div class="file-input">
+            <label for="testImages">Test Images (t10k-images.idx3-ubyte):</label>
+            <input type="file" id="testImages" accept=".idx3-ubyte">
+        </div>
+        
+        <div class="file-input">
+            <label for="testLabels">Test Labels (t10k-labels.idx1-ubyte):</label>
+            <input type="file" id="testLabels" accept=".idx1-ubyte">
+        </div>
+        
+        <div>
+            <button onclick="loadData()" id="loadBtn">📁 Load Data</button>
+            <button onclick="trainModel()" id="trainBtn" disabled>🚀 Train Model</button>
+            <button onclick="downloadModel()" id="downloadBtn" disabled>💾 Download Model</button>
+            <button onclick="testModel()" id="testBtn" disabled>🧪 Test Model</button>
+        </div>
+        
+        <div class="progress" id="progressContainer" style="display: none;">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+        
+        <div class="log" id="log"></div>
+        
+        <div class="sample-display" id="sampleDisplay"></div>
+    </div>
+
+    <script>
+        let trainImages, trainLabels, testImages, testLabels;
+        let model;
+        let isDataLoaded = false;
+
+        function log(message) {
+            const logElement = document.getElementById('log');
+            logElement.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function updateProgress(percent, text = '') {
+            const progressBar = document.getElementById('progressBar');
+            const progressContainer = document.getElementById('progressContainer');
+            
+            if (percent === 0) {
+                progressContainer.style.display = 'none';
+            } else {
+                progressContainer.style.display = 'block';
+                progressBar.style.width = percent + '%';
+                progressBar.textContent = text || `${percent.toFixed(1)}%`;
+            }
+        }
+
+        function readIDXFile(buffer, type = 'images') {
+            const view = new DataView(buffer);
+            const magic = view.getUint32(0, false);
+            
+            if (type === 'images') {
+                if (magic !== 0x00000803) {
+                    throw new Error('Invalid magic number for images file');
+                }
+                
+                const numImages = view.getUint32(4, false);
+                const numRows = view.getUint32(8, false);
+                const numCols = view.getUint32(12, false);
+                
+                const images = new Float32Array(numImages * numRows * numCols);
+                for (let i = 0; i < numImages * numRows * numCols; i++) {
+                    images[i] = view.getUint8(16 + i) / 255.0; // Normalize to [0, 1]
+                }
+                
+                return {
+                    data: images,
+                    shape: [numImages, numRows, numCols]
+                };
+            } else {
+                if (magic !== 0x00000801) {
+                    throw new Error('Invalid magic number for labels file');
+                }
+                
+                const numLabels = view.getUint32(4, false);
+                const labels = new Uint8Array(numLabels);
+                
+                for (let i = 0; i < numLabels; i++) {
+                    labels[i] = view.getUint8(8 + i);
+                }
+                
+                return {
+                    data: labels,
+                    shape: [numLabels]
+                };
+            }
+        }
+
+        async function loadData() {
+            try {
+                log('Loading data files...');
+                updateProgress(10, 'Loading files...');
+                
+                const trainImagesFile = document.getElementById('trainImages').files[0];
+                const trainLabelsFile = document.getElementById('trainLabels').files[0];
+                const testImagesFile = document.getElementById('testImages').files[0];
+                const testLabelsFile = document.getElementById('testLabels').files[0];
+                
+                if (!trainImagesFile || !trainLabelsFile || !testImagesFile || !testLabelsFile) {
+                    alert('Please select all four files');
+                    updateProgress(0);
+                    return;
+                }
+                
+                updateProgress(25, 'Reading train images...');
+                const trainImagesBuffer = await trainImagesFile.arrayBuffer();
+                trainImages = readIDXFile(trainImagesBuffer, 'images');
+                
+                updateProgress(50, 'Reading train labels...');
+                const trainLabelsBuffer = await trainLabelsFile.arrayBuffer();
+                trainLabels = readIDXFile(trainLabelsBuffer, 'labels');
+                
+                updateProgress(75, 'Reading test images...');
+                const testImagesBuffer = await testImagesFile.arrayBuffer();
+                testImages = readIDXFile(testImagesBuffer, 'images');
+                
+                updateProgress(90, 'Reading test labels...');
+                const testLabelsBuffer = await testLabelsFile.arrayBuffer();
+                testLabels = readIDXFile(testLabelsBuffer, 'labels');
+                
+                updateProgress(100, 'Data loaded!');
+                
+                log(`Training data: ${trainImages.shape[0]} images`);
+                log(`Test data: ${testImages.shape[0]} images`);
+                log(`Image dimensions: ${trainImages.shape[1]}x${trainImages.shape[2]}`);
+                
+                displaySampleImages();
+                
+                isDataLoaded = true;
+                document.getElementById('trainBtn').disabled = false;
+                document.getElementById('loadBtn').disabled = true;
+                
+                setTimeout(() => updateProgress(0), 2000);
+                
+            } catch (error) {
+                log(`Error loading data: ${error.message}`);
+                updateProgress(0);
+            }
+        }
+
+        function displaySampleImages() {
+            const sampleDisplay = document.getElementById('sampleDisplay');
+            sampleDisplay.innerHTML = '<h3>Sample Training Images:</h3>';
+            
+            for (let i = 0; i < 10; i++) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 28;
+                canvas.height = 28;
+                canvas.style.width = '56px';
+                canvas.style.height = '56px';
+                canvas.style.imageRendering = 'pixelated';
+                
+                const ctx = canvas.getContext('2d');
+                const imageData = ctx.createImageData(28, 28);
+                
+                for (let y = 0; y < 28; y++) {
+                    for (let x = 0; x < 28; x++) {
+                        const idx = (y * 28 + x) * 4;
+                        const pixelIdx = i * 28 * 28 + y * 28 + x;
+                        const value = Math.floor(trainImages.data[pixelIdx] * 255);
+                        
+                        imageData.data[idx] = value;     // R
+                        imageData.data[idx + 1] = value; // G
+                        imageData.data[idx + 2] = value; // B
+                        imageData.data[idx + 3] = 255;   // A
+                    }
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+                
+                const container = document.createElement('div');
+                container.className = 'sample-image';
+                container.appendChild(canvas);
+                container.appendChild(document.createElement('br'));
+                container.appendChild(document.createTextNode(`Label: ${trainLabels.data[i]}`));
+                
+                sampleDisplay.appendChild(container);
+            }
+        }
+
+        async function trainModel() {
+            if (!isDataLoaded) {
+                alert('Please load data first');
+                return;
+            }
+            
+            try {
+                log('Creating model...');
+                
+                // Create a simple CNN model
+                model = tf.sequential({
+                    layers: [
+                        tf.layers.reshape({inputShape: [784], targetShape: [28, 28, 1]}),
+                        tf.layers.conv2d({filters: 32, kernelSize: 3, activation: 'relu'}),
+                        tf.layers.maxPooling2d({poolSize: 2}),
+                        tf.layers.conv2d({filters: 64, kernelSize: 3, activation: 'relu'}),
+                        tf.layers.maxPooling2d({poolSize: 2}),
+                        tf.layers.flatten(),
+                        tf.layers.dense({units: 128, activation: 'relu'}),
+                        tf.layers.dropout({rate: 0.2}),
+                        tf.layers.dense({units: 10, activation: 'softmax'})
+                    ]
+                });
+                
+                model.compile({
+                    optimizer: 'adam',
+                    loss: 'categoricalCrossentropy',
+                    metrics: ['accuracy']
+                });
+                
+                log('Model created successfully');
+                log(`Model parameters: ${model.countParams()}`);
+                
+                // Prepare training data
+                const xs = tf.tensor2d(trainImages.data, [trainImages.shape[0], 784]);
+                const ys = tf.oneHot(tf.tensor1d(Array.from(trainLabels.data), 'int32'), 10);
+                
+                log('Starting training...');
+                updateProgress(0, 'Training...');
+                
+                // Train the model
+                const history = await model.fit(xs, ys, {
+                    epochs: 10,
+                    batchSize: 64,
+                    validationSplit: 0.1,
+                    callbacks: {
+                        onEpochEnd: (epoch, logs) => {
+                            const progress = ((epoch + 1) / 5) * 100;
+                            updateProgress(progress, `Epoch ${epoch + 1}/5`);
+                            log(`Epoch ${epoch + 1}: loss=${logs.loss.toFixed(4)}, accuracy=${logs.acc.toFixed(4)}, val_loss=${logs.val_loss.toFixed(4)}, val_accuracy=${logs.val_acc.toFixed(4)}`);
+                        }
+                    }
+                });
+                
+                // Clean up tensors
+                xs.dispose();
+                ys.dispose();
+                
+                log('Training completed!');
+                updateProgress(100, 'Training complete!');
+                
+                document.getElementById('trainBtn').disabled = true;
+                document.getElementById('downloadBtn').disabled = false;
+                document.getElementById('testBtn').disabled = false;
+                
+                setTimeout(() => updateProgress(0), 3000);
+                
+            } catch (error) {
+                log(`Error during training: ${error.message}`);
+                updateProgress(0);
+            }
+        }
+
+        async function testModel() {
+            if (!model) {
+                alert('Please train the model first');
+                return;
+            }
+            
+            try {
+                log('Testing model...');
+                updateProgress(50, 'Evaluating...');
+                
+                // Prepare test data
+                const testXs = tf.tensor2d(testImages.data, [testImages.shape[0], 784]);
+                const testYs = tf.oneHot(tf.tensor1d(Array.from(testLabels.data), 'int32'), 10);
+                
+                // Evaluate the model
+                const evaluation = await model.evaluate(testXs, testYs);
+                const testLoss = await evaluation[0].data();
+                const testAccuracy = await evaluation[1].data();
+                
+                log(`Test Results: loss=${testLoss[0].toFixed(4)}, accuracy=${testAccuracy[0].toFixed(4)}`);
+                
+                // Make predictions on first 10 test images
+                const sampleTestXs = testXs.slice([0, 0], [10, 784]);
+                const predictions = await model.predict(sampleTestXs).data();
+                
+                log('Sample predictions:');
+                for (let i = 0; i < 10; i++) {
+                    const predicted = Array.from(predictions.slice(i * 10, (i + 1) * 10)).indexOf(Math.max(...Array.from(predictions.slice(i * 10, (i + 1) * 10))));
+                    const actual = testLabels.data[i];
+                    log(`  Image ${i}: predicted=${predicted}, actual=${actual} ${predicted === actual ? '✓' : '✗'}`);
+                }
+                
+                // Clean up
+                testXs.dispose();
+                testYs.dispose();
+                evaluation[0].dispose();
+                evaluation[1].dispose();
+                sampleTestXs.dispose();
+                
+                updateProgress(100, 'Testing complete!');
+                setTimeout(() => updateProgress(0), 2000);
+                
+            } catch (error) {
+                log(`Error during testing: ${error.message}`);
+                updateProgress(0);
+            }
+        }
+
+        async function downloadModel() {
+            if (!model) {
+                alert('Please train the model first');
+                return;
+            }
+            
+            try {
+                log('Saving model...');
+                updateProgress(50, 'Preparing download...');
+                
+                // Save the model
+                await model.save('downloads://mnist-model');
+                
+                log('Model saved successfully! Check your downloads folder for mnist-model.json and mnist-model.weights.bin');
+                updateProgress(100, 'Model saved!');
+                
+                setTimeout(() => updateProgress(0), 2000);
+                
+            } catch (error) {
+                log(`Error saving model: ${error.message}`);
+                updateProgress(0);
+            }
+        }
+
+        // Initialize
+        log('MNIST Neural Network Trainer initialized');
+        log('Please select all four MNIST data files to begin');
+    </script>
+</body>
+</html>

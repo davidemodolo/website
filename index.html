@@ -35,15 +35,25 @@
                 <h2>Neural Network Digit Recognition</h2>
                 <div class="mnist-status" id="mnist-status">Loading MNIST model...</div>
                 
-                <canvas id="mnist-canvas" class="mnist-canvas" width="280" height="280"></canvas>
-                
-                <div class="mnist-controls">
-                    <button class="mnist-btn" onclick="classifyDigit()">🔍 Classify</button>
-                    <button class="mnist-btn" onclick="clearMnistCanvas()">🧹 Clear</button>
-                </div>
-                
-                <div class="mnist-prediction" id="mnist-prediction">
-                    Draw a digit (0-9) and click Classify!
+                <div class="mnist-container">
+                    <div class="mnist-canvas-section">
+                        <canvas id="mnist-canvas" class="mnist-canvas" width="280" height="280"></canvas>
+                        
+                        <div class="mnist-controls">
+                            <button class="mnist-btn" onclick="classifyDigit()">🔍 Classify</button>
+                            <button class="mnist-btn" onclick="clearMnistCanvas()">🧹 Clear</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mnist-prediction-section">
+                        <div class="mnist-prediction" id="mnist-prediction">
+                            <div style="font-size: 1.5rem; margin-bottom: 15px;">
+                                Predicted Digit: <span style="font-size: 2.5rem; color: var(--primary-green);">-</span>
+                            </div>
+                            <div style="font-size: 0.9rem; margin-bottom: 10px;">All Probabilities:</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Draw a digit and click classify to see results</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <p style="font-size: 0.85rem; text-align: center; margin-top: 15px; opacity: 0.8;">
