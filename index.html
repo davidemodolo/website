@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Engineer Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.10.0/tf.min.js"></script>
+</head>
+<body>
+    <div class="desktop" id="desktop">
+        <!-- Hero Section on Canvas -->
+        <div class="hero-section">
+            <h1 class="hero-title">AI ENGINEER</h1>
+            <p class="hero-subtitle">Machine Learning Specialist • Fresh Graduate • Ready to Innovate</p>
+            <p class="hero-description">
+                Master's degree in AI Engineering with hands-on experience in neural networks, 
+                deep learning, and cutting-edge AI solutions. Passionate about transforming 
+                complex problems into elegant technological solutions.
+            </p>
+        </div>
+
+        <!-- MNIST Window -->
+        <div class="window" id="mnist-window" data-window="mnist">
+            <div class="title-bar">
+                <span class="title-text">🔢 MNIST Digit Classifier</span>
+                <div class="window-controls">
+                    <button class="control-btn minimize-btn" onclick="minimizeWindow('mnist-window')">−</button>
+                    <button class="control-btn maximize-btn" onclick="toggleMaximize('mnist-window')">□</button>
+                    <button class="control-btn close-btn" onclick="hideWindow('mnist-window')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Neural Network Digit Recognition</h2>
+                <div class="mnist-status" id="mnist-status">Loading MNIST model...</div>
+                
+                <canvas id="mnist-canvas" class="mnist-canvas" width="280" height="280"></canvas>
+                
+                <div class="mnist-controls">
+                    <button class="mnist-btn" onclick="classifyDigit()">🔍 Classify</button>
+                    <button class="mnist-btn" onclick="clearMnistCanvas()">🧹 Clear</button>
+                </div>
+                
+                <div class="mnist-prediction" id="mnist-prediction">
+                    Draw a digit (0-9) and click Classify!
+                </div>
+                
+                <p style="font-size: 0.85rem; text-align: center; margin-top: 15px; opacity: 0.8;">
+                    This CNN model was trained on the MNIST dataset with high accuracy.
+                    Draw digits clearly in the center of the canvas for best results.
+                </p>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
+
+        <!-- Experience Window -->
+        <div class="window" id="experience-window" data-window="experience">
+            <div class="title-bar">
+                <span class="title-text">🚀 Professional Experience</span>
+                <div class="window-controls">
+                    <button class="control-btn minimize-btn" onclick="minimizeWindow('experience-window')">−</button>
+                    <button class="control-btn maximize-btn" onclick="toggleMaximize('experience-window')">□</button>
+                    <button class="control-btn close-btn" onclick="hideWindow('experience-window')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Professional Journey</h2>
+                
+                <div class="experience-item">
+                    <h3>AI Research Intern</h3>
+                    <p><strong>TechCorp Labs</strong> | 2024</p>
+                    <p>Developed novel neural network architectures for real-time object detection, achieving 15% improvement in accuracy over baseline models. Collaborated with senior researchers on cutting-edge computer vision projects.</p>
+                </div>
+                
+                <div class="experience-item">
+                    <h3>Machine Learning Developer</h3>
+                    <p><strong>StartupX</strong> | 2023</p>
+                    <p>Built end-to-end ML pipelines for recommendation systems serving 100K+ users daily. Implemented A/B testing frameworks and optimization strategies that improved user engagement by 25%.</p>
+                </div>
+                
+                <div class="experience-item">
+                    <h3>Teaching Assistant</h3>
+                    <p><strong>University AI Department</strong> | 2022-2024</p>
+                    <p>Assisted in advanced machine learning courses, mentored 50+ students in AI projects and thesis work. Developed practical assignments and helped students bridge theory-practice gap.</p>
+                </div>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
+
+        <!-- Projects Window -->
+        <div class="window" id="projects-window" data-window="projects">
+            <div class="title-bar">
+                <span class="title-text">🔬 Featured Projects</span>
+                <div class="window-controls">
+                    <button class="control-btn minimize-btn" onclick="minimizeWindow('projects-window')">−</button>
+                    <button class="control-btn maximize-btn" onclick="toggleMaximize('projects-window')">□</button>
+                    <button class="control-btn close-btn" onclick="hideWindow('projects-window')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Key Projects</h2>
+                
+                <div class="project-card">
+                    <h3>Neural Style Transfer for Video</h3>
+                    <p>Real-time artistic style transfer for video streams using optimized CNN architectures. Achieved 30fps processing on consumer hardware through efficient GPU utilization and model optimization.</p>
+                    <div>
+                        <span class="skill-tag">PyTorch</span>
+                        <span class="skill-tag">OpenCV</span>
+                        <span class="skill-tag">CUDA</span>
+                        <span class="skill-tag">Computer Vision</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>Autonomous Trading Bot</h3>
+                    <p>Deep reinforcement learning agent for cryptocurrency trading. Implemented PPO algorithm with custom reward shaping for risk management and portfolio optimization.</p>
+                    <div>
+                        <span class="skill-tag">Reinforcement Learning</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Financial APIs</span>
+                        <span class="skill-tag">Risk Management</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>Medical Image Diagnosis System</h3>
+                    <p>CNN-based system for automated detection of anomalies in X-ray images. Achieved 94% accuracy on validation dataset with explainable AI features for clinical interpretability.</p>
+                    <div>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">Medical AI</span>
+                        <span class="skill-tag">Explainable AI</span>
+                        <span class="skill-tag">Healthcare</span>
+                    </div>
+                </div>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
+
+        <!-- Contact Window -->
+        <div class="window" id="contact-window" data-window="contact">
+            <div class="title-bar">
+                <span class="title-text">📞 Contact Information</span>
+                <div class="window-controls">
+                    <button class="control-btn minimize-btn" onclick="minimizeWindow('contact-window')">−</button>
+                    <button class="control-btn maximize-btn" onclick="toggleMaximize('contact-window')">□</button>
+                    <button class="control-btn close-btn" onclick="hideWindow('contact-window')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Get In Touch</h2>
+                
+                <div class="contact-item">
+                    <strong>📧 Email:</strong><br>
+                    <a href="mailto:your.email@example.com">your.email@example.com</a>
+                </div>
+                
+                <div class="contact-item">
+                    <strong>💼 LinkedIn:</strong><br>
+                    <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a>
+                </div>
+                
+                <div class="contact-item">
+                    <strong>💻 GitHub:</strong><br>
+                    <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+                </div>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
+
+        
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="taskbar-item" onclick="toggleWindow('experience-window')" id="taskbar-experience">🚀 Experience</div>
+        <div class="taskbar-item" onclick="toggleWindow('projects-window')" id="taskbar-projects">🔬 Projects</div>
+        <div class="taskbar-item" onclick="toggleWindow('mnist-window')" id="taskbar-mnist">🔢 MNIST</div>
+        <div class="taskbar-item" onclick="toggleWindow('contact-window')" id="taskbar-contact">📞 Contact</div>
+        <div class="status-indicator">Available for Opportunities</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/window-manager.js"></script>
+    <script src="js/mnist-classifier.js"></script>
+</body>
+</html>
