@@ -146,13 +146,74 @@ async function displaySentimentResult(predictionPromise) {
         scoreDescription.textContent = description;
         scoreValue.style.color = color;
 
-        // Draw speedometer
-        drawSpeedometer(confidence);
+        // Draw speedometer with animation
+        animateSpeedometer(confidence);
     } catch (error) {
         console.error('Error displaying sentiment result:', error);
         scoreValue.textContent = 'Error';
         scoreDescription.textContent = 'Analysis failed';
     }
+}
+
+function animateSpeedometer(targetValue) {
+    const canvas = document.getElementById('sentiment-speedometer');
+    if (!canvas) {
+        console.error('Speedometer canvas not found');
+        return;
+    }
+    
+    // Validate value
+    if (isNaN(targetValue) || targetValue < 0 || targetValue > 1) {
+        console.error('Invalid speedometer value:', targetValue);
+        return;
+    }
+    
+    console.log('Animating speedometer to value:', targetValue);
+    
+    // Animation parameters
+    const animationDuration = 1000; // 2 seconds total
+    const phase1Duration = 500; // 0.8 seconds to go from 0 to 1
+    const phase2Duration = 50; // 0.4 seconds to pause at 1
+    const phase3Duration = 500; // 0.8 seconds to go from 1 to target
+    
+    const startTime = Date.now();
+    
+    function animate() {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+        
+        let currentValue;
+        
+        if (elapsed < phase1Duration) {
+            // Phase 1: 0 to 1
+            const progress = elapsed / phase1Duration;
+            currentValue = easeInOutCubic(progress);
+        } else if (elapsed < phase1Duration + phase2Duration) {
+            // Phase 2: stay at 1
+            currentValue = 1;
+        } else if (elapsed < animationDuration) {
+            // Phase 3: 1 to target value
+            const phase3Elapsed = elapsed - phase1Duration - phase2Duration;
+            const progress = phase3Elapsed / phase3Duration;
+            const easedProgress = easeInOutCubic(progress);
+            currentValue = 1 + (targetValue - 1) * easedProgress;
+        } else {
+            // Animation complete
+            currentValue = targetValue;
+            drawSpeedometer(currentValue);
+            return;
+        }
+        
+        drawSpeedometer(currentValue);
+        requestAnimationFrame(animate);
+    }
+    
+    animate();
+}
+
+// Easing function for smooth animation
+function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 }
 
 function drawSpeedometer(value) {
