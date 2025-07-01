@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.10.0/tf.min.js"></script>
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
 </head>
 <body>
     <div class="desktop" id="desktop">
@@ -22,7 +23,7 @@
         </div>
 
         <!-- MNIST Window -->
-        <div class="window" id="mnist-window" data-window="mnist">
+        <div class="window hidden" id="mnist-window" data-window="mnist">
             <div class="title-bar">
                 <span class="title-text">🔢 MNIST Digit Classifier</span>
                 <div class="window-controls">
@@ -178,6 +179,51 @@
             <div class="resize-handle"></div>
         </div>
 
+        <!-- Sentiment Analysis Window -->
+        <div class="window hidden" id="sentiment-window" data-window="sentiment">
+            <div class="title-bar">
+                <span class="title-text">🎭 Sentiment Analysis</span>
+                <div class="window-controls">
+                    <button class="control-btn minimize-btn" onclick="minimizeWindow('sentiment-window')">−</button>
+                    <button class="control-btn maximize-btn" onclick="toggleMaximize('sentiment-window')">□</button>
+                    <button class="control-btn close-btn" onclick="hideWindow('sentiment-window')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>AI Sentiment Analysis</h2>
+                <div class="sentiment-status" id="sentiment-status">Loading sentiment model...</div>
+                
+                <div class="sentiment-container">
+                    <div class="sentiment-input-section">
+                        <label for="sentiment-input">Enter text to analyze:</label>
+                        <textarea id="sentiment-input" class="sentiment-textarea" placeholder="Type your sentence here..." 
+                                  maxlength="500" rows="3">Today is the happiest day and is full of rainbows!</textarea>
+                        <div class="sentiment-controls">
+                            <button class="sentiment-btn" id="analyze-btn" onclick="analyzeSentiment()">🎯 Analyze</button>
+                            <button class="sentiment-btn" onclick="clearSentimentInput()">🧹 Clear</button>
+                        </div>
+                    </div>
+                    
+                    <div class="sentiment-result-section">
+                        <div class="speedometer-container">
+                            <canvas id="sentiment-speedometer" width="200" height="120"></canvas>
+                        </div>
+                        <div class="sentiment-score" id="sentiment-score">
+                            <div class="score-label">Sentiment Score:</div>
+                            <div class="score-value" id="score-value">-</div>
+                            <div class="score-description" id="score-description">Enter text and click analyze</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="sentiment-info">
+                    This AI model analyzes text sentiment on a scale from 0 (negative) to 1 (positive).
+                    The speedometer shows the confidence level of the prediction.
+                </p>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
+
         
     </div>
 
@@ -186,6 +232,7 @@
         <div class="taskbar-item" onclick="toggleWindow('experience-window')" id="taskbar-experience">🚀 Experience</div>
         <div class="taskbar-item" onclick="toggleWindow('projects-window')" id="taskbar-projects">🔬 Projects</div>
         <div class="taskbar-item" onclick="toggleWindow('mnist-window')" id="taskbar-mnist">🔢 MNIST</div>
+        <div class="taskbar-item" onclick="toggleWindow('sentiment-window')" id="taskbar-sentiment">🎭 Sentiment</div>
         <div class="taskbar-item" onclick="toggleWindow('contact-window')" id="taskbar-contact">📞 Contact</div>
         <div class="status-indicator">Available for Opportunities</div>
     </div>
@@ -193,5 +240,6 @@
     <!-- Scripts -->
     <script src="js/window-manager.js"></script>
     <script src="js/mnist-classifier.js"></script>
+    <script src="js/sentiment-analyzer.js"></script>
 </body>
 </html>

@@ -91,7 +91,6 @@ class MnistClassifier {
             document.getElementById('mnist-status').innerText = 'Model loaded successfully! Ready to classify digits.';
             this.initializePredictionDisplay();
             console.log('MNIST model loaded successfully');
-            this.inspectModel(); // Debug the model structure
         } catch (error) {
             console.error('Error loading MNIST model:', error);
             document.getElementById('mnist-status').innerText = 'Error loading model. Please ensure mnist-model.json and mnist-model.weights.bin are in the same directory.';

@@ -27,6 +27,7 @@ class WindowManager {
             'projects-window': { width: 550, height: 450 },
             'contact-window': { width: 400, height: 280 },
             'mnist-window': { width: 705, height: 600 },
+            'sentiment-window': { width: 650, height: 500 },
         };
 
         document.querySelectorAll('.window').forEach(window => {
@@ -42,7 +43,7 @@ class WindowManager {
             this.windowStates[windowId] = {
                 minimized: window.classList.contains('minimized'),
                 maximized: false,
-                hidden: false,
+                hidden: window.classList.contains('hidden'),
                 originalSize: { 
                     width: window.style.width, 
                     height: window.style.height, 
@@ -50,6 +51,11 @@ class WindowManager {
                     left: window.style.left 
                 }
             };
+            
+            // Update taskbar for initially hidden windows
+            if (window.classList.contains('hidden')) {
+                this.updateTaskbar(windowId, true);
+            }
             
             this.makeWindowInteractive(window);
         });
@@ -67,7 +73,10 @@ class WindowManager {
         const heroRight = heroLeft + heroWidth;
         const heroBottom = heroTop + heroHeight;
         
-        let position;
+        let position = {
+            x: Math.max(20, Math.min(0, screenWidth - windowWidth - 20)),
+            y: Math.max(20, Math.min(0, screenHeight - windowHeight - 20))
+        };
         let attempts = 0;
         const maxAttempts = 50;
         
@@ -232,7 +241,7 @@ class WindowManager {
         const window = document.getElementById(windowId);
         const state = this.windowStates[windowId];
         
-        window.style.display = 'none';
+        window.classList.add('hidden');
         state.hidden = true;
         this.updateTaskbar(windowId, true);
     }
@@ -242,7 +251,7 @@ class WindowManager {
         const state = this.windowStates[windowId];
         
         if (state.hidden) {
-            window.style.display = 'block';
+            window.classList.remove('hidden');
             state.hidden = false;
             this.setActiveWindow(window);
             this.updateTaskbar(windowId, false);
