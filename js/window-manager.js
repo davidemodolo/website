@@ -74,7 +74,7 @@ class WindowManager {
         });
     }
 
-    initializeWindows() {
+    async initializeWindows() {
         const defaultSizes = {
             'experience-window': { width: 560, height: 440 },
             'education-window': { width: 735, height: 500 },
@@ -84,24 +84,39 @@ class WindowManager {
             'sentiment-window': { width: 625, height: 545 },
         };
 
-        document.querySelectorAll('.window').forEach(window => {
+        // Gather windows in an array to animate in series
+        const windows = Array.from(document.querySelectorAll('.window'));
+
+        // Hide all windows initially for animation
+        windows.forEach(window => {
+            window.classList.remove('positioned');
+            window.style.opacity = '0';
+            window.style.transition = 'opacity 0.4s, transform 0.4s';
+            window.style.transform = 'scale(0.96)';
+        });
+
+        // Wait before starting the animation (e.g., 300ms)
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        for (let i = 0; i < windows.length; i++) {
+            const window = windows[i];
             const windowId = window.id;
             const size = defaultSizes[windowId] || { width: 500, height: 400 };
             const position = this.getRandomPosition(size.width, size.height);
-            
+
             // Ensure absolute positioning is set for desktop
             if (!this.isMobile) {
                 window.style.position = 'absolute';
             }
-            
+
             window.style.left = position.x + 'px';
             window.style.top = position.y + 'px';
             window.style.width = size.width + 'px';
             window.style.height = size.height + 'px';
-            
+
             // Add positioned class to make window visible
             window.classList.add('positioned');
-            
+
             this.windowStates[windowId] = {
                 minimized: window.classList.contains('minimized'),
                 maximized: false,
@@ -113,55 +128,102 @@ class WindowManager {
                     left: window.style.left 
                 }
             };
-            
+
             // Update taskbar for initially hidden windows
             if (window.classList.contains('hidden')) {
                 this.updateTaskbar(windowId, true);
             }
-            
+
             this.makeWindowInteractive(window);
-        });
+
+            // Animate window in
+            setTimeout(() => {
+                window.style.opacity = '1';
+                window.style.transform = 'scale(1)';
+            }, 10);
+
+            // Wait 0.4s before showing the next window
+            // (skip delay after last window)
+            if (i < windows.length - 1) {
+                // eslint-disable-next-line no-await-in-loop
+                await new Promise(resolve => setTimeout(resolve, 400));
+            }
+        }
     }
+
+    // Support vector to store already positioned window rects
+    positionedWindows = [];
 
     getRandomPosition(windowWidth = 500, windowHeight = 400) {
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight - 60; // Account for taskbar
-        
-        // Define hero section bounds to avoid
-        const heroWidth = 600;
-        const heroHeight = 300;
-        const heroLeft = (screenWidth - heroWidth) / 2;
-        const heroTop = (screenHeight - heroHeight) / 2;
-        const heroRight = heroLeft + heroWidth;
-        const heroBottom = heroTop + heroHeight;
-        
+
+        // Get hero section bounds from DOM
+        const heroSection = document.querySelector('.hero-section');
+        let heroLeft = 0, heroTop = 0, heroRight = 0, heroBottom = 0;
+        if (heroSection) {
+            const rect = heroSection.getBoundingClientRect();
+            heroLeft = rect.left;
+            heroTop = rect.top;
+            heroRight = rect.right;
+            heroBottom = rect.bottom;
+        }
+
         let position = {
             x: Math.max(20, Math.min(0, screenWidth - windowWidth - 20)),
             y: Math.max(20, Math.min(0, screenHeight - windowHeight - 20))
         };
         let attempts = 0;
         const maxAttempts = 50;
-        
+
         do {
             const x = Math.random() * (screenWidth - windowWidth);
             const y = Math.random() * (screenHeight - windowHeight);
-            
-            const windowRight = x + windowWidth;
-            const windowBottom = y + windowHeight;
-            
-            const overlapsHero = !(x > heroRight || windowRight < heroLeft || 
-                                 y > heroBottom || windowBottom < heroTop);
-            
-            if (!overlapsHero || attempts >= maxAttempts) {
+
+            const windowRect = {
+                left: x,
+                top: y,
+                right: x + windowWidth,
+                bottom: y + windowHeight
+            };
+
+            // Check overlap with hero section
+            const overlapsHero = !(windowRect.left > heroRight ||
+                                   windowRect.right < heroLeft ||
+                                   windowRect.top > heroBottom ||
+                                   windowRect.bottom < heroTop);
+
+            // Check if this window would completely cover any already positioned window
+            let completelyCovers = false;
+            for (const other of this.positionedWindows) {
+                if (
+                    windowRect.left <= other.left &&
+                    windowRect.top <= other.top &&
+                    windowRect.right >= other.right &&
+                    windowRect.bottom >= other.bottom
+                ) {
+                    completelyCovers = true;
+                    break;
+                }
+            }
+
+            if ((!overlapsHero && !completelyCovers) || attempts >= maxAttempts) {
                 position = {
                     x: Math.max(20, Math.min(x, screenWidth - windowWidth - 20)),
                     y: Math.max(20, Math.min(y, screenHeight - windowHeight - 20))
                 };
+                // Save this window's rect for future checks
+                this.positionedWindows.push({
+                    left: position.x,
+                    top: position.y,
+                    right: position.x + windowWidth,
+                    bottom: position.y + windowHeight
+                });
                 break;
             }
             attempts++;
         } while (attempts < maxAttempts);
-        
+
         return { x: Math.round(position.x), y: Math.round(position.y) };
     }
 
@@ -317,13 +379,21 @@ class WindowManager {
             window.classList.remove('hidden');
             state.hidden = false;
         } else {
-            window.classList.add('hidden');
-            window.classList.remove('minimized', 'fullscreen');
-            state.hidden = true;
-            state.minimized = false;
-            state.maximized = false;
+            // Add animation before hiding
+            window.style.transition = 'opacity 0.4s, transform 0.4s';
+            window.style.opacity = '0';
+            window.style.transform = 'scale(0.96)';
+            
+            // Wait for animation to complete before hiding
+            setTimeout(() => {
+                window.classList.add('hidden');
+                window.classList.remove('minimized', 'fullscreen');
+                state.hidden = true;
+                state.minimized = false;
+                state.maximized = false;
+            }, 400);
         }
-        this.updateTaskbar(windowId, state.hidden);
+        this.updateTaskbar(windowId, !state.hidden);
         this.checkEasterEggCondition();
     }
 
@@ -331,10 +401,21 @@ class WindowManager {
         const window = document.getElementById(windowId);
         const state = this.windowStates[windowId];
         
+        // Set initial animation state before showing
+        window.style.transition = 'opacity 0.4s, transform 0.4s';
+        window.style.opacity = '0';
+        window.style.transform = 'scale(0.96)';
+        
         window.classList.remove('hidden');
         state.hidden = false;
         this.updateTaskbar(windowId, false);
         this.setActiveWindow(window);
+        
+        // Trigger animation after a small delay
+        setTimeout(() => {
+            window.style.opacity = '1';
+            window.style.transform = 'scale(1)';
+        }, 10);
     }
 
     toggleWindow(windowId) {
@@ -344,7 +425,19 @@ class WindowManager {
         if (state.hidden) {
             this.showWindow(windowId);
         } else if (state.minimized) {
-            this.minimizeWindow(windowId); // This will unminimize
+            // Animate unminimize
+            window.style.transition = 'opacity 0.4s, transform 0.4s';
+            window.style.opacity = '0';
+            window.style.transform = 'scale(0.96)';
+            
+            setTimeout(() => {
+                this.minimizeWindow(windowId); // This will unminimize
+                // Animate in
+                setTimeout(() => {
+                    window.style.opacity = '1';
+                    window.style.transform = 'scale(1)';
+                }, 10);
+            }, 50);
         } else {
             this.hideWindow(windowId);
         }

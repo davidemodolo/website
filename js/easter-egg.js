@@ -19,7 +19,7 @@ class EasterEgg {
         this.characterSize = 40;
         this.hasWon = false;
         this.confetti = [];
-        
+
         this.setupEventListeners();
     }
 
@@ -30,16 +30,13 @@ class EasterEgg {
                 if (this.canActivate() && !this.isActive) {
                     e.preventDefault();
                     this.activate();
-                } else if (this.isActive) {
-                    e.preventDefault();
-                    // Don't deactivate on space during game (it's jump)
                 }
             }
-            
+
             // Game controls
             if (this.isActive) {
                 this.keys[e.code] = true;
-                
+
                 // ESC to exit
                 if (e.code === 'Escape') {
                     this.deactivate();
@@ -69,13 +66,7 @@ class EasterEgg {
                 return false;
             }
         }
-        
-        // At least one window should be visible (minimized)
-        const visibleMinimized = Array.from(windows).some(w => 
-            !w.classList.contains('hidden') && w.classList.contains('minimized')
-        );
-        
-        return visibleMinimized;
+        return true;
     }
 
     activate() {
@@ -85,7 +76,7 @@ class EasterEgg {
         this.createCharacter();
         this.updatePlatforms();
         this.startGameLoop();
-        
+
         // Show instructions
         this.showInstructions();
     }
@@ -117,13 +108,13 @@ class EasterEgg {
             transition: none;
             pointer-events: none;
         `;
-        
+
         // Start position at bottom center
         this.physics.x = window.innerWidth / 2 - this.characterSize / 2;
         this.physics.y = window.innerHeight - 100; // Above taskbar
         this.physics.velocityX = 0;
         this.physics.velocityY = 0;
-        
+
         this.updateCharacterPosition();
         document.body.appendChild(this.character);
     }
@@ -137,7 +128,7 @@ class EasterEgg {
 
     updatePlatforms() {
         this.platforms = [];
-        
+
         // Add window title bars as platforms
         const windows = document.querySelectorAll('.window:not(.hidden)');
         windows.forEach(window => {
@@ -166,15 +157,6 @@ class EasterEgg {
                 element: taskbar
             });
         }
-
-        // Add ground (invisible platform at bottom)
-        this.platforms.push({
-            x: 0,
-            y: window.innerHeight - 5,
-            width: window.innerWidth,
-            height: 10,
-            element: null // Ground
-        });
     }
 
     startGameLoop() {
@@ -197,7 +179,7 @@ class EasterEgg {
 
     updatePhysics() {
         if (this.hasWon) return; // Stop physics when won
-        
+
         // Handle input
         const moveSpeed = 0.8;
         if (this.keys['ArrowLeft'] || this.keys['KeyA']) {
@@ -260,25 +242,25 @@ class EasterEgg {
                 characterRect.top < platformRect.bottom) {
 
                 // Landing on top of platform
-                if (this.physics.velocityY > 0 && 
+                if (this.physics.velocityY > 0 &&
                     characterRect.bottom - this.physics.velocityY <= platformRect.top) {
                     this.physics.y = platformRect.top - this.characterSize;
                     this.physics.velocityY = 0;
                 }
                 // Hitting platform from below
-                else if (this.physics.velocityY < 0 && 
-                         characterRect.top - this.physics.velocityY >= platformRect.bottom) {
+                else if (this.physics.velocityY < 0 &&
+                    characterRect.top - this.physics.velocityY >= platformRect.bottom) {
                     this.physics.y = platformRect.bottom;
                     this.physics.velocityY = 0;
                 }
                 // Side collisions
-                else if (this.physics.velocityX > 0 && 
-                         characterRect.right - this.physics.velocityX <= platformRect.left) {
+                else if (this.physics.velocityX > 0 &&
+                    characterRect.right - this.physics.velocityX <= platformRect.left) {
                     this.physics.x = platformRect.left - this.characterSize;
                     this.physics.velocityX = 0;
                 }
-                else if (this.physics.velocityX < 0 && 
-                         characterRect.left - this.physics.velocityX >= platformRect.right) {
+                else if (this.physics.velocityX < 0 &&
+                    characterRect.left - this.physics.velocityX >= platformRect.right) {
                     this.physics.x = platformRect.right;
                     this.physics.velocityX = 0;
                 }
@@ -338,18 +320,13 @@ class EasterEgg {
                 text-align: center;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.3);
                 border: 2px solid #00ff00;
+                opacity: 0.4;
             ">
                 🎮 EASTER EGG ACTIVATED! 🎮<br>
                 <small>Use ARROW KEYS or WASD to move • SPACE or W to jump • ESC to exit</small>
             </div>
         `;
         document.body.appendChild(instructions);
-
-        // Auto-hide instructions after 5 seconds
-        setTimeout(() => {
-            const inst = document.getElementById('easter-egg-instructions');
-            if (inst) inst.style.opacity = '0.3';
-        }, 5000);
     }
 
     hideInstructions() {
@@ -361,7 +338,7 @@ class EasterEgg {
 
     checkWinCondition() {
         if (this.hasWon || !this.character) return;
-        
+
         // Check if character went beyond the top of the screen
         if (this.physics.y < -this.characterSize) {
             this.hasWon = true;
@@ -369,7 +346,7 @@ class EasterEgg {
             this.physics.velocityY = 0;
             this.showWinMessage();
             this.createConfetti();
-            
+
             // Auto-exit after 5 seconds
             setTimeout(() => {
                 this.deactivate();
@@ -426,56 +403,36 @@ class EasterEgg {
 
     createConfetti() {
         const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
-        
-        // Create 50 confetti pieces
-        for (let i = 0; i < 50; i++) {
-            const confettiPiece = {
-                element: document.createElement('div'),
-                x: Math.random() * window.innerWidth,
-                y: -10,
-                velocityX: (Math.random() - 0.5) * 4,
-                velocityY: Math.random() * 3 + 2,
-                rotation: Math.random() * 360,
-                rotationSpeed: (Math.random() - 0.5) * 10,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                size: Math.random() * 8 + 4
-            };
-
-            confettiPiece.element.style.cssText = `
-                position: fixed;
-                width: ${confettiPiece.size}px;
-                height: ${confettiPiece.size}px;
-                background: ${confettiPiece.color};
-                z-index: 10001;
-                border-radius: 2px;
-                pointer-events: none;
-                transform: rotate(${confettiPiece.rotation}deg);
+        for (let i = 0; i < 40; i++) {
+            const el = document.createElement('div');
+            const size = 6 + Math.random() * 6;
+            el.style.cssText = `
+                position:fixed;left:${Math.random()*window.innerWidth}px;top:-10px;
+                width:${size}px;height:${size}px;background:${colors[Math.random()*colors.length|0]};
+                border-radius:2px;z-index:10001;pointer-events:none;
             `;
-
-            confettiPiece.element.style.left = confettiPiece.x + 'px';
-            confettiPiece.element.style.top = confettiPiece.y + 'px';
-
-            document.body.appendChild(confettiPiece.element);
-            this.confetti.push(confettiPiece);
+            document.body.appendChild(el);
+            this.confetti.push({
+                element: el,
+                x: parseFloat(el.style.left),
+                y: -10,
+                vx: (Math.random() - 0.5) * 3,
+                vy: 2 + Math.random() * 2
+            });
         }
     }
 
     updateConfetti() {
-        this.confetti.forEach((piece, index) => {
-            piece.y += piece.velocityY;
-            piece.x += piece.velocityX;
-            piece.rotation += piece.rotationSpeed;
-            piece.velocityY += 0.1; // Gravity for confetti
-
+        this.confetti = this.confetti.filter(piece => {
+            piece.x += piece.vx;
+            piece.y += piece.vy += 0.08;
             piece.element.style.left = piece.x + 'px';
             piece.element.style.top = piece.y + 'px';
-            piece.element.style.transform = `rotate(${piece.rotation}deg)`;
-
-            // Remove confetti that has fallen off screen
             if (piece.y > window.innerHeight + 20) {
                 piece.element.remove();
-                this.confetti.splice(index, 1);
+                return false;
             }
+            return true;
         });
     }
 
