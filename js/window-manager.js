@@ -277,6 +277,7 @@ class WindowManager {
             state.maximized = false;
         }
         this.updateTaskbar(windowId, false);
+        this.checkEasterEggCondition();
     }
 
     toggleMaximize(windowId) {
@@ -312,9 +313,28 @@ class WindowManager {
         const window = document.getElementById(windowId);
         const state = this.windowStates[windowId];
         
-        window.classList.add('hidden');
-        state.hidden = true;
-        this.updateTaskbar(windowId, true);
+        if (state.hidden) {
+            window.classList.remove('hidden');
+            state.hidden = false;
+        } else {
+            window.classList.add('hidden');
+            window.classList.remove('minimized', 'fullscreen');
+            state.hidden = true;
+            state.minimized = false;
+            state.maximized = false;
+        }
+        this.updateTaskbar(windowId, state.hidden);
+        this.checkEasterEggCondition();
+    }
+
+    showWindow(windowId) {
+        const window = document.getElementById(windowId);
+        const state = this.windowStates[windowId];
+        
+        window.classList.remove('hidden');
+        state.hidden = false;
+        this.updateTaskbar(windowId, false);
+        this.setActiveWindow(window);
     }
 
     toggleWindow(windowId) {
@@ -322,15 +342,25 @@ class WindowManager {
         const state = this.windowStates[windowId];
         
         if (state.hidden) {
-            window.classList.remove('hidden');
-            state.hidden = false;
-            this.setActiveWindow(window);
-            this.updateTaskbar(windowId, false);
+            this.showWindow(windowId);
         } else if (state.minimized) {
-            this.minimizeWindow(windowId);
-            this.setActiveWindow(window);
+            this.minimizeWindow(windowId); // This will unminimize
         } else {
-            this.setActiveWindow(window);
+            this.hideWindow(windowId);
+        }
+        this.checkEasterEggCondition();
+    }
+
+    checkEasterEggCondition() {
+        // Notify easter egg system that window states have changed
+        if (window.easterEgg && window.easterEgg.isActive) {
+            // If easter egg is active and conditions no longer met, deactivate
+            if (!window.easterEgg.canActivate()) {
+                window.easterEgg.deactivate();
+            } else {
+                // Update platforms since window positions might have changed
+                window.easterEgg.updatePlatforms();
+            }
         }
     }
 
