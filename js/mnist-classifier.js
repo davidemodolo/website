@@ -99,9 +99,6 @@ class MnistClassifier {
 
     initializePredictionDisplay() {
         let html = `
-            <div id="predicted-digit" style="font-size: 1.5rem; margin-bottom: 15px;">
-                Predicted Digit: <span id="digit-result" style="font-size: 2.5rem; color: var(--primary-green);">-</span>
-            </div>
             <div style="font-size: 0.9rem; margin-bottom: 10px;">All Probabilities:</div>
         `;
         

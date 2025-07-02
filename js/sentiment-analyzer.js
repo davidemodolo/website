@@ -245,7 +245,7 @@ function drawSpeedometer(value) {
         return;
     }
     
-    console.log('Drawing speedometer with value:', value); // Debug log
+    //console.log('Drawing speedometer with value:', value); // Debug log
     
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -282,7 +282,7 @@ function drawSpeedometer(value) {
     const needleX = centerX + Math.cos(needleAngle) * needleLength;
     const needleY = centerY + Math.sin(needleAngle) * needleLength;
     
-    console.log('Needle position:', needleX, needleY, 'Angle:', needleAngle); // Debug log
+    // console.log('Needle position:', needleX, needleY, 'Angle:', needleAngle); // Debug log
     
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
@@ -312,7 +312,7 @@ function drawSpeedometer(value) {
     // Draw title
     ctx.fillStyle = '#00ff88';
     ctx.font = `${Math.max(12, radius / 7)}px Courier New`;
-    ctx.fillText('Sentiment Score', centerX, 25);
+    ctx.fillText('Sentiment Score', centerX, 10);
 }
 
 function clearSentimentInput() {
@@ -410,7 +410,7 @@ function initializeSpeedometer() {
     // Draw title
     ctx.fillStyle = '#00ff88';
     ctx.font = `${Math.max(12, radius / 7)}px Courier New`;
-    ctx.fillText('Sentiment Score', centerX, 25);
+    ctx.fillText('Sentiment Score', centerX, 10);
 }
 
 // Hook into window manager to initialize speedometer when window is shown
