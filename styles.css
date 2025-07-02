@@ -16,36 +16,13 @@
 }
 
 @keyframes fluidBackground {
-    0% { background-position: 0% 50%; }
-    25% { background-position: 100% 20%; }
-    50% { background-position: 50% 100%; }
-    75% { background-position: 20% 30%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes titleBarGradient1 {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
 }
 
-@keyframes titleBarGradient2 {
-    0%, 100% { background-position: 100% 50%; }
-    50% { background-position: 0% 50%; }
-}
-
-@keyframes titleBarGradient3 {
-    0%, 100% { background-position: 25% 50%; }
-    50% { background-position: 75% 50%; }
-}
-
-@keyframes titleBarGradient4 {
-    0%, 100% { background-position: 75% 50%; }
-    50% { background-position: 25% 50%; }
-}
-
-@keyframes titleBarGradient5 {
-    0%, 100% { background-position: 50% 0%; }
-    50% { background-position: 50% 100%; }
+@keyframes titleBarGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 body {
@@ -62,14 +39,12 @@ body {
     position: relative;
     background: 
         linear-gradient(45deg, 
-            rgba(0, 255, 136, 0.1) 0%, 
-            rgba(0, 212, 255, 0.05) 25%, 
-            rgba(0, 255, 204, 0.08) 50%, 
-            rgba(0, 255, 136, 0.03) 75%, 
-            rgba(0, 212, 255, 0.1) 100%
+            rgba(0, 255, 136, 0.08) 0%, 
+            rgba(0, 212, 255, 0.05) 50%, 
+            rgba(0, 255, 136, 0.08) 100%
         );
-    background-size: 400% 400%;
-    animation: fluidBackground 20s ease-in-out infinite;
+    background-size: 300% 300%;
+    animation: fluidBackground 15s ease-in-out infinite;
 }
 
 /* Hero Section */
@@ -144,13 +119,14 @@ body {
 }
 
 /* Different animation for each window */
-#experience-window .title-bar { animation: titleBarGradient1 15s ease-in-out infinite; }
-#education-window .title-bar { animation: titleBarGradient2 18s ease-in-out infinite; }
-#projects-window .title-bar { animation: titleBarGradient3 12s ease-in-out infinite; }
-#contact-window .title-bar { animation: titleBarGradient4 20s ease-in-out infinite; }
-#hobbies-window .title-bar { animation: titleBarGradient5 16s ease-in-out infinite; }
-#mnist-window .title-bar { animation: titleBarGradient1 22s ease-in-out infinite; }
-#sentiment-window .title-bar { animation: titleBarGradient2 14s ease-in-out infinite; }
+.window .title-bar { animation: titleBarGradient 15s ease-in-out infinite; }
+#experience-window .title-bar { animation-duration: 15s; }
+#education-window .title-bar { animation-duration: 18s; animation-direction: reverse; }
+#projects-window .title-bar { animation-duration: 12s; }
+#contact-window .title-bar { animation-duration: 20s; animation-direction: reverse; }
+#hobbies-window .title-bar { animation-duration: 16s; }
+#mnist-window .title-bar { animation-duration: 22s; }
+#sentiment-window .title-bar { animation-duration: 14s; animation-direction: reverse; }
 
 .title-text { font-weight: bold; font-size: 14px; }
 .window-controls { display: flex; gap: 8px; }
@@ -356,11 +332,16 @@ a:hover {
     box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
 }
 
-.mnist-controls, .sentiment-controls { display: flex; gap: 10px; justify-content: center; margin: 15px 0; flex-wrap: wrap; }
+.mnist-controls, .sentiment-controls { 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+    margin: 15px 0; 
+    flex-wrap: wrap; 
+}
 
 .mnist-btn, .sentiment-btn {
     padding: 8px 16px;
-    background: rgba(0, 255, 136, 0.1);
     border: 2px solid var(--primary-green);
     border-radius: 6px;
     color: var(--primary-green);
@@ -368,12 +349,7 @@ a:hover {
     font-family: 'Courier New', monospace;
     font-weight: bold;
     transition: all 0.3s;
-}
-
-.sentiment-btn {
-    background: linear-gradient(145deg, var(--primary-green), #00cc66);
-    color: var(--primary-black);
-    text-shadow: none;
+    background: rgba(0, 255, 136, 0.1);
 }
 
 .mnist-btn:hover, .sentiment-btn:hover {
@@ -382,10 +358,20 @@ a:hover {
     box-shadow: 0 4px 12px rgba(0, 255, 136, 0.4);
 }
 
+.sentiment-btn {
+    background: linear-gradient(145deg, var(--primary-green), #00cc66);
+    color: var(--primary-black);
+}
+
 .sentiment-btn:hover { 
     background: linear-gradient(145deg, var(--primary-aqua), #00a3cc); 
 }
-.sentiment-btn:disabled { background: #666; cursor: not-allowed; opacity: 0.6; }
+
+.sentiment-btn:disabled { 
+    background: #666; 
+    cursor: not-allowed; 
+    opacity: 0.6; 
+}
 
 .mnist-prediction {
     text-align: left;

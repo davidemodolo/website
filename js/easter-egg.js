@@ -10,7 +10,7 @@ class EasterEgg {
             velocityX: 0,
             velocityY: 0,
             gravity: 0.8,
-            jumpForce: -20,
+            jumpForce: -100,
             friction: 0.85,
             groundFriction: 0.9
         };
@@ -220,7 +220,7 @@ class EasterEgg {
     }
 
     handleCollisions() {
-        const characterRect = {
+        const char = {
             left: this.physics.x,
             right: this.physics.x + this.characterSize,
             top: this.physics.y,
@@ -228,40 +228,33 @@ class EasterEgg {
         };
 
         for (let platform of this.platforms) {
-            const platformRect = {
+            const plat = {
                 left: platform.x,
                 right: platform.x + platform.width,
                 top: platform.y,
                 bottom: platform.y + platform.height
             };
 
-            // Check for collision
-            if (characterRect.right > platformRect.left &&
-                characterRect.left < platformRect.right &&
-                characterRect.bottom > platformRect.top &&
-                characterRect.top < platformRect.bottom) {
+            // Check collision
+            if (char.right > plat.left && char.left < plat.right &&
+                char.bottom > plat.top && char.top < plat.bottom) {
 
-                // Landing on top of platform
-                if (this.physics.velocityY > 0 &&
-                    characterRect.bottom - this.physics.velocityY <= platformRect.top) {
-                    this.physics.y = platformRect.top - this.characterSize;
+                // Landing on top
+                if (this.physics.velocityY > 0 && char.bottom - this.physics.velocityY <= plat.top) {
+                    this.physics.y = plat.top - this.characterSize;
                     this.physics.velocityY = 0;
                 }
-                // Hitting platform from below
-                else if (this.physics.velocityY < 0 &&
-                    characterRect.top - this.physics.velocityY >= platformRect.bottom) {
-                    this.physics.y = platformRect.bottom;
+                // Hit from below
+                else if (this.physics.velocityY < 0 && char.top - this.physics.velocityY >= plat.bottom) {
+                    this.physics.y = plat.bottom;
                     this.physics.velocityY = 0;
                 }
                 // Side collisions
-                else if (this.physics.velocityX > 0 &&
-                    characterRect.right - this.physics.velocityX <= platformRect.left) {
-                    this.physics.x = platformRect.left - this.characterSize;
+                else if (this.physics.velocityX > 0) {
+                    this.physics.x = plat.left - this.characterSize;
                     this.physics.velocityX = 0;
-                }
-                else if (this.physics.velocityX < 0 &&
-                    characterRect.left - this.physics.velocityX >= platformRect.right) {
-                    this.physics.x = platformRect.right;
+                } else if (this.physics.velocityX < 0) {
+                    this.physics.x = plat.right;
                     this.physics.velocityX = 0;
                 }
             }
@@ -269,29 +262,16 @@ class EasterEgg {
     }
 
     isOnGround() {
-        const characterRect = {
+        const char = {
             left: this.physics.x,
             right: this.physics.x + this.characterSize,
-            top: this.physics.y,
             bottom: this.physics.y + this.characterSize
         };
 
-        for (let platform of this.platforms) {
-            const platformRect = {
-                left: platform.x,
-                right: platform.x + platform.width,
-                top: platform.y,
-                bottom: platform.y + platform.height
-            };
-
-            // Check if character is standing on this platform
-            if (characterRect.right > platformRect.left &&
-                characterRect.left < platformRect.right &&
-                Math.abs(characterRect.bottom - platformRect.top) < 5) {
-                return true;
-            }
-        }
-        return false;
+        return this.platforms.some(platform => {
+            return char.right > platform.x && char.left < platform.x + platform.width &&
+                   Math.abs(char.bottom - platform.y) < 5;
+        });
     }
 
     updateCharacterPosition() {
@@ -402,10 +382,10 @@ class EasterEgg {
     }
 
     createConfetti() {
-        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
-        for (let i = 0; i < 40; i++) {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
+        for (let i = 0; i < 20; i++) {
             const el = document.createElement('div');
-            const size = 6 + Math.random() * 6;
+            const size = 6 + Math.random() * 4;
             el.style.cssText = `
                 position:fixed;left:${Math.random()*window.innerWidth}px;top:-10px;
                 width:${size}px;height:${size}px;background:${colors[Math.random()*colors.length|0]};
@@ -416,7 +396,6 @@ class EasterEgg {
                 element: el,
                 x: parseFloat(el.style.left),
                 y: -10,
-                vx: (Math.random() - 0.5) * 3,
                 vy: 2 + Math.random() * 2
             });
         }
@@ -424,9 +403,7 @@ class EasterEgg {
 
     updateConfetti() {
         this.confetti = this.confetti.filter(piece => {
-            piece.x += piece.vx;
-            piece.y += piece.vy += 0.08;
-            piece.element.style.left = piece.x + 'px';
+            piece.y += piece.vy += 0.1;
             piece.element.style.top = piece.y + 'px';
             if (piece.y > window.innerHeight + 20) {
                 piece.element.remove();

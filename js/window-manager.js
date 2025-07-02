@@ -84,18 +84,15 @@ class WindowManager {
             'sentiment-window': { width: 625, height: 545 },
         };
 
-        // Gather windows in an array to animate in series
         const windows = Array.from(document.querySelectorAll('.window'));
 
-        // Hide all windows initially for animation
+        // Hide all windows initially
         windows.forEach(window => {
             window.classList.remove('positioned');
             window.style.opacity = '0';
-            window.style.transition = 'opacity 0.4s, transform 0.4s';
             window.style.transform = 'scale(0.96)';
         });
 
-        // Wait before starting the animation (e.g., 300ms)
         await new Promise(resolve => setTimeout(resolve, 300));
 
         for (let i = 0; i < windows.length; i++) {
@@ -104,17 +101,14 @@ class WindowManager {
             const size = defaultSizes[windowId] || { width: 500, height: 400 };
             const position = this.getRandomPosition(size.width, size.height);
 
-            // Ensure absolute positioning is set for desktop
             if (!this.isMobile) {
                 window.style.position = 'absolute';
+                window.style.left = position.x + 'px';
+                window.style.top = position.y + 'px';
             }
-
-            window.style.left = position.x + 'px';
-            window.style.top = position.y + 'px';
+            
             window.style.width = size.width + 'px';
             window.style.height = size.height + 'px';
-
-            // Add positioned class to make window visible
             window.classList.add('positioned');
 
             this.windowStates[windowId] = {
@@ -129,7 +123,6 @@ class WindowManager {
                 }
             };
 
-            // Update taskbar for initially hidden windows
             if (window.classList.contains('hidden')) {
                 this.updateTaskbar(windowId, true);
             }
@@ -142,89 +135,52 @@ class WindowManager {
                 window.style.transform = 'scale(1)';
             }, 10);
 
-            // Wait 0.4s before showing the next window
-            // (skip delay after last window)
             if (i < windows.length - 1) {
-                // eslint-disable-next-line no-await-in-loop
                 await new Promise(resolve => setTimeout(resolve, 400));
             }
         }
     }
 
-    // Support vector to store already positioned window rects
-    positionedWindows = [];
-
     getRandomPosition(windowWidth = 500, windowHeight = 400) {
         const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight - 60; // Account for taskbar
+        const screenHeight = window.innerHeight - 60;
 
-        // Get hero section bounds from DOM
+        // Get hero section bounds
         const heroSection = document.querySelector('.hero-section');
-        let heroLeft = 0, heroTop = 0, heroRight = 0, heroBottom = 0;
+        let heroRect = { left: 0, top: 0, right: 0, bottom: 0 };
         if (heroSection) {
             const rect = heroSection.getBoundingClientRect();
-            heroLeft = rect.left;
-            heroTop = rect.top;
-            heroRight = rect.right;
-            heroBottom = rect.bottom;
+            heroRect = { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
         }
 
-        let position = {
-            x: Math.max(20, Math.min(0, screenWidth - windowWidth - 20)),
-            y: Math.max(20, Math.min(0, screenHeight - windowHeight - 20))
-        };
         let attempts = 0;
-        const maxAttempts = 50;
+        const maxAttempts = 20; // Reduced attempts
 
-        do {
+        while (attempts < maxAttempts) {
             const x = Math.random() * (screenWidth - windowWidth);
             const y = Math.random() * (screenHeight - windowHeight);
 
-            const windowRect = {
-                left: x,
-                top: y,
-                right: x + windowWidth,
-                bottom: y + windowHeight
-            };
+            // Simple overlap check with hero section
+            const overlapsHero = !(x + windowWidth < heroRect.left || 
+                                   x > heroRect.right || 
+                                   y + windowHeight < heroRect.top || 
+                                   y > heroRect.bottom);
 
-            // Check overlap with hero section
-            const overlapsHero = !(windowRect.left > heroRight ||
-                                   windowRect.right < heroLeft ||
-                                   windowRect.top > heroBottom ||
-                                   windowRect.bottom < heroTop);
-
-            // Check if this window would completely cover any already positioned window
-            let completelyCovers = false;
-            for (const other of this.positionedWindows) {
-                if (
-                    windowRect.left <= other.left &&
-                    windowRect.top <= other.top &&
-                    windowRect.right >= other.right &&
-                    windowRect.bottom >= other.bottom
-                ) {
-                    completelyCovers = true;
-                    break;
-                }
-            }
-
-            if ((!overlapsHero && !completelyCovers) || attempts >= maxAttempts) {
-                position = {
+            if (!overlapsHero) {
+                const position = {
                     x: Math.max(20, Math.min(x, screenWidth - windowWidth - 20)),
                     y: Math.max(20, Math.min(y, screenHeight - windowHeight - 20))
                 };
-                // Save this window's rect for future checks
-                this.positionedWindows.push({
-                    left: position.x,
-                    top: position.y,
-                    right: position.x + windowWidth,
-                    bottom: position.y + windowHeight
-                });
-                break;
+                return position;
             }
             attempts++;
-        } while (attempts < maxAttempts);
+        }
 
-        return { x: Math.round(position.x), y: Math.round(position.y) };
+        // Fallback position
+        return {
+            x: Math.max(20, Math.min(100 + attempts * 30, screenWidth - windowWidth - 20)),
+            y: Math.max(20, Math.min(100 + attempts * 30, screenHeight - windowHeight - 20))
+        };
     }
 
     makeWindowInteractive(window) {

@@ -92,61 +92,31 @@ async function displaySentimentResult(predictionPromise) {
     const scoreDescription = document.getElementById('score-description');
 
     try {
-        // Await the prediction if it's a Promise
         const prediction = await Promise.resolve(predictionPromise);
-        console.log('Raw prediction:', prediction); // Debug log
-
-        // ml5.js sentiment returns an object with 'confidence' property
-        let confidence;
-
-        if (typeof prediction === 'object' && prediction !== null) {
-            if (prediction.confidence !== undefined) {
-                confidence = prediction.confidence;
-            } else if (prediction.score !== undefined) {
-                confidence = prediction.score;
-            } else {
-                confidence = parseFloat(prediction);
-            }
-        } else {
-            confidence = parseFloat(prediction);
-        }
-
-        // Validate confidence value
+        
+        // Extract confidence value
+        let confidence = prediction?.confidence ?? prediction?.score ?? parseFloat(prediction);
+        
         if (isNaN(confidence) || confidence < 0 || confidence > 1) {
-            console.error('Invalid confidence value:', confidence);
-            scoreValue.textContent = 'Error';
-            scoreDescription.textContent = 'Invalid result';
-            return;
+            throw new Error('Invalid confidence value');
         }
 
-        const roundedScore = Math.round(confidence * 1000) / 1000; // Round to 3 decimal places
+        const roundedScore = Math.round(confidence * 1000) / 1000;
         scoreValue.textContent = roundedScore.toFixed(3);
 
-        // Determine sentiment description
-        let description = '';
-        let color = '';
+        // Determine sentiment
+        const sentiments = [
+            { threshold: 0.3, label: 'Very Negative', color: '#ff4444' },
+            { threshold: 0.45, label: 'Negative', color: '#ff7744' },
+            { threshold: 0.55, label: 'Neutral', color: '#ffaa44' },
+            { threshold: 0.7, label: 'Positive', color: '#88ff44' },
+            { threshold: 1, label: 'Very Positive', color: 'var(--primary-green)' }
+        ];
 
-        if (confidence < 0.3) {
-            description = 'Very Negative';
-            color = '#ff4444';
-        } else if (confidence < 0.45) {
-            description = 'Negative';
-            color = '#ff7744';
-        } else if (confidence < 0.55) {
-            description = 'Neutral';
-            color = '#ffaa44';
-        } else if (confidence < 0.7) {
-            description = 'Positive';
-            color = '#88ff44';
-        } else {
-            description = 'Very Positive';
-            color = 'var(--primary-green)';
-        }
+        const sentiment = sentiments.find(s => confidence < s.threshold) || sentiments[sentiments.length - 1];
+        scoreDescription.textContent = sentiment.label;
+        scoreValue.style.color = sentiment.color;
 
-        scoreDescription.textContent = description;
-        scoreValue.style.color = color;
-
-        // Draw speedometer with animation
         animateSpeedometer(confidence);
     } catch (error) {
         console.error('Error displaying sentiment result:', error);
@@ -157,80 +127,33 @@ async function displaySentimentResult(predictionPromise) {
 
 function animateSpeedometer(targetValue) {
     const canvas = document.getElementById('sentiment-speedometer');
-    if (!canvas) {
-        console.error('Speedometer canvas not found');
-        return;
-    }
+    if (!canvas || isNaN(targetValue) || targetValue < 0 || targetValue > 1) return;
     
-    // Validate value
-    if (isNaN(targetValue) || targetValue < 0 || targetValue > 1) {
-        console.error('Invalid speedometer value:', targetValue);
-        return;
-    }
-    
-    console.log('Animating speedometer to value:', targetValue);
-    
-    // Animation parameters
-    const animationDuration = 1000; // 2 seconds total
-    const phase1Duration = 500; // 0.8 seconds to go from 0 to 1
-    const phase2Duration = 50; // 0.4 seconds to pause at 1
-    const phase3Duration = 500; // 0.8 seconds to go from 1 to target
-    
+    // Simplified animation - direct ease to target
+    const duration = 800;
     const startTime = Date.now();
     
     function animate() {
-        const currentTime = Date.now();
-        const elapsed = currentTime - startTime;
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = progress < 0.5 ? 2 * progress * progress : 1 - 2 * (1 - progress) * (1 - progress);
         
-        let currentValue;
+        drawSpeedometer(targetValue * easedProgress);
         
-        if (elapsed < phase1Duration) {
-            // Phase 1: 0 to 1
-            const progress = elapsed / phase1Duration;
-            currentValue = easeInOutCubic(progress);
-        } else if (elapsed < phase1Duration + phase2Duration) {
-            // Phase 2: stay at 1
-            currentValue = 1;
-        } else if (elapsed < animationDuration) {
-            // Phase 3: 1 to target value
-            const phase3Elapsed = elapsed - phase1Duration - phase2Duration;
-            const progress = phase3Elapsed / phase3Duration;
-            const easedProgress = easeInOutCubic(progress);
-            currentValue = 1 + (targetValue - 1) * easedProgress;
-        } else {
-            // Animation complete
-            currentValue = targetValue;
-            drawSpeedometer(currentValue);
-            return;
-        }
-        
-        drawSpeedometer(currentValue);
-        requestAnimationFrame(animate);
+        if (progress < 1) requestAnimationFrame(animate);
     }
-    
     animate();
-}
-
-// Easing function for smooth animation
-function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 }
 
 function drawSpeedometer(value) {
     const canvas = document.getElementById('sentiment-speedometer');
-    if (!canvas) {
-        console.error('Speedometer canvas not found');
-        return;
-    }
+    if (!canvas || isNaN(value) || value < 0 || value > 1) return;
     
     const ctx = canvas.getContext('2d');
-    
-    // Make canvas responsive
     const container = canvas.parentElement;
-    const containerWidth = container.clientWidth;
-    const canvasSize = Math.min(containerWidth - 40, 200); // Max 200px, responsive
+    const canvasSize = Math.min(container.clientWidth - 40, 200);
     
-    if (canvas.width !== canvasSize || canvas.height !== canvasSize * 0.6) {
+    if (canvas.width !== canvasSize) {
         canvas.width = canvasSize;
         canvas.height = canvasSize * 0.6;
     }
@@ -239,79 +162,61 @@ function drawSpeedometer(value) {
     const centerY = canvas.height - 20;
     const radius = Math.min(centerX, centerY) - 20;
     
-    // Validate value
-    if (isNaN(value) || value < 0 || value > 1) {
-        console.error('Invalid speedometer value:', value);
-        return;
-    }
-    
-    //console.log('Drawing speedometer with value:', value); // Debug log
-    
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Draw arc background
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, Math.PI, 0);
     ctx.strokeStyle = '#333';
-    ctx.lineWidth = Math.max(4, radius / 20);
+    ctx.lineWidth = radius / 20;
     ctx.stroke();
     
     // Draw colored segments
     const segments = [
-        { start: 0, end: 0.3, color: '#ff4444' },      // Red (negative)
-        { start: 0.3, end: 0.45, color: '#ff7744' },   // Orange-red
-        { start: 0.45, end: 0.55, color: '#ffaa44' },  // Yellow (neutral)
-        { start: 0.55, end: 0.7, color: '#88ff44' },   // Yellow-green
-        { start: 0.7, end: 1.0, color: '#00ff88' }     // Green (positive)
+        { end: 0.3, color: '#ff4444' },
+        { end: 0.45, color: '#ff7744' },
+        { end: 0.55, color: '#ffaa44' },
+        { end: 0.7, color: '#88ff44' },
+        { end: 1.0, color: '#00ff88' }
     ];
     
+    let start = 0;
     segments.forEach(segment => {
         ctx.beginPath();
-        const startAngle = Math.PI + (segment.start * Math.PI);
-        const endAngle = Math.PI + (segment.end * Math.PI);
-        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.arc(centerX, centerY, radius, Math.PI + start * Math.PI, Math.PI + segment.end * Math.PI);
         ctx.strokeStyle = segment.color;
-        ctx.lineWidth = Math.max(4, radius / 20);
+        ctx.lineWidth = radius / 20;
         ctx.stroke();
+        start = segment.end;
     });
     
     // Draw needle
-    const needleAngle = Math.PI + (value * Math.PI);
+    const needleAngle = Math.PI + value * Math.PI;
     const needleLength = radius - 10;
-    const needleX = centerX + Math.cos(needleAngle) * needleLength;
-    const needleY = centerY + Math.sin(needleAngle) * needleLength;
-    
-    // console.log('Needle position:', needleX, needleY, 'Angle:', needleAngle); // Debug log
-    
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
-    ctx.lineTo(needleX, needleY);
+    ctx.lineTo(
+        centerX + Math.cos(needleAngle) * needleLength,
+        centerY + Math.sin(needleAngle) * needleLength
+    );
     ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = Math.max(2, radius / 40);
+    ctx.lineWidth = radius / 40;
     ctx.lineCap = 'round';
     ctx.stroke();
     
     // Draw center circle
     ctx.beginPath();
-    ctx.arc(centerX, centerY, Math.max(4, radius / 20), 0, 2 * Math.PI);
+    ctx.arc(centerX, centerY, radius / 20, 0, 2 * Math.PI);
     ctx.fillStyle = '#ffffff';
     ctx.fill();
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 2;
-    ctx.stroke();
     
-    // Draw scale labels
+    // Draw labels
     ctx.fillStyle = '#ffffff';
-    ctx.font = `${Math.max(10, radius / 8)}px Courier New`;
+    ctx.font = `${radius / 8}px Courier New`;
     ctx.textAlign = 'center';
     ctx.fillText('0', centerX - radius + 10, centerY + 15);
     ctx.fillText('0.5', centerX, centerY - radius + 15);
     ctx.fillText('1', centerX + radius - 10, centerY + 15);
-    
-    // Draw title
-    ctx.fillStyle = '#00ff88';
-    ctx.font = `${Math.max(12, radius / 7)}px Courier New`;
     ctx.fillText('Sentiment Score', centerX, 10);
 }
 
@@ -320,37 +225,25 @@ function clearSentimentInput() {
     const scoreValue = document.getElementById('score-value');
     const scoreDescription = document.getElementById('score-description');
     
-    // Clear input
     inputElement.value = '';
-    
-    // Reset display
     scoreValue.textContent = '-';
     scoreValue.style.color = 'var(--primary-green)';
     scoreDescription.textContent = 'Enter text and click analyze';
     
-    // Redraw empty speedometer
     initializeSpeedometer();
-    
-    // Focus on input
     inputElement.focus();
 }
 
 // Initialize empty speedometer on window show
 function initializeSpeedometer() {
     const canvas = document.getElementById('sentiment-speedometer');
-    if (!canvas) {
-        console.error('Canvas not found for speedometer initialization');
-        return;
-    }
+    if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
-    
-    // Make canvas responsive
     const container = canvas.parentElement;
-    const containerWidth = container.clientWidth;
-    const canvasSize = Math.min(containerWidth - 40, 200); // Max 200px, responsive
+    const canvasSize = Math.min(container.clientWidth - 40, 200);
     
-    if (canvas.width !== canvasSize || canvas.height !== canvasSize * 0.6) {
+    if (canvas.width !== canvasSize) {
         canvas.width = canvasSize;
         canvas.height = canvasSize * 0.6;
     }
@@ -359,57 +252,45 @@ function initializeSpeedometer() {
     const centerY = canvas.height - 20;
     const radius = Math.min(centerX, centerY) - 20;
     
-    console.log('Initializing speedometer'); // Debug log
-    
-    // Draw empty speedometer
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Draw arc background
+    // Draw background and faded segments
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, Math.PI, 0);
     ctx.strokeStyle = '#333';
-    ctx.lineWidth = Math.max(4, radius / 20);
+    ctx.lineWidth = radius / 20;
     ctx.stroke();
     
-    // Draw colored segments (faded)
     const segments = [
-        { start: 0, end: 0.3, color: '#ff444444' },      // Red (negative) - with alpha
-        { start: 0.3, end: 0.45, color: '#ff774444' },   // Orange-red - with alpha
-        { start: 0.45, end: 0.55, color: '#ffaa4444' },  // Yellow (neutral) - with alpha
-        { start: 0.55, end: 0.7, color: '#88ff4444' },   // Yellow-green - with alpha
-        { start: 0.7, end: 1.0, color: '#00ff8844' }     // Green (positive) - with alpha
+        { end: 0.3, color: '#ff444444' },
+        { end: 0.45, color: '#ff774444' },
+        { end: 0.55, color: '#ffaa4444' },
+        { end: 0.7, color: '#88ff4444' },
+        { end: 1.0, color: '#00ff8844' }
     ];
     
+    let start = 0;
     segments.forEach(segment => {
         ctx.beginPath();
-        const startAngle = Math.PI + (segment.start * Math.PI);
-        const endAngle = Math.PI + (segment.end * Math.PI);
-        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.arc(centerX, centerY, radius, Math.PI + start * Math.PI, Math.PI + segment.end * Math.PI);
         ctx.strokeStyle = segment.color;
-        ctx.lineWidth = Math.max(3, radius / 25);
+        ctx.lineWidth = radius / 25;
         ctx.stroke();
+        start = segment.end;
     });
     
-    // Draw center circle
+    // Draw center circle and labels
     ctx.beginPath();
-    ctx.arc(centerX, centerY, Math.max(4, radius / 20), 0, 2 * Math.PI);
+    ctx.arc(centerX, centerY, radius / 20, 0, 2 * Math.PI);
     ctx.fillStyle = '#666';
     ctx.fill();
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 2;
-    ctx.stroke();
     
-    // Draw scale labels
     ctx.fillStyle = '#ffffff';
-    ctx.font = `${Math.max(10, radius / 8)}px Courier New`;
+    ctx.font = `${radius / 8}px Courier New`;
     ctx.textAlign = 'center';
     ctx.fillText('0', centerX - radius + 10, centerY + 15);
     ctx.fillText('0.5', centerX, centerY - radius + 15);
     ctx.fillText('1', centerX + radius - 10, centerY + 15);
-    
-    // Draw title
-    ctx.fillStyle = '#00ff88';
-    ctx.font = `${Math.max(12, radius / 7)}px Courier New`;
     ctx.fillText('Sentiment Score', centerX, 10);
 }
 
