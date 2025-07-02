@@ -10,7 +10,7 @@ class EasterEgg {
             velocityX: 0,
             velocityY: 0,
             gravity: 0.8,
-            jumpForce: -100,
+            jumpForce: -25,
             friction: 0.85,
             groundFriction: 0.9
         };
