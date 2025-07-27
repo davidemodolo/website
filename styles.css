@@ -676,3 +676,150 @@ a:hover {
         min-width: 70px;
     }
 }
+
+
+/* --- Subopti.ml Window Enhancements --- */
+
+/* Main container to establish a positioning context */
+.suboptiml-container {
+    position: relative;
+    overflow: hidden; /* This is crucial to keep effects inside the container */
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Background gradient effect, positioned absolutely within the container */
+.suboptiml-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+    z-index: 1;
+}
+
+/* Grid overlay effect */
+.suboptiml-grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 2;
+}
+
+/* Content must be on top of the background effects */
+.suboptiml-container > * {
+    position: relative;
+    z-index: 3;
+}
+
+/* Floating circles container */
+.suboptiml-floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 2; /* Between grid and content */
+}
+
+.suboptiml-floating-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+    animation: suboptimlFloatUp 10s infinite linear;
+}
+
+@keyframes suboptimlFloatUp {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    10%, 90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+}
+
+/* suboptiml animation styles */
+.suboptiml-container .step-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 20px 0;
+}
+
+.suboptiml-container .step {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #888;
+    transition: all 0.4s ease;
+}
+
+.suboptiml-container .step::before {
+    content: '○';
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    color: #444;
+    transition: all 0.4s ease;
+}
+
+.suboptiml-container .step.running {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+.suboptiml-container .step.running::before {
+    content: '⚡';
+    color: #22c55e;
+    animation: runningPulse 1.5s ease-in-out infinite;
+}
+
+.suboptiml-container .step.done {
+    color: #10b981;
+}
+
+.suboptiml-container .step.done::before {
+    content: '✨';
+    color: #10b981;
+}
+
+@keyframes runningPulse {
+    50% { transform: scale(1.2); }
+}
+
+/* Styling for the button */
+#btn-load-demo {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #22c55e, #10b981);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
+}
+
+#btn-load-demo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+}
