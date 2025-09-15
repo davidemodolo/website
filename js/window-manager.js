@@ -79,7 +79,7 @@ class WindowManager {
             'experience-window': { width: 560, height: 440 },
             'education-window': { width: 735, height: 500 },
             'projects-window': { width: 750, height: 420 },
-            'contact-window': { width: 400, height: 280 },
+            'contact-window': { width: 440, height: 470 },
             'mnist-window': { width: 705, height: 600 },
             'sentiment-window': { width: 625, height: 545 },
         };
@@ -422,6 +422,40 @@ class WindowManager {
                 taskbarItem.classList.remove('hidden');
             }
         }
+    }
+
+    // Reset all windows to fresh state
+    resetToFreshState() {
+        // Clear all window states
+        this.windowStates = {};
+        this.activeWindow = null;
+        this.dragData = null;
+        this.resizeData = null;
+        
+        // Reset all windows
+        const windows = document.querySelectorAll('.window');
+        windows.forEach(window => {
+            window.classList.remove('hidden', 'minimized', 'fullscreen', 'active', 'positioned');
+            window.style.opacity = '';
+            window.style.transform = '';
+            window.style.transition = '';
+            window.style.position = '';
+            window.style.left = '';
+            window.style.top = '';
+            window.style.width = '';
+            window.style.height = '';
+        });
+        
+        // Reset all taskbar items
+        const taskbarItems = document.querySelectorAll('.taskbar-item:not(.blog-toggle)');
+        taskbarItems.forEach(item => {
+            if (!item.classList.contains('status-indicator')) {
+                item.classList.remove('hidden');
+            }
+        });
+        
+        // Reinitialize everything
+        this.initializeWindows();
     }
 }
 
