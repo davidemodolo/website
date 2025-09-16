@@ -13,6 +13,10 @@ let savedWindowStates = null;
 // Initialize blog functionality
 document.addEventListener('DOMContentLoaded', function() {
     loadArticles();
+    handleInitialURL();
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', handleURLChange);
 });
 
 // Toggle between portfolio and blog view
@@ -356,10 +360,16 @@ function clearAllFilters() {
 }
 
 // Open and display a blog article
-async function openBlogArticle(articleId) {
+async function openBlogArticle(articleId, updateURL = true) {
     const article = allArticles.find(a => a.id === articleId);
     if (!article) return;
     
+    // Update URL if requested
+    if (updateURL) {
+        const newURL = `${window.location.origin}${window.location.pathname}#blog/${articleId}`;
+        history.pushState({ blogArticle: articleId }, `${article.title} - Blog`, newURL);
+    }
+
     try {
         // Show loading state
         const articleContent = document.getElementById('article-content');
@@ -370,6 +380,15 @@ async function openBlogArticle(articleId) {
         const blogHeader = document.querySelector('.blog-header');
         const blogFilters = document.getElementById('blog-filters');
         const articleReader = document.getElementById('article-reader');
+        
+        // Update article reader header with back button and share button only
+        const articleHeaderDiv = articleReader.querySelector('.article-header');
+        articleHeaderDiv.innerHTML = `
+            <button onclick="closeBlogArticle()" class="back-link">← Back to Articles</button>
+            <button onclick="copyArticleLink('${articleId}')" class="share-button" title="Copy article link">
+                Share
+            </button>
+        `;
         
         // Slide out the main blog content
         articlesContainer.style.opacity = '0';
@@ -400,9 +419,7 @@ async function openBlogArticle(articleId) {
         document.getElementById('article-content').innerHTML = 
             '<div class="error">Error loading article. Please try again.</div>';
     }
-}
-
-// Helper function to load article content
+}// Helper function to load article content
 async function loadArticleContent(article) {
     try {
         const response = await fetch(`blog/articles/${article.filename}`);
@@ -413,6 +430,18 @@ async function loadArticleContent(article) {
         
         // Display the article
         document.getElementById('article-content').innerHTML = html;
+        
+        // Handle header anchor scrolling if present in URL
+        setTimeout(() => {
+            const hash = window.location.hash;
+            if (hash && !hash.startsWith('#blog/')) {
+                const targetElement = document.getElementById(hash.substring(1));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }, 100);
+        
     } catch (error) {
         console.error('Error loading article content:', error);
         document.getElementById('article-content').innerHTML = 
@@ -421,7 +450,13 @@ async function loadArticleContent(article) {
 }
 
 // Close blog article and return to articles list
-function closeBlogArticle() {
+function closeBlogArticle(updateURL = true) {
+    // Update URL to remove article reference
+    if (updateURL && window.location.hash.includes('blog/')) {
+        const newURL = `${window.location.origin}${window.location.pathname}`;
+        history.pushState({ blogView: true }, 'Blog', newURL);
+    }
+    
     const articlesContainer = document.getElementById('articles-container');
     const blogHeader = document.querySelector('.blog-header');
     const blogFilters = document.getElementById('blog-filters');
@@ -453,16 +488,159 @@ function closeBlogArticle() {
     document.getElementById('blog-view').scrollTop = 0;
 }
 
+// URL handling functions
+function handleInitialURL() {
+    const hash = window.location.hash;
+    if (hash.startsWith('#blog/')) {
+        const fullPath = hash.substring(6); // Remove '#blog/'
+        const [articleId, headerAnchor] = fullPath.split('#');
+        
+        // Wait for articles to load first
+        setTimeout(() => {
+            if (allArticles.length > 0) {
+                const article = allArticles.find(a => a.id === articleId);
+                if (article) {
+                    // Switch to blog view first
+                    if (!blogActive) {
+                        toggleBlogView();
+                    }
+                    // Then open the specific article
+                    setTimeout(() => {
+                        openBlogArticle(articleId, false);
+                        
+                        // If there's a header anchor, scroll to it after content loads
+                        if (headerAnchor) {
+                            setTimeout(() => {
+                                const targetElement = document.getElementById(headerAnchor);
+                                if (targetElement) {
+                                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            }, 600);
+                        }
+                    }, 500);
+                }
+            }
+        }, 100);
+    } else if (hash && hash.length > 1) {
+        // Check if it's a header anchor in the current article
+        // This will be handled after article content loads
+    }
+}
+
+function handleURLChange(event) {
+    const hash = window.location.hash;
+    if (hash.startsWith('#blog/')) {
+        const fullPath = hash.substring(6);
+        const [articleId, headerAnchor] = fullPath.split('#');
+        const article = allArticles.find(a => a.id === articleId);
+        
+        if (article) {
+            if (!blogActive) {
+                toggleBlogView();
+                setTimeout(() => {
+                    openBlogArticle(articleId, false);
+                    if (headerAnchor) {
+                        setTimeout(() => {
+                            const targetElement = document.getElementById(headerAnchor);
+                            if (targetElement) {
+                                targetElement.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }, 600);
+                    }
+                }, 500);
+            } else {
+                openBlogArticle(articleId, false);
+                if (headerAnchor) {
+                    setTimeout(() => {
+                        const targetElement = document.getElementById(headerAnchor);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 500);
+                }
+            }
+        }
+    } else if (hash === '' && blogActive) {
+        // If hash is cleared and we're in blog view, close article if open
+        const articleReader = document.getElementById('article-reader');
+        if (!articleReader.classList.contains('hidden')) {
+            closeBlogArticle(false);
+        }
+    }
+}
+
+function copyArticleLink(articleId) {
+    const articleURL = `${window.location.origin}${window.location.pathname}#blog/${articleId}`;
+    navigator.clipboard.writeText(articleURL).then(() => {
+        // Visual feedback
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = 'Copied to clipboard';
+        button.disabled = true;
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.disabled = false;
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        // Fallback: show the URL in an alert
+        alert(`Article URL: ${articleURL}`);
+    });
+}
+
+function copyHeaderLink(headerId) {
+    // Get current article ID from URL or find it another way
+    let currentArticleId = '';
+    const hash = window.location.hash;
+    if (hash.startsWith('#blog/')) {
+        currentArticleId = hash.substring(6).split('#')[0];
+    }
+    
+    const headerURL = `${window.location.origin}${window.location.pathname}#blog/${currentArticleId}#${headerId}`;
+    navigator.clipboard.writeText(headerURL).then(() => {
+        // Visual feedback
+        const headerLink = document.querySelector(`[data-header-id="${headerId}"]`);
+        if (headerLink) {
+            const originalText = headerLink.textContent;
+            headerLink.textContent = 'Copied';
+            headerLink.disabled = true;
+            setTimeout(() => {
+                headerLink.textContent = originalText;
+                headerLink.disabled = false;
+            }, 2000);
+        }
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        alert(`Header URL: ${headerURL}`);
+    });
+}
+
 // Simple markdown parser (basic implementation)
 function parseMarkdown(markdown) {
     // Remove frontmatter
     markdown = markdown.replace(/^---[\s\S]*?---\n/, '');
     
+    // Function to create URL-friendly anchor from header text
+    function createAnchor(text) {
+        return text.toLowerCase()
+            .replace(/[^\w\s-]/g, '') // Remove special characters
+            .replace(/\s+/g, '-') // Replace spaces with hyphens
+            .replace(/-+/g, '-') // Replace multiple hyphens with single
+            .trim('-'); // Remove leading/trailing hyphens
+    }
+    
     let html = markdown
-        // Headers
+        // Headers with anchor links (only # and ##)
+        .replace(/^## (.*$)/gim, (match, headerText) => {
+            const anchor = createAnchor(headerText);
+            return `<h2 id="${anchor}">${headerText} <button class="header-link" data-header-id="${anchor}" onclick="copyHeaderLink('${anchor}')" title="Copy link to this section">Link</button></h2>`;
+        })
+        .replace(/^# (.*$)/gim, (match, headerText) => {
+            const anchor = createAnchor(headerText);
+            return `<h1 id="${anchor}">${headerText} <button class="header-link" data-header-id="${anchor}" onclick="copyHeaderLink('${anchor}')" title="Copy link to this section">Link</button></h1>`;
+        })
+        // Headers without anchor links (###)
         .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
         
         // Bold and italic
         .replace(/\*\*\*(.*?)\*\*\*/gim, '<strong><em>$1</em></strong>')
@@ -537,6 +715,95 @@ const additionalCSS = `
     border-color: var(--accent-green) !important;
 }
 
+/* Article share and header styling */
+.article-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--surface-secondary);
+}
+
+.back-link {
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.back-link:hover {
+    background: var(--surface-tertiary);
+    transform: translateY(-1px);
+}
+
+.share-button {
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.share-button:hover:not(:disabled) {
+    background: var(--accent-green-hover, #0e8043);
+    transform: translateY(-1px);
+}
+
+.share-button:disabled {
+    background: var(--muted-text);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Header link buttons */
+.header-link {
+    background: none;
+    border: none;
+    color: var(--muted-text);
+    cursor: pointer;
+    font-size: 0.6em;
+    margin-left: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    vertical-align: middle;
+}
+
+h1:hover .header-link,
+h2:hover .header-link {
+    opacity: 1;
+}
+
+.header-link:hover:not(:disabled) {
+    background: var(--surface-secondary);
+    color: var(--accent-green);
+    transform: scale(1.05);
+}
+
+.header-link:disabled {
+    background: var(--surface-secondary);
+    color: var(--accent-green);
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
 @media (max-width: 768px) {
     .blog-container {
         padding: 20px 10px;
@@ -554,6 +821,15 @@ const additionalCSS = `
     
     .article-tags {
         width: 100%;
+    }
+    
+    .article-header {
+        gap: 15px;
+    }
+    
+    .share-button {
+        padding: 6px 12px;
+        font-size: 0.8em;
     }
 }
 `;
