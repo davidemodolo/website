@@ -365,24 +365,35 @@ async function openBlogArticle(articleId) {
         const articleContent = document.getElementById('article-content');
         articleContent.innerHTML = '<div class="loading">Loading article...</div>';
         
-        // Hide articles and show reader
-        document.getElementById('articles-container').style.display = 'none';
-        document.querySelector('.blog-header').style.display = 'none';
-        document.getElementById('blog-filters').style.display = 'none';
-        document.getElementById('article-reader').classList.remove('hidden');
+        // Start slide-out animation for main blog content
+        const articlesContainer = document.getElementById('articles-container');
+        const blogHeader = document.querySelector('.blog-header');
+        const blogFilters = document.getElementById('blog-filters');
+        const articleReader = document.getElementById('article-reader');
         
-        // Fetch and parse markdown
-        const response = await fetch(`blog/articles/${article.filename}`);
-        const markdown = await response.text();
+        // Slide out the main blog content
+        articlesContainer.style.opacity = '0';
+        articlesContainer.style.transform = 'translateX(-50%)';
+        blogHeader.style.opacity = '0';
+        blogHeader.style.transform = 'translateX(-50%)';
+        blogFilters.style.opacity = '0';
+        blogFilters.style.transform = 'translateX(-50%)';
         
-        // Parse markdown to HTML
-        const html = parseMarkdown(markdown);
-        
-        // Display the article
-        articleContent.innerHTML = html;
-        
-        // Scroll to top
-        document.getElementById('blog-view').scrollTop = 0;
+        // After slide-out animation, hide main content and show article reader
+        setTimeout(() => {
+            articlesContainer.style.display = 'none';
+            blogHeader.style.display = 'none';
+            blogFilters.style.display = 'none';
+            
+            // Show article reader and start slide-in animation
+            articleReader.classList.remove('hidden');
+            
+            // Fetch and parse markdown
+            loadArticleContent(article);
+            
+            // Scroll to top
+            document.getElementById('blog-view').scrollTop = 0;
+        }, 400);
         
     } catch (error) {
         console.error('Error loading article:', error);
@@ -391,12 +402,52 @@ async function openBlogArticle(articleId) {
     }
 }
 
+// Helper function to load article content
+async function loadArticleContent(article) {
+    try {
+        const response = await fetch(`blog/articles/${article.filename}`);
+        const markdown = await response.text();
+        
+        // Parse markdown to HTML
+        const html = parseMarkdown(markdown);
+        
+        // Display the article
+        document.getElementById('article-content').innerHTML = html;
+    } catch (error) {
+        console.error('Error loading article content:', error);
+        document.getElementById('article-content').innerHTML = 
+            '<div class="error">Error loading article content. Please try again.</div>';
+    }
+}
+
 // Close blog article and return to articles list
 function closeBlogArticle() {
-    document.getElementById('article-reader').classList.add('hidden');
-    document.getElementById('articles-container').style.display = 'flex';
-    document.querySelector('.blog-header').style.display = 'flex';
-    document.getElementById('blog-filters').style.display = 'flex';
+    const articlesContainer = document.getElementById('articles-container');
+    const blogHeader = document.querySelector('.blog-header');
+    const blogFilters = document.getElementById('blog-filters');
+    const articleReader = document.getElementById('article-reader');
+    
+    // Start slide-out animation for article reader
+    articleReader.classList.add('hidden');
+    
+    // After slide-out animation, show main content and start slide-in animation
+    setTimeout(() => {
+        // Show main blog content
+        articlesContainer.style.display = 'flex';
+        blogHeader.style.display = 'flex';
+        blogFilters.style.display = 'flex';
+        
+        // Reset and start slide-in animation
+        setTimeout(() => {
+            articlesContainer.style.opacity = '1';
+            articlesContainer.style.transform = 'translateX(0)';
+            blogHeader.style.opacity = '1';
+            blogHeader.style.transform = 'translateX(0)';
+            blogFilters.style.opacity = '1';
+            blogFilters.style.transform = 'translateX(0)';
+        }, 50);
+        
+    }, 400);
     
     // Scroll to top
     document.getElementById('blog-view').scrollTop = 0;

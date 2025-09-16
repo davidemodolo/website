@@ -60,6 +60,7 @@
     align-items: center;
     margin-bottom: 40px;
     gap: 20px;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .blog-header h2 {
@@ -98,6 +99,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter-section {
@@ -144,6 +146,7 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .article-card {
@@ -220,10 +223,15 @@
 
 .article-reader {
     max-width: none;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .article-reader.hidden {
-    display: none;
+    opacity: 0;
+    transform: translateX(100%);
+    pointer-events: none;
 }
 
 .article-header {
