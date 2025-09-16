@@ -13,8 +13,18 @@ function initializeSentimentModel() {
     const statusElement = document.getElementById('sentiment-status');
     
     try {
-        // Initialize the sentiment analysis model
-        sentiment = ml5.sentiment('MovieReviews', modelReady);
+        // Initialize sentiment model
+        const sentimentResult = ml5.sentiment('MovieReviews', modelReady);
+        
+        // Handle the Promise
+        sentimentResult.then((result) => {
+            sentiment = result;
+            modelReady();
+        }).catch((error) => {
+            console.error('Error loading sentiment model:', error);
+            statusElement.textContent = 'Error loading model. Please refresh the page.';
+            statusElement.style.color = '#ff4444';
+        });
     } catch (error) {
         console.error('Error loading sentiment model:', error);
         statusElement.textContent = 'Error loading model. Please refresh the page.';
@@ -53,7 +63,7 @@ function setupSentimentListeners() {
     });
 }
 
-function analyzeSentiment() {
+async function analyzeSentiment() {
     if (!isModelLoaded) {
         alert('Model is still loading. Please wait.');
         return;
@@ -73,10 +83,9 @@ function analyzeSentiment() {
     scoreValue.textContent = '...';
     scoreDescription.textContent = 'Analyzing...';
     
-    // Predict sentiment
+    // Predict sentiment using the loaded model
     try {
-        const prediction = sentiment.predict(text);
-        console.log('Prediction result:', prediction); // Debug log
+        const prediction = await sentiment.predict(text);
         
         // Display results
         displaySentimentResult(prediction);
@@ -87,18 +96,16 @@ function analyzeSentiment() {
     }
 }
 
-async function displaySentimentResult(predictionPromise) {
+function displaySentimentResult(prediction) {
     const scoreValue = document.getElementById('score-value');
     const scoreDescription = document.getElementById('score-description');
 
     try {
-        const prediction = await Promise.resolve(predictionPromise);
-        
-        // Extract confidence value
-        let confidence = prediction?.confidence ?? prediction?.score ?? parseFloat(prediction);
+        // ml5.js sentiment model returns an object with confidence score
+        const confidence = prediction.confidence;
         
         if (isNaN(confidence) || confidence < 0 || confidence > 1) {
-            throw new Error('Invalid confidence value');
+            throw new Error('Invalid confidence value: ' + confidence);
         }
 
         const roundedScore = Math.round(confidence * 1000) / 1000;

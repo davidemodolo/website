@@ -25,37 +25,49 @@ function toggleBlogView() {
     blogActive = !blogActive;
     
     if (blogActive) {
-        // Switch to blog view
-        saveCurrentWindowStates();
-        hideAllWindows();
-        blogView.classList.remove('hidden');
-        body.classList.add('blog-active');
-        blogToggle.textContent = '🏠 Portfolio';
+        // Switch to blog view - add small delay to ensure any window animations complete
+        setTimeout(() => {
+            saveCurrentWindowStates();
+            
+            // Clear inline styles that might interfere with CSS transitions
+            const windows = document.querySelectorAll('.window');
+            windows.forEach(window => {
+                if (window.classList.contains('positioned') && !window.classList.contains('hidden')) {
+                    // Clear ALL inline styles that might interfere with CSS transitions
+                    window.style.opacity = '';
+                    window.style.transform = '';
+                    window.style.transition = '';
+                }
+            });
+            
+            // Start transition to blog view
+            blogView.classList.remove('hidden');
+            blogView.classList.add('active');
+            body.classList.add('blog-active');
+            blogToggle.textContent = '🏠 Portfolio';
+            
+            // Load and display articles after animation
+            setTimeout(() => {
+                displayArticles();
+                setupFilters();
+            }, 300);
+        }, 100);
         
-        // Load and display articles
-        displayArticles();
-        setupFilters();
     } else {
-        // Switch back to portfolio view - restore exact previous state
+        // Switch back to portfolio view
+        blogView.classList.remove('active');
         blogView.classList.add('hidden');
         body.classList.remove('blog-active');
         blogToggle.textContent = '📝 Blog';
         
-        // Restore the exact state from before entering blog
-        restoreWindowStates();
-        
-        // Hide article reader if open
-        closeBlogArticle();
+        // Restore the exact state from before entering blog after animation
+        setTimeout(() => {
+            restoreWindowStates();
+            
+            // Hide article reader if open
+            closeBlogArticle();
+        }, 600);
     }
-}
-
-// Hide all portfolio windows (for blog view)
-function hideAllWindows() {
-    const windows = document.querySelectorAll('.window');
-    windows.forEach(window => {
-        window.classList.add('hidden');
-        window.classList.remove('positioned', 'active');
-    });
 }
 
 // Save current window states before entering blog view
@@ -72,20 +84,26 @@ function saveCurrentWindowStates() {
     const windows = document.querySelectorAll('.window');
     windows.forEach(window => {
         const windowId = window.id;
+        
+        // For positioned windows, ensure we save the final state, not animation state
+        const computedStyle = window.getComputedStyle ? getComputedStyle(window) : {};
+        const isPositioned = window.classList.contains('positioned');
+        
         savedWindowStates.windowPositions[windowId] = {
             hidden: window.classList.contains('hidden'),
             minimized: window.classList.contains('minimized'),
             maximized: window.classList.contains('fullscreen'),
             active: window.classList.contains('active'),
-            positioned: window.classList.contains('positioned'),
+            positioned: isPositioned,
             style: {
                 position: window.style.position,
                 left: window.style.left,
                 top: window.style.top,
                 width: window.style.width,
                 height: window.style.height,
-                opacity: window.style.opacity,
-                transform: window.style.transform,
+                // For positioned windows, ensure final opacity and transform
+                opacity: isPositioned ? '1' : window.style.opacity,
+                transform: isPositioned ? 'translateY(0)' : window.style.transform,
                 transition: window.style.transition
             }
         };
@@ -107,11 +125,16 @@ function saveCurrentWindowStates() {
 function restoreWindowStates() {
     if (!savedWindowStates || !windowManager) return;
     
+    // Temporarily disable transitions on all windows to prevent flashing
+    const windows = document.querySelectorAll('.window');
+    windows.forEach(window => {
+        window.style.transition = 'none';
+    });
+    
     // Restore window manager internal states
     windowManager.windowStates = savedWindowStates.windowStates;
     
-    // Restore window DOM states and styles
-    const windows = document.querySelectorAll('.window');
+    // Restore window DOM states and styles immediately
     windows.forEach(window => {
         const windowId = window.id;
         const savedState = savedWindowStates.windowPositions[windowId];
@@ -120,17 +143,24 @@ function restoreWindowStates() {
             // Remove all classes first
             window.classList.remove('hidden', 'minimized', 'fullscreen', 'active', 'positioned');
             
-            // Restore classes
+            // Restore all styles immediately
+            Object.assign(window.style, savedState.style);
+            
+            // Restore all classes immediately
             if (savedState.hidden) window.classList.add('hidden');
             if (savedState.minimized) window.classList.add('minimized');
             if (savedState.maximized) window.classList.add('fullscreen');
             if (savedState.active) window.classList.add('active');
             if (savedState.positioned) window.classList.add('positioned');
-            
-            // Restore styles
-            Object.assign(window.style, savedState.style);
         }
     });
+    
+    // Re-enable transitions after a short delay to allow smooth future interactions
+    setTimeout(() => {
+        windows.forEach(window => {
+            window.style.transition = 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+    }, 100);
     
     // Restore taskbar states
     const taskbarItems = document.querySelectorAll('.taskbar-item:not(.blog-toggle)');

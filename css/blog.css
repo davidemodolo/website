@@ -9,10 +9,22 @@
     z-index: 2000;
     overflow-y: auto;
     padding-bottom: 80px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100%) scale(0.95);
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blog-view.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
 }
 
 .blog-view.hidden {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100%) scale(0.95);
 }
 
 .blog-hero {
@@ -334,7 +346,26 @@
 
 /* Hide portfolio when blog is active */
 body.blog-active .desktop {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-100%) scale(0.95);
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.blog-active .desktop .window {
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Ensure smooth transition back to portfolio view */
+.desktop .window {
+    transform: translateY(0);
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.desktop {
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.blog-active .taskbar {

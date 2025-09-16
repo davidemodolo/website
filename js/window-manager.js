@@ -93,7 +93,7 @@ class WindowManager {
             window.style.transform = 'scale(0.96)';
         });
 
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise(resolve => setTimeout(resolve, 200));
 
         for (let i = 0; i < windows.length; i++) {
             const window = windows[i];
@@ -286,13 +286,39 @@ class WindowManager {
         const state = this.windowStates[windowId];
         
         if (state.minimized) {
-            window.classList.remove('minimized');
-            state.minimized = false;
+            // Animate restore from minimized
+            window.style.transition = 'all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            window.style.transform = 'scale(0.95) translateY(20px)';
+            window.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                window.classList.remove('minimized');
+                window.style.transform = 'scale(1) translateY(0)';
+                window.style.opacity = '1';
+                state.minimized = false;
+                
+                setTimeout(() => {
+                    window.style.transition = '';
+                }, 150);
+            }, 20);
         } else {
-            window.classList.add('minimized');
-            window.classList.remove('fullscreen');
-            state.minimized = true;
-            state.maximized = false;
+            // Animate minimize
+            window.style.transition = 'all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            window.style.transform = 'scale(0.95) translateY(10px)';
+            window.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                window.classList.add('minimized');
+                window.classList.remove('fullscreen');
+                state.minimized = true;
+                state.maximized = false;
+                
+                setTimeout(() => {
+                    window.style.transition = '';
+                    window.style.transform = '';
+                    window.style.opacity = '';
+                }, 50);
+            }, 150);
         }
         this.updateTaskbar(windowId, false);
         this.checkEasterEggCondition();
@@ -303,14 +329,33 @@ class WindowManager {
         const state = this.windowStates[windowId];
         
         if (state.maximized) {
-            window.classList.remove('fullscreen');
-            const original = state.originalSize;
-            window.style.width = original.width;
-            window.style.height = original.height;
-            window.style.top = original.top;
-            window.style.left = original.left;
-            state.maximized = false;
+            // Animate restore from fullscreen
+            window.style.transition = 'all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            // First, scale down slightly while still fullscreen
+            window.style.transform = 'scale(0.96)';
+            
+            setTimeout(() => {
+                window.classList.remove('fullscreen');
+                const original = state.originalSize;
+                window.style.width = original.width;
+                window.style.height = original.height;
+                window.style.top = original.top;
+                window.style.left = original.left;
+                window.style.transform = 'scale(0.94)';
+                
+                setTimeout(() => {
+                    window.style.transform = 'scale(1)';
+                    state.maximized = false;
+                    
+                    setTimeout(() => {
+                        window.style.transition = '';
+                        window.style.transform = '';
+                    }, 200);
+                }, 20);
+            }, 80);
         } else {
+            // Animate to fullscreen
             if (!state.maximized) {
                 state.originalSize = {
                     width: window.style.width,
@@ -319,10 +364,28 @@ class WindowManager {
                     left: window.style.left
                 };
             }
-            window.classList.add('fullscreen');
-            window.classList.remove('minimized');
-            state.maximized = true;
-            state.minimized = false;
+            
+            window.style.transition = 'all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            // First scale up slightly
+            window.style.transform = 'scale(1.02)';
+            
+            setTimeout(() => {
+                window.classList.add('fullscreen');
+                window.classList.remove('minimized');
+                window.style.transform = 'scale(0.98)';
+                
+                setTimeout(() => {
+                    window.style.transform = 'scale(1)';
+                    state.maximized = true;
+                    state.minimized = false;
+                    
+                    setTimeout(() => {
+                        window.style.transition = '';
+                        window.style.transform = '';
+                    }, 200);
+                }, 20);
+            }, 80);
         }
         this.updateTaskbar(windowId, false);
     }
@@ -363,6 +426,7 @@ class WindowManager {
         window.style.transform = 'scale(0.96)';
         
         window.classList.remove('hidden');
+        window.classList.add('positioned'); // Ensure positioned class is added
         state.hidden = false;
         this.updateTaskbar(windowId, false);
         this.setActiveWindow(window);
