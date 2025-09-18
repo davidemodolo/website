@@ -78,6 +78,25 @@ function toggleBlogView() {
 function saveCurrentWindowStates() {
     if (!windowManager) return;
     
+    // Ensure all windows have states set, in case initialization is not complete
+    const windows = document.querySelectorAll('.window');
+    windows.forEach(window => {
+        const windowId = window.id;
+        if (!windowManager.windowStates[windowId]) {
+            windowManager.windowStates[windowId] = {
+                minimized: window.classList.contains('minimized'),
+                maximized: false,
+                hidden: window.classList.contains('hidden'),
+                originalSize: {
+                    width: window.style.width || '500px',
+                    height: window.style.height || '400px',
+                    top: window.style.top || '100px',
+                    left: window.style.left || '100px'
+                }
+            };
+        }
+    });
+    
     savedWindowStates = {
         windowStates: JSON.parse(JSON.stringify(windowManager.windowStates)),
         windowPositions: {},
@@ -85,7 +104,6 @@ function saveCurrentWindowStates() {
     };
     
     // Save current window positions and styles
-    const windows = document.querySelectorAll('.window');
     windows.forEach(window => {
         const windowId = window.id;
         
@@ -105,12 +123,32 @@ function saveCurrentWindowStates() {
                 top: window.style.top,
                 width: window.style.width,
                 height: window.style.height,
-                // For positioned windows, ensure final opacity and transform
-                opacity: isPositioned ? '1' : window.style.opacity,
-                transform: isPositioned ? 'translateY(0)' : window.style.transform,
-                transition: window.style.transition
+                // Clear inline styles to let CSS handle opacity and transform
+                opacity: '',
+                transform: '',
+                transition: ''
             }
         };
+
+        // If window is not yet positioned, set default positioned state with random position
+        if (!isPositioned) {
+            const defaultSizes = {
+                'experience-window': { width: 560, height: 440 },
+                'education-window': { width: 735, height: 500 },
+                'projects-window': { width: 750, height: 420 },
+                'contact-window': { width: 440, height: 470 },
+                'mnist-window': { width: 705, height: 600 },
+                'sentiment-window': { width: 625, height: 545 },
+            };
+            const size = defaultSizes[windowId] || { width: 500, height: 400 };
+            const position = windowManager.getRandomPosition(size.width, size.height);
+            savedWindowStates.windowPositions[windowId].style.position = 'absolute';
+            savedWindowStates.windowPositions[windowId].style.left = position.x + 'px';
+            savedWindowStates.windowPositions[windowId].style.top = position.y + 'px';
+            savedWindowStates.windowPositions[windowId].style.width = size.width + 'px';
+            savedWindowStates.windowPositions[windowId].style.height = size.height + 'px';
+            savedWindowStates.windowPositions[windowId].positioned = true;
+        }
     });
     
     // Save taskbar states
@@ -119,7 +157,7 @@ function saveCurrentWindowStates() {
         if (!item.classList.contains('status-indicator')) {
             const windowId = item.id.replace('taskbar-', '') + '-window';
             savedWindowStates.taskbarStates[item.id] = {
-                hidden: item.classList.contains('hidden')
+                hidden: windowManager.windowStates[windowId].hidden
             };
         }
     });
@@ -173,9 +211,9 @@ function restoreWindowStates() {
             const savedTaskbarState = savedWindowStates.taskbarStates[item.id];
             if (savedTaskbarState) {
                 if (savedTaskbarState.hidden) {
-                    item.classList.add('hidden');
+                    item.classList.add('window-hidden');
                 } else {
-                    item.classList.remove('hidden');
+                    item.classList.remove('window-hidden');
                 }
             }
         }

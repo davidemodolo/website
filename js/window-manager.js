@@ -481,9 +481,9 @@ class WindowManager {
         const taskbarItem = document.getElementById('taskbar-' + windowId.replace('-window', ''));
         if (taskbarItem) {
             if (isHidden) {
-                taskbarItem.classList.add('hidden');
+                taskbarItem.classList.add('window-hidden');
             } else {
-                taskbarItem.classList.remove('hidden');
+                taskbarItem.classList.remove('window-hidden');
             }
         }
     }
@@ -514,7 +514,7 @@ class WindowManager {
         const taskbarItems = document.querySelectorAll('.taskbar-item:not(.blog-toggle)');
         taskbarItems.forEach(item => {
             if (!item.classList.contains('status-indicator')) {
-                item.classList.remove('hidden');
+                item.classList.remove('hidden', 'window-hidden');
             }
         });
         

@@ -251,6 +251,10 @@ body {
     opacity: 0.7;
 }
 
+.taskbar-item.window-hidden {
+    opacity: 0.5;
+}
+
 .status-indicator {
     background: var(--accent-green);
     color: white;
