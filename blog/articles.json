@@ -1,14 +1,1 @@
-{
-  "articles": [
-    {
-      "id": "how-to-add-articles",
-      "title": "How to Add New Blog Articles",
-      "excerpt": "A comprehensive guide explaining the structure and process for adding new articles to this blog system.",
-      "date": "2025-09-15",
-      "topic": "Documentation",
-      "tags": ["tutorial", "blog", "structure", "markdown"],
-      "filename": "how-to-add-articles.md",
-      "readTime": "5 min read"
-    }
-  ]
-}
+{}
