@@ -99,26 +99,30 @@ class MnistClassifier {
 
     initializePredictionDisplay() {
         let html = `
-            <div style="font-size: 0.9rem; margin-bottom: 10px;">All Probabilities:</div>
+            <div style="font-size: 1.5rem; margin-bottom: 10px;">
+                Predicted Digit: <span id="digit-result" style="font-size: 2.5rem; color: var(--accent-green);">-</span>
+            </div>
+            <div class="keypad-grid">
         `;
         
-        // Create all digit rows with empty bars
-        for (let i = 0; i < 10; i++) {
-            html += `
-                <div class="prediction-item" style="margin: 4px 0; display: flex; align-items: center; gap: 10px;">
-                    <span id="digit-${i}" style="color: var(--primary-yellow); font-weight: normal; min-width: 15px;">
-                        ${i}
-                    </span>
-                    <div style="flex: 1; display: flex; align-items: center; gap: 8px;">
-                        <div class="confidence-bar" style="flex: 1;">
-                            <div id="confidence-fill-${i}" class="confidence-fill" style="width: 0%;"></div>
-                        </div>
-                        <span id="percentage-${i}" style="font-size: 0.8rem; min-width: 35px; text-align: right;">0.0%</span>
+        // Create keypad layout: 1 2 3 / 4 5 6 / 7 8 9 / 0
+        const layout = [1, 2, 3, 4, 5, 6, 7, 8, 9, null, 0, null];
+        
+        for (let i = 0; i < layout.length; i++) {
+            const digit = layout[i];
+            if (digit === null) {
+                html += `<div class="keypad-empty"></div>`;
+            } else {
+                html += `
+                    <div id="keypad-btn-${digit}" class="keypad-btn">
+                        <span class="keypad-digit">${digit}</span>
+                        <span id="keypad-prob-${digit}" class="keypad-prob">0%</span>
                     </div>
-                </div>
-            `;
+                `;
+            }
         }
         
+        html += `</div>`;
         document.getElementById('mnist-prediction').innerHTML = html;
     }
 
@@ -127,18 +131,15 @@ class MnistClassifier {
         if (digitResult) digitResult.textContent = '-';
         
         for (let i = 0; i < 10; i++) {
-            const elements = {
-                digit: document.getElementById(`digit-${i}`),
-                fill: document.getElementById(`confidence-fill-${i}`),
-                percentage: document.getElementById(`percentage-${i}`)
-            };
+            const btn = document.getElementById(`keypad-btn-${i}`);
+            const prob = document.getElementById(`keypad-prob-${i}`);
             
-            if (elements.digit) {
-                elements.digit.style.color = 'var(--primary-yellow)';
-                elements.digit.style.fontWeight = 'normal';
+            if (btn) {
+                btn.style.backgroundColor = 'var(--card-bg)';
+                btn.style.borderColor = 'var(--border-color)';
+                btn.style.color = 'var(--text-color)';
             }
-            if (elements.fill) elements.fill.style.width = '0%';
-            if (elements.percentage) elements.percentage.textContent = '0.0%';
+            if (prob) prob.textContent = '0%';
         }
     }
 
@@ -147,23 +148,25 @@ class MnistClassifier {
         const digitResult = document.getElementById('digit-result');
         if (digitResult) digitResult.textContent = predictedDigit;
         
-        // Update all bars and percentages
+        // Update all keypad buttons
         for (let i = 0; i < 10; i++) {
-            const prob = (probabilities[i] * 100).toFixed(1);
+            const probValue = probabilities[i];
+            const probPercent = (probValue * 100).toFixed(0);
             const isMax = i === predictedDigit;
             
-            const elements = {
-                digit: document.getElementById(`digit-${i}`),
-                fill: document.getElementById(`confidence-fill-${i}`),
-                percentage: document.getElementById(`percentage-${i}`)
-            };
+            const btn = document.getElementById(`keypad-btn-${i}`);
+            const prob = document.getElementById(`keypad-prob-${i}`);
             
-            if (elements.digit) {
-                elements.digit.style.color = isMax ? 'var(--primary-green)' : 'var(--primary-yellow)';
-                elements.digit.style.fontWeight = isMax ? 'bold' : 'normal';
+            if (btn) {
+                // Calculate color based on probability
+                // Base color: var(--card-bg)
+                // Target color: var(--accent-green)
+                // We'll use rgba to blend
+                btn.style.backgroundColor = `rgba(34, 197, 94, ${probValue * 0.8})`;
+                btn.style.borderColor = isMax ? 'var(--accent-green)' : 'var(--border-color)';
+                btn.style.color = isMax ? 'white' : 'var(--text-color)';
             }
-            if (elements.fill) elements.fill.style.width = `${prob}%`;
-            if (elements.percentage) elements.percentage.textContent = `${prob}%`;
+            if (prob) prob.textContent = `${probPercent}%`;
         }
     }
 
@@ -195,52 +198,61 @@ class MnistClassifier {
             inputData[i] = (255 - grayscale) / 255.0; // Invert and normalize
         }
         
-        return inputData;
+        return tf.tensor2d(inputData, [1, 784]);
     }
 
     async classify() {
         if (!this.model) {
-            document.getElementById('mnist-prediction').innerHTML = 'Model not loaded yet!';
+            alert('Model is not loaded yet. Please wait.');
             return;
         }
 
         try {
-            const digitResult = document.getElementById('digit-result');
-            if (digitResult) digitResult.textContent = '...';
+            // Preprocess the image
+            const tensor = this.preprocessImage();
             
-            const inputData = this.preprocessImage();
-            const inputTensor = tf.tensor2d([inputData], [1, 784]);
+            // Run prediction
+            const predictions = await this.model.predict(tensor).data();
             
-            const prediction = this.model.predict(inputTensor);
-            const probabilities = await prediction.data();
-            const predictedDigit = tf.argMax(prediction, 1).dataSync()[0];
+            // Find the digit with highest probability
+            let maxProb = 0;
+            let predictedDigit = 0;
             
-            this.updatePredictionDisplay(predictedDigit, probabilities);
+            for (let i = 0; i < 10; i++) {
+                if (predictions[i] > maxProb) {
+                    maxProb = predictions[i];
+                    predictedDigit = i;
+                }
+            }
             
-            // Clean up tensors
-            inputTensor.dispose();
-            prediction.dispose();
+            // Update UI
+            this.updatePredictionDisplay(predictedDigit, predictions);
+            
+            // Cleanup tensor
+            tensor.dispose();
             
         } catch (error) {
-            console.error('Error during prediction:', error);
-            const digitResult = document.getElementById('digit-result');
-            if (digitResult) digitResult.textContent = 'Error';
+            console.error('Error during classification:', error);
+            document.getElementById('mnist-status').innerText = 'Error during classification.';
         }
     }
 }
 
-// Global instance and functions for HTML onclick handlers
+// Global instance and functions for HTML buttons
 let mnistClassifier;
 
+document.addEventListener('DOMContentLoaded', () => {
+    mnistClassifier = new MnistClassifier();
+});
+
 function classifyDigit() {
-    mnistClassifier.classify();
+    if (mnistClassifier) {
+        mnistClassifier.classify();
+    }
 }
 
 function clearMnistCanvas() {
-    mnistClassifier.clearCanvas();
+    if (mnistClassifier) {
+        mnistClassifier.clearCanvas();
+    }
 }
-
-// Initialize when page loads
-window.addEventListener('load', () => {
-    mnistClassifier = new MnistClassifier();
-});

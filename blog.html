@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Davide Modolo's Blog - Writing about AI, the slow way; no hype.">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Blog - Davide Modolo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0B1R5DZQGV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-0B1R5DZQGV');
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="index.html#about">About</a>
+            <a href="index.html#experience">Experience</a>
+            <a href="index.html#education">Education</a>
+            <a href="index.html#projects">Projects</a>
+            <a href="index.html#interactive">Interactive</a>
+            <a href="blog.html" style="color: var(--accent-green);">Blog</a>
+            <a href="index.html#contact">Contact</a>
+            <a href="MyResume.pdf" download="Davide_Modolo_Resume.pdf" class="download-cv">Download CV</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="blog" class="section" style="padding-top: 2rem;">
+            <h2>Blog</h2>
+            <p class="blog-subtitle">Writing about AI, the slow way; no hype.</p>
+            
+            <div class="blog-container">
+                <div class="blog-header">
+                    <input type="text" id="blog-search-input" placeholder="Search articles..." class="search-input">
+                </div>
+                
+                <div class="blog-filters" id="blog-filters">
+                    <div class="filter-tags" id="topic-filters"></div>
+                    <div class="filter-tags" id="tag-filters"></div>
+                </div>
+                
+                <div id="articles-container" class="articles-container">
+                    <!-- Articles will be dynamically loaded here -->
+                </div>
+                
+                <div id="article-reader" class="article-reader hidden">
+                    <button onclick="closeBlogArticle()" class="btn back-btn">← Back to Articles</button>
+                    <div id="article-content" class="article-content"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/blog.js"></script>
+</body>
+</html>

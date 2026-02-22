@@ -1,4 +1,4 @@
-// Sentiment Analysis with ml5.js and Speedometer Visualization
+// Sentiment Analysis with ml5.js
 
 let sentiment;
 let isModelLoaded = false;
@@ -36,7 +36,7 @@ function modelReady() {
     const statusElement = document.getElementById('sentiment-status');
     isModelLoaded = true;
     statusElement.textContent = 'Model loaded successfully! Ready to analyze sentiment.';
-    statusElement.style.color = 'var(--primary-green)';
+    statusElement.style.color = 'var(--accent-green)';
     
     // Enable the analyze button
     const analyzeBtn = document.getElementById('analyze-btn');
@@ -81,6 +81,7 @@ async function analyzeSentiment() {
     const scoreValue = document.getElementById('score-value');
     const scoreDescription = document.getElementById('score-description');
     scoreValue.textContent = '...';
+    scoreValue.style.color = 'var(--text-color)';
     scoreDescription.textContent = 'Analyzing...';
     
     // Predict sentiment using the loaded model
@@ -113,118 +114,22 @@ function displaySentimentResult(prediction) {
 
         // Determine sentiment
         const sentiments = [
-            { threshold: 0.3, label: 'Very Negative', color: '#ff4444' },
-            { threshold: 0.45, label: 'Negative', color: '#ff7744' },
-            { threshold: 0.55, label: 'Neutral', color: '#ffaa44' },
-            { threshold: 0.7, label: 'Positive', color: '#88ff44' },
-            { threshold: 1, label: 'Very Positive', color: 'var(--primary-green)' }
+            { threshold: 0.3, label: 'Very Negative', color: '#ef4444' },
+            { threshold: 0.45, label: 'Negative', color: '#f97316' },
+            { threshold: 0.55, label: 'Neutral', color: '#eab308' },
+            { threshold: 0.7, label: 'Positive', color: '#84cc16' },
+            { threshold: 1, label: 'Very Positive', color: 'var(--accent-green)' }
         ];
 
-        const sentiment = sentiments.find(s => confidence < s.threshold) || sentiments[sentiments.length - 1];
+        const sentiment = sentiments.find(s => confidence <= s.threshold) || sentiments[sentiments.length - 1];
         scoreDescription.textContent = sentiment.label;
         scoreValue.style.color = sentiment.color;
 
-        animateSpeedometer(confidence);
     } catch (error) {
         console.error('Error displaying sentiment result:', error);
         scoreValue.textContent = 'Error';
         scoreDescription.textContent = 'Analysis failed';
     }
-}
-
-function animateSpeedometer(targetValue) {
-    const canvas = document.getElementById('sentiment-speedometer');
-    if (!canvas || isNaN(targetValue) || targetValue < 0 || targetValue > 1) return;
-    
-    // Simplified animation - direct ease to target
-    const duration = 800;
-    const startTime = Date.now();
-    
-    function animate() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easedProgress = progress < 0.5 ? 2 * progress * progress : 1 - 2 * (1 - progress) * (1 - progress);
-        
-        drawSpeedometer(targetValue * easedProgress);
-        
-        if (progress < 1) requestAnimationFrame(animate);
-    }
-    animate();
-}
-
-function drawSpeedometer(value) {
-    const canvas = document.getElementById('sentiment-speedometer');
-    if (!canvas || isNaN(value) || value < 0 || value > 1) return;
-    
-    const ctx = canvas.getContext('2d');
-    const container = canvas.parentElement;
-    const canvasSize = Math.min(container.clientWidth - 40, 200);
-    
-    if (canvas.width !== canvasSize) {
-        canvas.width = canvasSize;
-        canvas.height = canvasSize * 0.6;
-    }
-    
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height - 20;
-    const radius = Math.min(centerX, centerY) - 20;
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw arc background
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, Math.PI, 0);
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = radius / 20;
-    ctx.stroke();
-    
-    // Draw colored segments
-    const segments = [
-        { end: 0.3, color: '#ff4444' },
-        { end: 0.45, color: '#ff7744' },
-        { end: 0.55, color: '#ffaa44' },
-        { end: 0.7, color: '#88ff44' },
-        { end: 1.0, color: '#00ff88' }
-    ];
-    
-    let start = 0;
-    segments.forEach(segment => {
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, Math.PI + start * Math.PI, Math.PI + segment.end * Math.PI);
-        ctx.strokeStyle = segment.color;
-        ctx.lineWidth = radius / 20;
-        ctx.stroke();
-        start = segment.end;
-    });
-    
-    // Draw needle
-    const needleAngle = Math.PI + value * Math.PI;
-    const needleLength = radius - 10;
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(
-        centerX + Math.cos(needleAngle) * needleLength,
-        centerY + Math.sin(needleAngle) * needleLength
-    );
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = radius / 40;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-    
-    // Draw center circle
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius / 20, 0, 2 * Math.PI);
-    ctx.fillStyle = '#ffffff';
-    ctx.fill();
-    
-    // Draw labels
-    ctx.fillStyle = '#ffffff';
-    ctx.font = `${radius / 8}px Courier New`;
-    ctx.textAlign = 'center';
-    ctx.fillText('0', centerX - radius + 10, centerY + 15);
-    ctx.fillText('0.5', centerX, centerY - radius + 15);
-    ctx.fillText('1', centerX + radius - 10, centerY + 15);
-    ctx.fillText('Sentiment Score', centerX, 10);
 }
 
 function clearSentimentInput() {
@@ -234,78 +139,8 @@ function clearSentimentInput() {
     
     inputElement.value = '';
     scoreValue.textContent = '-';
-    scoreValue.style.color = 'var(--primary-green)';
-    scoreDescription.textContent = 'Enter text and click analyze';
+    scoreValue.style.color = 'var(--text-color)';
+    scoreDescription.textContent = '-';
     
-    initializeSpeedometer();
     inputElement.focus();
 }
-
-// Initialize empty speedometer on window show
-function initializeSpeedometer() {
-    const canvas = document.getElementById('sentiment-speedometer');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    const container = canvas.parentElement;
-    const canvasSize = Math.min(container.clientWidth - 40, 200);
-    
-    if (canvas.width !== canvasSize) {
-        canvas.width = canvasSize;
-        canvas.height = canvasSize * 0.6;
-    }
-    
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height - 20;
-    const radius = Math.min(centerX, centerY) - 20;
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw background and faded segments
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, Math.PI, 0);
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = radius / 20;
-    ctx.stroke();
-    
-    const segments = [
-        { end: 0.3, color: '#ff444444' },
-        { end: 0.45, color: '#ff774444' },
-        { end: 0.55, color: '#ffaa4444' },
-        { end: 0.7, color: '#88ff4444' },
-        { end: 1.0, color: '#00ff8844' }
-    ];
-    
-    let start = 0;
-    segments.forEach(segment => {
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, Math.PI + start * Math.PI, Math.PI + segment.end * Math.PI);
-        ctx.strokeStyle = segment.color;
-        ctx.lineWidth = radius / 25;
-        ctx.stroke();
-        start = segment.end;
-    });
-    
-    // Draw center circle and labels
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius / 20, 0, 2 * Math.PI);
-    ctx.fillStyle = '#666';
-    ctx.fill();
-    
-    ctx.fillStyle = '#ffffff';
-    ctx.font = `${radius / 8}px Courier New`;
-    ctx.textAlign = 'center';
-    ctx.fillText('0', centerX - radius + 10, centerY + 15);
-    ctx.fillText('0.5', centerX, centerY - radius + 15);
-    ctx.fillText('1', centerX + radius - 10, centerY + 15);
-    ctx.fillText('Sentiment Score', centerX, 10);
-}
-
-// Hook into window manager to initialize speedometer when window is shown
-const originalToggleWindow = window.toggleWindow;
-window.toggleWindow = function(windowId) {
-    originalToggleWindow(windowId);
-    if (windowId === 'sentiment-window') {
-        setTimeout(initializeSpeedometer, 100);
-    }
-};
