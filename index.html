@@ -216,5 +216,13 @@
 
     <script src="js/mnist-classifier.js"></script>
     <script src="js/sentiment-analyzer.js"></script>
+    <script>
+        function updateNavbarHeight() {
+            const h = document.querySelector('.navbar').offsetHeight;
+            document.documentElement.style.setProperty('--navbar-height', h + 'px');
+        }
+        updateNavbarHeight();
+        window.addEventListener('resize', updateNavbarHeight);
+    </script>
 </body>
 </html>

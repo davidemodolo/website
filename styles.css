@@ -102,7 +102,7 @@ body {
 .container {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 80px 1.5rem 3rem;
+    padding: var(--navbar-height, 80px) 1.5rem 3rem;
 }
 
 /* ===== SECTIONS ===== */
@@ -539,7 +539,7 @@ body {
     }
 
     .container {
-        padding-top: 90px;
+        padding-top: var(--navbar-height, 90px);
     }
 
     .interactive-grid {
