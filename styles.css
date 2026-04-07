@@ -227,6 +227,15 @@ body {
     color: #222;
 }
 
+.card p .present {
+    color: var(--green-mid);
+    font-weight: 700;
+}
+
+.card p .time {
+    font-style: italic;
+}
+
 /* ===== TAGS ===== */
 .tags {
     display: flex;
