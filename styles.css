@@ -289,11 +289,9 @@ body {
 /* ===== MNIST ===== */
 .mnist-container {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 2rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
     margin: 1.25rem 0;
     width: 100%;
 }
@@ -453,8 +451,7 @@ body {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 5px;
-    width: 100%;
-    max-width: 280px;
+    width: 280px;
 }
 
 .keypad-btn {
@@ -491,6 +488,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    width: 100%;
+    max-width: 280px;
 }
 
 /* ===== HIDDEN ===== */
