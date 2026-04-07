@@ -99,29 +99,22 @@ class MnistClassifier {
 
     initializePredictionDisplay() {
         let html = `
-            <div style="font-size: 1.5rem; margin-bottom: 10px;">
-                Predicted Digit: <span id="digit-result" style="font-size: 2.5rem; color: var(--accent-green);">-</span>
+            <div style="font-weight:900; font-size:1rem; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">
+                Predicted: <span id="digit-result" style="font-size:1.8rem; color:var(--accent-green);">?</span>
             </div>
             <div class="keypad-grid">
         `;
-        
-        // Create keypad layout: 1 2 3 / 4 5 6 / 7 8 9 / 0
-        const layout = [1, 2, 3, 4, 5, 6, 7, 8, 9, null, 0, null];
-        
-        for (let i = 0; i < layout.length; i++) {
-            const digit = layout[i];
-            if (digit === null) {
-                html += `<div class="keypad-empty"></div>`;
-            } else {
-                html += `
-                    <div id="keypad-btn-${digit}" class="keypad-btn">
-                        <span class="keypad-digit">${digit}</span>
-                        <span id="keypad-prob-${digit}" class="keypad-prob">0%</span>
-                    </div>
-                `;
-            }
+
+        // Two rows: 0-4 top, 5-9 bottom
+        for (let i = 0; i < 10; i++) {
+            html += `
+                <div id="keypad-btn-${i}" class="keypad-btn">
+                    <span class="keypad-digit">${i}</span>
+                    <span id="keypad-prob-${i}" class="keypad-prob">0%</span>
+                </div>
+            `;
         }
-        
+
         html += `</div>`;
         document.getElementById('mnist-prediction').innerHTML = html;
     }
