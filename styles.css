@@ -1,32 +1,32 @@
-/* ===== NEOBRUTALISM THEME ===== */
+/* ===== NEOBRUTALISM DARK THEME ===== */
 :root {
     /* Neobrutalism palette */
-    --bg: #FFFEF2;
+    --bg: #0D0D0D;
     --black: #000000;
     --green: #4ADE80;
     --green-mid: #22C55E;
-    --green-light: #DCFCE7;
-    --white: #FFFFFF;
+    --green-light: #142B14;
+    --white: #1A1A1A;
     --yellow: #FEF08A;
     --red-bright: #FF3B3B;
 
     /* Hard shadow */
-    --shadow: 4px 4px 0px var(--black);
-    --shadow-sm: 2px 2px 0px var(--black);
-    --shadow-lg: 6px 6px 0px var(--black);
+    --shadow: 4px 4px 0px #666666;
+    --shadow-sm: 2px 2px 0px #666666;
+    --shadow-lg: 6px 6px 0px #666666;
 
     /* Borders */
-    --border: 2px solid var(--black);
-    --border-thick: 3px solid var(--black);
+    --border: 2px solid #666666;
+    --border-thick: 3px solid #666666;
 
     /* Legacy aliases (used by JS model files) */
     --accent-green: var(--green-mid);
-    --border-color: var(--black);
+    --border-color: #666666;
     --card-bg: var(--white);
-    --text-color: var(--black);
-    --muted-text: #555555;
+    --text-color: #DDDDDD;
+    --muted-text: #888888;
     --bg-color: var(--bg);
-    --heading-color: var(--black);
+    --heading-color: #FFFFFF;
     --hover-bg: var(--green-light);
     --red: var(--red-bright);
 }
@@ -43,8 +43,8 @@ html {
 
 body {
     background: var(--bg);
-    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-    color: var(--black);
+    font-family: 'Consolas', 'Lucida Console', 'Courier New', monospace;
+    color: var(--text-color);
     line-height: 1.6;
 }
 
@@ -57,6 +57,7 @@ body {
     border-bottom: 3px solid var(--black);
     z-index: 1000;
     padding: 0.75rem 0;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .nav-links {
@@ -79,6 +80,7 @@ body {
     padding: 0.35rem 0.75rem;
     border: 2px solid transparent;
     transition: background 0.1s, border-color 0.1s;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .nav-links a:hover {
@@ -94,8 +96,8 @@ body {
 }
 
 .download-cv:hover {
-    background: var(--white) !important;
-    color: var(--black) !important;
+    background: var(--green-light) !important;
+    color: var(--heading-color) !important;
 }
 
 /* ===== CONTAINER ===== */
@@ -108,7 +110,7 @@ body {
 /* ===== SECTIONS ===== */
 .section {
     padding: 4rem 0;
-    border-bottom: 3px solid var(--black);
+    border-bottom: 3px solid var(--border-color);
 }
 
 .section:last-child {
@@ -127,13 +129,14 @@ body {
     border: 3px solid var(--black);
     box-shadow: var(--shadow);
     padding: 0.25rem 0.75rem;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* ===== HERO ===== */
 .hero-section {
     text-align: center;
     padding: 5rem 0 4rem;
-    border-bottom: 3px solid var(--black);
+    border-bottom: 3px solid var(--border-color);
 }
 
 .hero-title {
@@ -149,15 +152,17 @@ body {
     border: 3px solid var(--black);
     box-shadow: var(--shadow-lg);
     padding: 0.25rem 1rem;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .hero-subtitle {
     font-size: 1.1rem;
-    color: var(--black);
+    color: var(--heading-color);
     font-weight: 700;
     margin-bottom: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .hero-description {
@@ -175,7 +180,7 @@ body {
 /* ===== CARDS ===== */
 .card {
     background: var(--white);
-    border: 3px solid var(--black);
+    border: 3px solid var(--border-color);
     box-shadow: var(--shadow);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -211,20 +216,23 @@ body {
     padding: 0.15rem 0.5rem;
     white-space: nowrap;
     flex-shrink: 0;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .card h3 {
-    color: var(--black);
+    color: var(--heading-color);
     margin-bottom: 0.4rem;
     font-size: 1.25rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.01em;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .card p {
     margin-bottom: 0.75rem;
-    color: #222;
+    color: var(--text-color);
+    line-height: 1.7;
 }
 
 .card p .present {
@@ -246,19 +254,22 @@ body {
 
 .tag {
     background: var(--green-light);
-    color: var(--black);
+    color: var(--text-color);
     padding: 0.2rem 0.6rem;
     font-size: 0.8rem;
     font-weight: 700;
-    border: 2px solid var(--black);
+    border: 2px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .tag.link {
     text-decoration: none;
     background: var(--green);
+    color: var(--black);
+    border-color: var(--black);
     transition: transform 0.1s, box-shadow 0.1s;
 }
 
@@ -282,7 +293,7 @@ body {
     text-decoration: none;
     display: inline-block;
     transition: transform 0.1s, box-shadow 0.1s;
-    font-family: inherit;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .btn:hover {
@@ -296,7 +307,7 @@ body {
 }
 
 .btn:disabled {
-    background: #ccc;
+    background: #444;
     cursor: not-allowed;
     transform: none;
     box-shadow: var(--shadow-sm);
@@ -311,7 +322,7 @@ body {
 
 .interactive-card {
     background: var(--white);
-    border: 3px solid var(--black);
+    border: 3px solid var(--border-color);
     box-shadow: var(--shadow);
     padding: 1.5rem;
     display: flex;
@@ -319,6 +330,10 @@ body {
     align-items: center;
     text-align: center;
     margin-bottom: 0;
+}
+
+.interactive-card-wide {
+    grid-column: 1 / -1;
 }
 
 /* ===== MNIST ===== */
@@ -357,7 +372,7 @@ body {
     font-weight: 600;
     margin-bottom: 0.75rem;
     background: var(--green-light);
-    border: 2px solid var(--black);
+    border: 2px solid var(--border-color);
     padding: 0.25rem 0.75rem;
     width: 100%;
     text-align: center;
@@ -388,8 +403,8 @@ body {
 .sentiment-textarea {
     width: 100%;
     background: var(--white);
-    color: var(--black);
-    border: 3px solid var(--black);
+    color: var(--text-color);
+    border: 3px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     padding: 0.75rem;
     font-family: inherit;
@@ -413,7 +428,7 @@ body {
     font-weight: 600;
     margin-bottom: 0.75rem;
     background: var(--green-light);
-    border: 2px solid var(--black);
+    border: 2px solid var(--border-color);
     padding: 0.25rem 0.75rem;
     width: 100%;
     text-align: center;
@@ -435,6 +450,7 @@ body {
     box-shadow: var(--shadow);
     padding: 1rem 1.5rem;
     min-width: 160px;
+    color: var(--black);
     font-weight: 700;
 }
 
@@ -491,7 +507,7 @@ body {
 
 .keypad-btn {
     background: var(--white);
-    border: 2px solid var(--black);
+    border: 2px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     padding: 4px 2px;
     display: flex;
@@ -525,6 +541,165 @@ body {
     gap: 0.5rem;
     width: 100%;
     max-width: 280px;
+}
+
+/* ===== LLM PLAYGROUND ===== */
+.llm-status {
+    color: var(--muted-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    background: var(--green-light);
+    border: 2px solid var(--border-color);
+    padding: 0.25rem 0.75rem;
+    width: 100%;
+    text-align: center;
+}
+
+.llm-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.25rem 0;
+    width: 100%;
+}
+
+.llm-input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.llm-textarea {
+    width: 100%;
+    background: var(--white);
+    color: var(--text-color);
+    border: 3px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 0.75rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+}
+
+.llm-textarea:focus {
+    outline: none;
+    box-shadow: 4px 4px 0 var(--green-mid);
+}
+
+.llm-controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.llm-select {
+    background: var(--white);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 0.5rem 0.75rem;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+}
+
+.llm-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.llm-response-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.llm-response-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--green-mid);
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.llm-response-box {
+    background: var(--white);
+    border: 3px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 1rem 1.25rem;
+    line-height: 1.8;
+    min-height: 130px;
+    font-size: 0.95rem;
+}
+
+.llm-token {
+    font-weight: 600;
+    padding: 0.05rem 0.15rem;
+    margin: 0 0.05rem;
+    border-radius: 0;
+}
+
+.llm-token.certain {
+    color: var(--heading-color);
+}
+
+.llm-token.uncertain {
+    color: var(--yellow);
+    border-bottom: 2px solid var(--yellow);
+}
+
+.llm-cursor {
+    color: var(--green-mid);
+    font-weight: 900;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.llm-token-legend {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.75rem;
+    color: var(--muted-text);
+    font-weight: 600;
+    font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.llm-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 0.25rem;
+    vertical-align: middle;
+}
+
+.certain-dot {
+    background: var(--heading-color);
+    border: 1px solid var(--heading-color);
+}
+
+.uncertain-dot {
+    background: var(--yellow);
+    border: 1px solid var(--yellow);
+}
+
+/* ===== TEXT UTILITY CLASSES ===== */
+.hl {
+    color: var(--green-mid);
+    font-weight: 700;
+}
+
+.em {
+    font-style: italic;
+    color: var(--heading-color);
 }
 
 /* ===== HIDDEN ===== */

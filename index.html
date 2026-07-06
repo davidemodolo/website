@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Davide Modolo: Junior ML/DL Engineer & AI Engineer. Master's in AI Systems, experienced in Deep Learning, NLP, Computer Vision, Transformers, PyTorch. Open to new opportunities.">
-    <meta name="keywords" content="Davide Modolo, ML Engineer, Machine Learning Engineer, Deep Learning Engineer, AI Engineer, NLP Engineer, Computer Vision, PyTorch, Transformers, Junior ML Engineer, Junior Deep Learning Engineer, Artificial Intelligence, Hire AI Engineer">
+    <meta name="description" content="Davide Modolo: AI &amp; Machine Learning Engineer. Master's in AI Systems, experienced in Deep Learning, NLP, Transformers, PyTorch, LLMs, RAG. Open to new opportunities.">
+    <meta name="keywords" content="Davide Modolo, AI Engineer, Machine Learning Engineer, Deep Learning Engineer, NLP Engineer, Computer Vision, PyTorch, Transformers, LLM Engineer, RAG, Artificial Intelligence, Hire AI Engineer">
     <meta name="author" content="Davide Modolo">
-    <meta property="og:title" content="Davide Modolo - ML/DL & AI Engineer">
-    <meta property="og:description" content="Junior ML/DL Engineer with a Master's in AI Systems. Experienced in Deep Learning, NLP, Computer Vision, and LLMs. Open to new opportunities.">
+    <meta property="og:title" content="Davide Modolo - AI &amp; ML Engineer">
+    <meta property="og:description" content="AI &amp; Machine Learning Engineer with a Master's in AI Systems. Experienced in Deep Learning, NLP, Transformers, LLMs, and RAG. Open to new opportunities.">
     <meta property="og:type" content="website">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <title>Davide Modolo | ML/DL & AI Engineer</title>
+    <title>Davide Modolo | AI &amp; ML Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.10.0/tf.min.js"></script>
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
@@ -40,28 +43,37 @@
     <main class="container">
         <section id="about" class="section hero-section">
             <h1 class="hero-title">DAVIDE MODOLO</h1>
-            <p class="hero-subtitle">Computer Vision • Natural Language Processing • Deep Learning • Machine Learning</p>
+            <p class="hero-subtitle">NLP &bull; Transformers &bull; Deep Learning &bull; RAG &bull; LLMs &bull; Computer Vision</p>
             <p class="hero-description">
-                Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems, specializing in Deep Learning, NLP, and Computer Vision. Currently building production NLP pipelines and conversational AI at OpenCity Labs fine-tuning Transformer models, designing multi-agent architectures, and integrating LLMs into real products.<br><strong>Open to new opportunities.</strong>
+                AI &amp; Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems. Currently building production NLP pipelines and agentic AI systems at OpenCity Labs, fine-tuning Transformer models, designing hybrid RAG architectures, and integrating LLMs into real products.<br><strong>Open to new opportunities.</strong>
             </p>
         </section>
 
         <section id="experience" class="section">
             <h2>Professional Experience</h2>
             <div class="card">
-                <h3>AI Engineer, R&amp;D</h3>
+                <h3>AI &amp; Machine Learning Engineer, R&amp;D</h3>
                 <p><strong>OpenCity Labs (Startup)</strong> | Remote | <span class="time">August 2025 - <span class="present">Present</span></span></p>
-                <p>Architected a multi-tenant conversational AI system on the open-source Cheshire Cat AI framework, developing and releasing multiple open-source plugins. Started exploring Model Context Protocol (MCP) to standardize tool execution, building a Client-Server proof of concept for autonomous appointment booking. Built a core NLP pipeline: fine-tuned multilingual Transformer-based NER models for PII anonymization, a spaCy-based sentiment analysis module optimized for fast CPU inference, and an output validation layer for automated translation.</p>
+                <p>
+                    &bull; Single-handedly engineered an NLP pipeline for RAG ingestion with PII anonymization via a fine-tuned <span class="em">Transformer-based NER model</span> and an in-memory reversible dictionary, processing <span class="hl">50k+ daily inputs</span>.<br>
+                    &bull; Built a <span class="em">spaCy</span> detection + LLM fallback guard to fix a cross-lingual model failure in a RAG pipeline: despite explicit English instructions, Italian-only retrieved context caused the model to default to Italian in 35-40% of non-Italian queries, eliminating the error. Released to <span class="hl">10+ clients</span>.<br>
+                    &bull; Developed an open-source agentic AI system. Designed hybrid RAG architecture <span class="em">(vector + full-text reciprocal rank fusion)</span> to solve domain-specific retrieval failures: pure embedding search missed legal acronyms and regulatory references, while keyword search failed on semantic ones. Built <span class="em">MCP</span>-based tool-calling infrastructure with human-in-the-loop approval, reducing targeted workflows from <span class="hl">days to hours</span>.<br>
+                    &bull; Dockerized all services with <span class="em">GitLab CI</span> pipelines automating testing and Docker image builds for consistent, reliable deployments.
+                </p>
                 <div class="tags">
-                    <span class="tag">Python</span> <span class="tag">NLP</span> <span class="tag">spaCy</span> <span class="tag">Transformers</span> <span class="tag">MCP</span> <span class="tag">Gemini API</span> <span class="tag">Docker</span> <span class="tag">Grafana</span>
+                    <span class="tag">Python</span> <span class="tag">Transformers</span> <span class="tag">NLP</span> <span class="tag">LLM</span> <span class="tag">RAG</span> <span class="tag">FastAPI</span> <span class="tag">Docker</span> <span class="tag">SurrealDB</span> <span class="tag">AWS EC2</span> <span class="tag">Prometheus</span> <span class="tag">Grafana</span>
                 </div>
             </div>
             <div class="card">
-                <h3>AI Engineer Intern</h3>
+                <h3>Intern / AI Engineer</h3>
                 <p><strong>Eurecat Technology Center</strong> | Barcelona, Spain | <span class="time">April 2024 - June 2024</span></p>
-                <p>Implemented a token-level uncertainty estimation framework for planning tasks by analyzing log-probabilities, benchmarking across GPT-4o and locally quantized models (Llama 3.1 via llama.cpp). Developed a RAG system with gte-large embeddings to retrieve context-aware user preferences, significantly reducing model hallucination in recurrent decision-making. Prototyped a multimodal agent integrating LLaVA for visual reasoning tasks.</p>
+                <p>
+                    &bull; Implemented a token-level uncertainty estimation framework for planning tasks by analyzing log-probabilities, benchmarking performance across proprietary (<span class="em">GPT-4o</span>) and locally quantized models (<span class="em">Llama 3.1 via llama.cpp</span>).<br>
+                    &bull; Developed a RAG system utilizing <span class="em">gte-large</span> embeddings to retrieve context-aware user preferences, significantly reducing model hallucination in recurrent decision-making scenarios.<br>
+                    &bull; Prototyped a multimodal agent integrating <span class="em">LLaVA</span> for visual reasoning tasks and validated the uncertainty reconstruction approach across multiple simulated environments.
+                </p>
                 <div class="tags">
-                    <span class="tag">Python</span> <span class="tag">PyTorch</span> <span class="tag">OpenAI API</span> <span class="tag">Hugging Face</span> <span class="tag">llama.cpp</span> <span class="tag">RAG</span>
+                    <span class="tag">Python</span> <span class="tag">PyTorch</span> <span class="tag">Hugging Face</span> <span class="tag">OpenAI API</span> <span class="tag">LLMs</span> <span class="tag">RAG</span> <span class="tag">llama.cpp</span> <span class="tag">Ollama</span> <span class="tag">Multimodal AI</span>
                 </div>
             </div>
         </section>
@@ -71,19 +83,25 @@
             <div class="card">
                 <h3>Master's Degree in Artificial Intelligence Systems</h3>
                 <p><strong>University of Trento</strong> | Trento, Italy | <span class="time">September 2021 - March 2025</span></p>
-                <p><strong>Thesis:</strong> "Exploring the Use of LLMs for Agent Planning: Strengths and Weaknesses" - Research on Large Language Models applied to automated planning and decision-making scenarios.</p>
+                <p>
+                    &bull; <strong>Thesis:</strong> <span class="em">Exploring the Use of LLMs for Agent Planning: Strengths and Weaknesses</span> - investigated how large language models perform on planning and decision-making tasks, identifying capabilities and failure modes. Developed a rigorous uncertainty quantification methodology based on <span class="em">token log-probabilities</span> and <span class="em">conformal prediction</span>, generating heatmap visualizations across <span class="hl">36 test cases</span> (3 LLM versions, 4 map sizes, 2 tasks) to characterize spatial reasoning quality across the entire state space.<br>
+                    &bull; <strong>Relevant Courses:</strong> <span class="em">Machine Learning, Deep Learning, Natural Language Understanding, Automated Planning, Law &amp; Ethics in AI, Fundamentals of AI, Signal Processing, AI for Finance, High Performance Computing.</span>
+                </p>
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/master_thesis/blob/main/modolo_davide_ais_2023_2024.pdf" target="_blank" class="tag link">Thesis Report</a>
                     <a href="https://github.com/davidemodolo/LLMs_for_Agent_Planning" target="_blank" class="tag link">Code</a>
-                    <span class="tag">AI Systems</span> <span class="tag">LLMs</span>
+                    <span class="tag">Machine Learning</span> <span class="tag">Deep Learning</span> <span class="tag">NLP</span> <span class="tag">Automated Planning</span> <span class="tag">LLMs</span> <span class="tag">HPC</span> <span class="tag">PyTorch</span>
                 </div>
             </div>
             <div class="card">
                 <h3>Bachelor's Degree in Computer Science</h3>
                 <p><strong>University of Trento</strong> | Trento, Italy | <span class="time">September 2017 - June 2021</span></p>
-                <p><strong>Thesis:</strong> "Healthy Plus - Redesign and evolution of an Android application for monitoring healthy lifestyles" - Complete redesign and modular development of a health tracking mobile application.</p>
+                <p>
+                    &bull; <strong>Thesis:</strong> <span class="em">Healthy Plus - Redesign and evolution of an Android application for monitoring healthy lifestyles.</span><br>
+                    &bull; <strong>Core Topics:</strong> <span class="em">Algorithms &amp; Data Structures, Software Engineering, Database Systems, Operating Systems, Computer Architectures, Distributed Networks.</span>
+                </p>
                 <div class="tags">
-                    <span class="tag">Computer Science</span> <span class="tag">Mobile Development</span> <span class="tag">Software Engineering</span> <span class="tag">Algorithms</span>
+                    <span class="tag">Java</span> <span class="tag">Android</span> <span class="tag">SQL</span> <span class="tag">Software Engineering</span> <span class="tag">Data Structures</span> <span class="tag">Operating Systems</span> <span class="tag">Computer Networks</span>
                 </div>
             </div>
         </section>
@@ -95,7 +113,11 @@
                     <h3>COVID-19 Lung Ultrasound Images Classification</h3>
                     <span class="course-label">Medical Imaging Diagnostic</span>
                 </div>
-                <p>Designed a multi-stage deep learning model to classify Lung Ultrasound images based on a 0-to-3 illness score. Developed 3 components: multi-class frame classifier, uncertainty detection model, and similarity module using 47k frames from 14 real patients.</p>
+                <p>
+                    &bull; Built a multi-stage deep learning pipeline to classify Lung Ultrasound frames into 4 severity scores (0-3) using a fine-tuned <span class="em">ResNet18</span> on <span class="hl">~47k frames</span> from 11 patients, with patient-based train/test splitting to prevent data leakage.<br>
+                    &bull; Added a binary confidence classifier that detects uncertain predictions by analyzing softmax output patterns, and a <span class="em">t-SNE</span>-based image similarity retrieval module that finds visually similar training images when the primary classifier is not confident.<br>
+                    &bull; Designed an aggressive augmentation pipeline <span class="em">(affine transforms, brightness scaling, Gaussian blur, horizontal flips)</span> to combat overfitting on the limited medical dataset.
+                </p>
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier/blob/master/ProjectPresentation.pdf" target="_blank" class="tag link">Slides</a>
                     <a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier/blob/master/Medical_Imaging_Diagnostic_Report.pdf" target="_blank" class="tag link">Report</a>
@@ -108,7 +130,11 @@
                     <h3>Joint Intent Detection and Slot Filling</h3>
                     <span class="course-label">Natural Language Understanding</span>
                 </div>
-                <p>Implemented 4 Deep Learning models for simultaneous Intent Detection and Slot Filling tasks. Achieved 13% improvement on SNIPS dataset in slot filling task. Fine-tuned BERT and ERNIE, built Bidirectional LSTM and Encoder-Decoder models from scratch.</p>
+                <p>
+                    &bull; Implemented 5 neural architectures from scratch in <span class="em">PyTorch</span> for multi-task joint intent classification and slot filling on <span class="em">ATIS</span> and <span class="em">SNIPS</span> datasets: baseline LSTM, bidirectional LSTM, encoder-decoder, and fine-tuned <span class="em">BERT</span> and <span class="em">ERNIE 2.0</span>.<br>
+                    &bull; Custom encoder-decoder achieved the best overall results (<span class="hl">94.95% slot F1, 96.42% intent accuracy</span> on ATIS), outperforming pretrained transformers which suffered from a vocabulary mismatch when custom slot-label tokens were added to their tokenizer.<br>
+                    &bull; Each model trained 5 times with different random seeds and reported with <span class="em">mean &plusmn; standard deviation</span>; used early stopping and custom LR scheduling (halve every 3 epochs without improvement).
+                </p>
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/NLU_Intent_and_Slot/blob/master/NLU_Report_Modolo.pdf" target="_blank" class="tag link">Report</a>
                     <a href="https://github.com/davidemodolo/NLU_Intent_and_Slot" target="_blank" class="tag link">Code</a>
@@ -118,9 +144,13 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Domain Adaptation / Transfer Learning</h3>
-                    <span class="course-label">Deep Learning · Team Project</span>
+                    <span class="course-label">Deep Learning &middot; Team Project</span>
                 </div>
-                <p>Built and evaluated a deep learning model for Unsupervised Domain Adaptation using ResNet34 with custom adaptation layer. Achieved +11.53% improvement over baseline non-adapted model on Adaptiope dataset using 3rd and 4th-order statistics.</p>
+                <p>
+                    &bull; Built a full unsupervised domain adaptation pipeline in <span class="em">PyTorch</span> based on the <span class="em">HoMM</span> paper, matching 3rd and 4th-order statistical moments between source and target feature distributions to capture shape differences (skewness and kurtosis) that simpler methods like <span class="em">MMD</span> and <span class="em">CORAL</span> miss.<br>
+                    &bull; Used <span class="em">ResNet34</span> pretrained on ImageNet with a modified tanh activation layer, balancing three loss terms: cross-entropy (source supervision), HoMM discrepancy (domain alignment), and discriminative clustering with moving-average centroids (target pseudo-labels).<br>
+                    &bull; Achieved <span class="hl">+11.53% gain</span> over the source-only baseline on the <span class="em">Adaptiope</span> dataset (20 object classes across product_images and real_life domains).
+                </p>
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/HoMM-DomainAdaptation" target="_blank" class="tag link">Code</a>
                     <span class="tag">PyTorch</span> <span class="tag">ResNet34</span> <span class="tag">Transfer Learning</span>
@@ -129,9 +159,12 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Autonomous Delivery BDI Agent</h3>
-                    <span class="course-label">Autonomous Software Agents · Team Project</span>
+                    <span class="course-label">Autonomous Software Agents &middot; Team Project</span>
                 </div>
-                <p>Designed autonomous agent solution for delivery problems using Belief-Desire-Intent framework. Developed and tested both single-agent and collaborative multi-agent environments across 7 challenges with 2 different approaches.</p>
+                <p>
+                    &bull; Developed an autonomous software agent in <span class="em">Node.js</span> for a grid-based parcel delivery game using a <span class="em">Belief-Desire-Intention</span> architecture with intention revision and plan caching.<br>
+                    &bull; Integrated a <span class="em">PDDL</span> online solver (planning.domains API) for declarative path planning, replacing an earlier <span class="em">A*</span> approach that required hand-coded edge cases for each map configuration.<br>
+                    &bull; Built two multi-agent coordination strategies: angular map slicing with basic communication, and intention sharing with conflict resolution via mutual scoring.
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/ASA_Delivery_Bot/blob/main/ASA_Slides.pdf" target="_blank" class="tag link">Slides</a>
                     <a href="https://github.com/davidemodolo/ASA_Delivery_Bot/blob/main/ModoloMoletta.pdf" target="_blank" class="tag link">Report</a>
@@ -142,9 +175,13 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Parallel Closest Pair of Points</h3>
-                    <span class="course-label">High Performance Computing · Team Project</span>
+                    <span class="course-label">High Performance Computing &middot; Team Project</span>
                 </div>
-                <p>Provided a solution to Closest Pair of Points problem in N dimensions with parallel implementation. Implemented both Bruteforce and Divide et Impera solutions using Message Passing Interface (MPI) in C. Tested with up to 250M points using 1 to 80 CPU cores in 4 different configurations on the University's cluster.</p>
+                <p>
+                    &bull; Implemented parallel solutions to the closest pair of points problem in up to 5 dimensions using <span class="em">C</span> and <span class="em">MPI</span>, with both brute-force (<span class="em">O(n&sup2;)</span>) and divide-and-conquer (<span class="em">O(n log n)</span>) algorithms under a master-worker model.<br>
+                    &bull; The brute-force approach scaled near-linearly to <span class="hl">~28&times; speedup</span> on 80 cores (embarrassingly parallel), while divide-and-conquer plateaued at ~7.3&times; due to cross-boundary strip-exchange communication overhead, a tradeoff between asymptotic complexity and parallel scalability.<br>
+                    &bull; Handled the INT_MAX MPI buffer limit with automatic multi-tranche serialization of variable-size Point structs via <span class="em">MPI_Pack/MPI_Unpack</span>; benchmarked up to <span class="hl">250 million points</span> across 1-80 cores on an HPC cluster.
+                </p>
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/Closest-pair-of-points-HPC/blob/master/HPC-Slides.pdf" target="_blank" class="tag link">Slides</a>
                     <a href="https://github.com/davidemodolo/Closest-pair-of-points-HPC/blob/master/Closest_Pair_of_Points_Report.pdf" target="_blank" class="tag link">Report</a>
@@ -198,6 +235,36 @@
                         </div>
                     </div>
                     <p class="small-text">Analyzes text sentiment from 0 (negative) to 1 (positive) using ml5.js.</p>
+                </div>
+
+                <div class="card interactive-card interactive-card-wide">
+                    <h3>LLM Playground</h3>
+                    <p>Local LLM Inference &amp; Uncertainty Visualization</p>
+                    <div class="llm-status">Powered by WebLLM / Coming soon</div>
+                    <div class="llm-container">
+                        <div class="llm-input-area">
+                            <textarea id="llm-prompt" class="llm-textarea" placeholder="Enter your prompt..." rows="3" disabled>What is the shortest path from A to B?</textarea>
+                            <div class="llm-controls">
+                                <select class="llm-select" disabled>
+                                    <option>Llama 3.2 1B</option>
+                                    <option>Gemma 2 2B</option>
+                                    <option>Phi-3 Mini</option>
+                                </select>
+                                <button class="btn" disabled>Generate</button>
+                            </div>
+                        </div>
+                        <div class="llm-response-area">
+                            <div class="llm-response-label">Response</div>
+                            <div class="llm-response-box">
+                                <span class="llm-token certain">The</span> <span class="llm-token certain">shortest</span> <span class="llm-token certain">path</span> <span class="llm-token uncertain">depends</span> <span class="llm-token certain">on</span> <span class="llm-token certain">the</span> <span class="llm-token certain">grid</span> <span class="llm-token uncertain">layout</span><span class="llm-cursor">|</span>
+                            </div>
+                            <div class="llm-token-legend">
+                                <span><span class="llm-dot certain-dot"></span> Confident</span>
+                                <span><span class="llm-dot uncertain-dot"></span> Uncertain</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="small-text">In-browser LLM inference with token-level uncertainty highlighting. Coming soon.</p>
                 </div>
             </div>
         </section>

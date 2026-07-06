@@ -87,13 +87,16 @@ class MnistClassifier {
     async loadModel() {
         try {
             document.getElementById('mnist-status').innerText = 'Loading MNIST model...';
+            await tf.ready();
             this.model = await tf.loadLayersModel('./mnist-model.json');
             document.getElementById('mnist-status').innerText = 'Model loaded successfully! Ready to classify digits.';
+            document.getElementById('mnist-status').style.color = 'var(--accent-green)';
             this.initializePredictionDisplay();
             console.log('MNIST model loaded successfully');
         } catch (error) {
             console.error('Error loading MNIST model:', error);
             document.getElementById('mnist-status').innerText = 'Error loading model. Please ensure mnist-model.json and mnist-model.weights.bin are in the same directory.';
+            document.getElementById('mnist-status').style.color = '#ff4444';
         }
     }
 
@@ -227,6 +230,7 @@ class MnistClassifier {
         } catch (error) {
             console.error('Error during classification:', error);
             document.getElementById('mnist-status').innerText = 'Error during classification.';
+            document.getElementById('mnist-status').style.color = '#ff4444';
         }
     }
 }
