@@ -61,11 +61,4 @@ Links to LinkedIn and GitHub profiles, plus downloadable CV.
 └── README.md
 ```
 
-## Run Locally
-
-```bash
-python3 -m http.server 8080
-# open http://localhost:8080
-```
-
-The site is fully static -- no build step, no npm install, no server needed beyond serving files.
+> The site is fully static -- no build step, no npm install, no server needed beyond serving files.
