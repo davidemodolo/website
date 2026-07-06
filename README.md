@@ -1,125 +1,71 @@
-# [Personal Website](davidemodolo.dev)
+# davidemodolo.dev
 
-The idea is to have an interactive version of my CV.
+Personal website -- an interactive, brutalist-styled CV running entirely client-side. Built as a single static HTML page with no framework, hosted on GitHub Pages.
 
-# Content of the web page
-Passionate about exploring all aspects of <strong>Artificial Intelligence</strong> - from computer vision to natural language processing with deep learning and classical machine learning. 
-Eager to apply my knowledge in real-world scenarios and continue growing in this exciting field.
+## Tech Stack
 
-## Education
-<table>
-    <tr>
-        <td>Master's Degree in Artificial Intelligence Systems</td>
-        <td align="right">@ <strong>University of Trento</strong> | Trento, Italy</td>
-    </tr>
-    <tr>
-        <td>Bachelor's Degree in Computer Science</td>
-        <td align="right">@ <strong>University of Trento</strong> | Trento, Italy</td>
-    </tr>
-</table>
+- Pure HTML/CSS/JS -- no bundler, no framework
+- **Titillium Web** for headings and UI elements, **Consolas** for body text
+- Dark brutalist theme: thick borders, hard shadows, high-contrast green accents
 
-## Work Experience
-<table>
-    <tr>
-        <td>AI Engineer Intern</td>
-        <td align="right">@ <strong>Eurecat Technology Center</strong> | Barcelona, Spain</td>
-    </tr>
-    <tr>
-        <td>Android App Developer Intern</td>
-        <td align="right">@ <strong>University of Trento</strong> | Trento, Italy</td>
-    </tr>
-</table>
+## Sections
 
-## University Projects
+### About
+Professional summary: AI/ML Engineer with a Master's in AI Systems, focused on NLP, Transformers, RAG, LLMs, and Computer Vision.
 
-<table>
-    <tr>
-        <th align="left">Project</th>
-        <th align="left">Course</th>
-        <th align="center">Slides</th>
-        <th align="center">Report</th>
-        <th align="center">Code</th>
-    </tr>
-    <tr>
-        <td>COVID-19 Lung Ultrasound Images Classification</td>
-        <td>Medical Imaging Diagnostics</td>
-        <td align="center"><a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier/blob/master/ProjectPresentation.pdf">📊</a></td>
-        <td align="center"><a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier/blob/master/Medical_Imaging_Diagnostic_Report.pdf">📄</a></td>
-        <td align="center"><a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier">💻</a></td>
-    </tr>
-    <tr>
-        <td>Joint Intent Detection and Slot Filling</td>
-        <td>Natural Language Understanding</td>
-        <td align="center"></td>
-        <td align="center"><a href="https://github.com/davidemodolo/NLU_Intent_and_Slot/blob/master/NLU_Report_Modolo.pdf">📄</a></td>
-        <td align="center"><a href="https://github.com/davidemodolo/NLU_Intent_and_Slot">💻</a></td>
-    </tr>
-    <tr>
-        <td>Domain Adaptation / Transfer Learning <em>- team project</em></td>
-        <td>Deep Learning</td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"><a href="https://github.com/davidemodolo/HoMM-DomainAdaptation">💻</a></td>
-    </tr>
-    <tr>
-        <td>Autonomous Delivery BDI Agent <em>- team project</em></td>
-        <td>Autonomous Software Agents</td>
-        <td align="center"><a href="https://github.com/davidemodolo/ASA_Delivery_Bot/blob/main/ASA_Slides.pdf">📊</a></td>
-        <td align="center"><a href="https://github.com/davidemodolo/ASA_Delivery_Bot/blob/main/ModoloMoletta.pdf">📄</a></td>
-        <td align="center"><a href="https://github.com/davidemodolo/ASA_Delivery_Bot">💻</a></td>
-    </tr>
-    <tr>
-        <td>Parallel Closest Pair of Points <em>- team project</em></td>
-        <td>High Performance Computing</td>
-        <td align="center"><a href="https://github.com/davidemodolo/Closest-pair-of-points-HPC/blob/master/HPC-Slides.pdf">📊</a></td>
-        <td align="center"><a href="https://github.com/davidemodolo/Closest-pair-of-points-HPC/blob/master/Closest_Pair_of_Points_Report.pdf">📄</a></td>
-        <td align="center"><a href="https://github.com/davidemodolo/Closest-pair-of-points-HPC">💻</a></td>
-    </tr>
-</table>
+### Experience
+Two roles:
+- **OpenCity Labs** (2025-present): NLP pipeline engineering, RAG ingestion with PII anonymization, cross-lingual guard, agentic AI system with MCP tool-calling, Docker/GitLab CI deployment
+- **Eurecat** (2024): Token-level uncertainty estimation for planning tasks, RAG system for user preferences, multimodal agent with LLaVA
 
-## Interactive Demos
+### Education
+- **MSc in AI Systems** @ University of Trento -- thesis on LLMs for agent planning, uncertainty quantification via token log-probabilities and conformal prediction
+- **BSc in Computer Science** @ University of Trento -- thesis on Android app for healthy lifestyle monitoring
 
-### Digit Classifier
-A Convolutional Neural Network (CNN) digit recognition demo trained on the MNIST dataset using **TensorFlow.js**.
-<p align="center">
-    <img src="model_arch.png" alt="CNN Model Architecture" width="500"/>
-</p>
+### Projects
+Five university projects with links to slides, reports, and code:
+- COVID-19 Lung Ultrasound Classification (ResNet18, t-SNE retrieval)
+- Joint Intent Detection and Slot Filling (5 architectures, BERT/ERNIE)
+- Domain Adaptation with HoMM (ResNet34, 3rd/4th-order moment matching)
+- Autonomous Delivery BDI Agent (PDDL online solver, multi-agent coordination)
+- Parallel Closest Pair of Points (C/MPI, 28x speedup on 80 cores)
 
-### Sentiment Analysis
-An AI model that analyzes text sentiment on a scale from 0 (negative) to 1 (positive), using the **ml5.js** library.
+### Interactive Demos
+All models run **entirely in the browser** -- no data is sent to any server.
 
-<p align="center">
-    <img src="https://raw.githubusercontent.com/ml5js/ml5-website-archive/refs/heads/main/src/img/ml5_logo_purple.png" alt="ml5.js Logo" width="120"/>
-</p>
+| Demo | Model | Framework | Size |
+|------|-------|-----------|------|
+| **Digit Classifier** | CNN (Conv2D 32/64, Dense 128, Softmax 10) | TensorFlow.js | ~2 MB |
+| **Sentiment Analysis** | Conv1D text classifier (IMDB 25k) | ml5.js | ~1 MB |
+| **LLM Playground** | LaMini-Flan-T5-77M (4-bit quantized) | Transformers.js + ONNX | ~100 MB |
 
-## General Skills
+The LLM Playground implements the core idea from my Master's thesis: prompt the model with a multiple-choice question (A-D options + E = none), capture the decoder's first-step logits before sampling, extract probabilities for the A-E token IDs, and visualize the model's internal confidence calibration as a bar chart.
 
-- Artificial Intelligence
-- Machine Learning & Deep Learning
-- Natural Language Processing (NLP)
-- Computer Vision
-- Automated Planning
-- Software Engineering
-- Mobile Development (Android)
-- Parallel & High-Performance Computing
-- Teamwork & Collaboration
-- Research & Technical Writing
+### Contact
+Links to LinkedIn and GitHub profiles, plus downloadable CV.
 
-## Structure
+## Project Structure
+
 ```
 .
-├── digit-classifier-tf-js      // html used for training on the mnist dataset
+├── index.html                     # single-page site
+├── styles.css                     # all styles (dark brutalist theme)
+├── js/
+│   ├── mnist-classifier.js        # CNN digit recognition
+│   ├── sentiment-analyzer.js      # sentiment scoring via ml5.js
+│   └── llm-playground.js          # T5-77M MCQ uncertainty demo
+├── mnist-model.json               # TF.js model architecture
+├── mnist-model.weights.bin        # TF.js model weights
+├── Davide_Modolo_Resume.pdf       # downloadable CV
 ├── favicon.ico
-├── image.png
-├── index.html
-├── js                          // all the scripts for the interactive webpage
-│   ├── easter-egg.js           // spoiler?
-│   ├── mnist-classifier.js
-│   ├── sentiment-analyzer.js
-│   └── window-manager.js
-├── mnist-model.json            // trained model structure
-├── mnist-model.weights.bin     // trained model weights
-├── MyResume.pdf                // full resume to download
-├── README.md
-└── styles.css
+└── README.md
 ```
+
+## Run Locally
+
+```bash
+python3 -m http.server 8080
+# open http://localhost:8080
+```
+
+The site is fully static -- no build step, no npm install, no server needed beyond serving files.
