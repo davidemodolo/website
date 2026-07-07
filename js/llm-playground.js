@@ -6,9 +6,10 @@ import {
 const MODEL = "Xenova/LaMini-Flan-T5-77M";
 const TARGETS = ["A", "B", "C", "D", "E"];
 
-let tokenizer = null;
-let model = null;
-const tokenMap = {};
+export let modelReady = false;
+export let tokenizer = null;
+export let model = null;
+export const tokenMap = {};
 
 const EXAMPLES = [
     {
@@ -47,65 +48,34 @@ const EXAMPLES = [
 
 const el = (id) => document.getElementById(id);
 
-const loadBtn = el("llm-load-btn");
-const statusSpan = el("llm-status");
-const progressDiv = el("llm-load-progress");
-const progressBar = progressDiv.querySelector(".llm-progress-bar");
-const progressText = progressDiv.querySelector(".llm-progress-text");
-const questionArea = el("llm-question-area");
-const submitBtn = el("llm-submit-btn");
-const exampleBtn = el("llm-example-btn");
-const resetBtn = el("llm-reset-btn");
-const resultsDiv = el("llm-results");
-const barChart = el("llm-bar-chart");
-const predictionDiv = el("llm-prediction");
+export let modelLoading = false;
 
-loadBtn.addEventListener("click", async () => {
-    loadBtn.disabled = true;
-    statusSpan.textContent = "Loading tokenizer...";
-    statusSpan.style.color = "var(--muted-text)";
-    progressDiv.style.display = "block";
-    progressText.textContent = "Downloading model files...";
-    progressBar.style.width = "0%";
+export async function loadModel(progressCallback) {
+    if (modelReady || modelLoading) return;
+    modelLoading = true;
+    window.dispatchEvent(new CustomEvent("llm-loading-started"));
 
     try {
         tokenizer = await AutoTokenizer.from_pretrained(MODEL, {
             progress_callback: (info) => {
-                if (info.total) {
-                    progressBar.style.width = `${(info.loaded / info.total) * 100}%`;
-                    progressText.textContent = info.file || "";
-                }
+                if (progressCallback) progressCallback("tokenizer", info);
             },
         });
-
-        statusSpan.textContent = "Loading model (~100 MB)...";
 
         model = await AutoModelForSeq2SeqLM.from_pretrained(MODEL, {
             dtype: "q4f16",
             progress_callback: (info) => {
-                if (info.total) {
-                    progressBar.style.width = `${(info.loaded / info.total) * 100}%`;
-                    progressText.textContent = `${info.file}: ${Math.round(info.loaded / 1024 / 1024)}MB / ${Math.round(info.total / 1024 / 1024)}MB`;
-                }
+                if (progressCallback) progressCallback("model", info);
             },
         });
 
         buildTokenMap();
-
-        const cacheMB = await getCacheSize();
-        statusSpan.textContent = `Model loaded (${cacheMB} MB cached)`;
-        statusSpan.style.color = "var(--accent-green)";
-        progressDiv.style.display = "none";
-        loadBtn.style.display = "none";
-        questionArea.style.display = "flex";
-        loadExample();
-    } catch (e) {
-        statusSpan.textContent = `Error: ${e.message || "Failed to load model."}`;
-        statusSpan.style.color = "#ff4444";
-        loadBtn.disabled = false;
-        console.error(e);
+        modelReady = true;
+        window.dispatchEvent(new CustomEvent("llm-model-ready"));
+    } finally {
+        modelLoading = false;
     }
-});
+}
 
 function buildTokenMap() {
     for (const letter of TARGETS) {
@@ -129,50 +99,7 @@ function buildTokenMap() {
     }
 }
 
-async function getCacheSize() {
-    try {
-        const cache = await caches.open("transformers-cache");
-        const keys = await cache.keys();
-        let total = 0;
-        for (const req of keys) {
-            const resp = await cache.match(req);
-            if (resp) {
-                const blob = await resp.blob();
-                total += blob.size;
-            }
-        }
-        return Math.round(total / 1024 / 1024);
-    } catch {
-        return "?";
-    }
-}
-
-exampleBtn.addEventListener("click", loadExample);
-resetBtn.addEventListener("click", resetAll);
-
-let exampleIndex = 0;
-
-function loadExample() {
-    const ex = EXAMPLES[exampleIndex];
-    exampleIndex = (exampleIndex + 1) % EXAMPLES.length;
-    el("llm-question").value = ex.q;
-    el("llm-opt-a").value = ex.a;
-    el("llm-opt-b").value = ex.b;
-    el("llm-opt-c").value = ex.c;
-    el("llm-opt-d").value = ex.d;
-}
-
-function resetAll() {
-    el("llm-question").value = "";
-    el("llm-opt-a").value = "";
-    el("llm-opt-b").value = "";
-    el("llm-opt-c").value = "";
-    el("llm-opt-d").value = "";
-    resultsDiv.style.display = "none";
-}
-
-async function runInference(question, optA, optB, optC, optD) {
-    const prompt = `question: ${question} options: A) ${optA} B) ${optB} C) ${optC} D) ${optD} E) none of the above. Answer with only the letter:`;
+export async function runInferenceGeneral(prompt) {
     const encoded = tokenizer(prompt);
 
     let capturedProbs = null;
@@ -209,80 +136,196 @@ async function runInference(question, optA, optB, optC, optD) {
     }
 
     const predicted = TARGETS.reduce((a, b) => (probs[a] >= probs[b] ? a : b));
-    return { probs, predicted };
+    const entropy = -Object.values(probs).reduce((s, p) => s + (p > 0 ? p * Math.log2(p) : 0), 0);
+
+    return { probs, predicted, entropy };
 }
 
-submitBtn.addEventListener("click", async () => {
-    const question = el("llm-question").value.trim();
-    const optA = el("llm-opt-a").value.trim();
-    const optB = el("llm-opt-b").value.trim();
-    const optC = el("llm-opt-c").value.trim();
-    const optD = el("llm-opt-d").value.trim();
+function runInference(question, optA, optB, optC, optD) {
+    const prompt = `question: ${question} options: A) ${optA} B) ${optB} C) ${optC} D) ${optD} E) none of the above. Answer with only the letter:`;
+    return runInferenceGeneral(prompt);
+}
 
-    if (!question || !optA || !optB || !optC || !optD) {
-        alert("Please fill in all fields.");
-        return;
+async function getCacheSize() {
+    try {
+        const cache = await caches.open("transformers-cache");
+        const keys = await cache.keys();
+        let total = 0;
+        for (const req of keys) {
+            const resp = await cache.match(req);
+            if (resp) {
+                const blob = await resp.blob();
+                total += blob.size;
+            }
+        }
+        return Math.round(total / 1024 / 1024);
+    } catch {
+        return "?";
+    }
+}
+
+/* ---- UI wiring (kept self-contained, does not interfere with exports) ---- */
+
+const loadBtn = el("llm-load-btn");
+const statusSpan = el("llm-status");
+const progressDiv = el("llm-load-progress");
+const progressBar = progressDiv ? progressDiv.querySelector(".llm-progress-bar") : null;
+const questionArea = el("llm-question-area");
+const submitBtn = el("llm-submit-btn");
+const exampleBtn = el("llm-example-btn");
+const resetBtn = el("llm-reset-btn");
+const resultsDiv = el("llm-results");
+const barChart = el("llm-bar-chart");
+const predictionDiv = el("llm-prediction");
+
+if (loadBtn) {
+    if (modelReady) {
+        loadBtn.style.display = "none";
+        statusSpan.textContent = "Model loaded.";
+        statusSpan.style.color = "var(--accent-green)";
+        questionArea.style.display = "flex";
+        loadExample();
     }
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Running...";
+    loadBtn.addEventListener("click", async () => {
+        loadBtn.disabled = true;
+        statusSpan.textContent = "Loading model...";
+        statusSpan.style.color = "var(--muted-text)";
+        progressDiv.style.display = "block";
+        if (progressBar) progressBar.style.width = "0%";
+
+        try {
+            await loadModel((stage, info) => {
+                if (stage === "model" && progressBar && info.total) {
+                    progressBar.style.width = `${(info.loaded / info.total) * 100}%`;
+                }
+            });
+
+            const cacheMB = await getCacheSize();
+            statusSpan.textContent = `Model loaded (${cacheMB} MB cached)`;
+            statusSpan.style.color = "var(--accent-green)";
+            progressDiv.style.display = "none";
+            loadBtn.style.display = "none";
+            questionArea.style.display = "flex";
+        } catch (e) {
+            statusSpan.textContent = `Error: ${e.message || "Failed to load model."}`;
+            statusSpan.style.color = "#ff4444";
+            loadBtn.disabled = false;
+            console.error(e);
+        }
+    });
+}
+
+window.addEventListener("llm-loading-started", () => {
+    if (loadBtn) loadBtn.disabled = true;
+});
+
+window.addEventListener("llm-model-ready", () => {
+    if (loadBtn) loadBtn.style.display = "none";
+    if (progressDiv) progressDiv.style.display = "none";
+    statusSpan.textContent = "Model loaded.";
+    statusSpan.style.color = "var(--accent-green)";
+    questionArea.style.display = "flex";
+    loadExample();
+});
+
+if (exampleBtn) exampleBtn.addEventListener("click", loadExample);
+if (resetBtn) resetBtn.addEventListener("click", resetAll);
+
+let exampleIndex = 0;
+
+function loadExample() {
+    const ex = EXAMPLES[exampleIndex];
+    exampleIndex = (exampleIndex + 1) % EXAMPLES.length;
+    el("llm-question").value = ex.q;
+    el("llm-opt-a").value = ex.a;
+    el("llm-opt-b").value = ex.b;
+    el("llm-opt-c").value = ex.c;
+    el("llm-opt-d").value = ex.d;
+}
+
+function resetAll() {
+    el("llm-question").value = "";
+    el("llm-opt-a").value = "";
+    el("llm-opt-b").value = "";
+    el("llm-opt-c").value = "";
+    el("llm-opt-d").value = "";
     resultsDiv.style.display = "none";
+}
 
-    try {
-        const res = await runInference(question, optA, optB, optC, optD);
+if (submitBtn) {
+    submitBtn.addEventListener("click", async () => {
+        const question = el("llm-question").value.trim();
+        const optA = el("llm-opt-a").value.trim();
+        const optB = el("llm-opt-b").value.trim();
+        const optC = el("llm-opt-c").value.trim();
+        const optD = el("llm-opt-d").value.trim();
 
-        if (!res) {
-            alert("Failed to capture model output.");
+        if (!question || !optA || !optB || !optC || !optD) {
+            alert("Please fill in all fields.");
             return;
         }
 
-        const { probs, predicted } = res;
-        const maxProb = Math.max(...Object.values(probs), 0.01);
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Running...";
+        resultsDiv.style.display = "none";
 
-        barChart.innerHTML = "";
-        TARGETS.forEach((letter) => {
-            const pct = (probs[letter] * 100).toFixed(1);
-            const height = (probs[letter] / maxProb) * 100;
-            const isPredicted = letter === predicted;
+        try {
+            const res = await runInference(question, optA, optB, optC, optD);
 
-            const item = document.createElement("div");
-            item.className = "llm-bar-item";
+            if (!res) {
+                alert("Failed to capture model output.");
+                return;
+            }
 
-            const track = document.createElement("div");
-            track.className = "llm-bar-track";
+            const { probs, predicted } = res;
+            const maxProb = Math.max(...Object.values(probs), 0.01);
 
-            const fill = document.createElement("div");
-            fill.className = `llm-bar-fill${isPredicted ? " predicted" : ""}`;
-            fill.style.height = `${Math.max(height, 2)}%`;
-            track.appendChild(fill);
+            barChart.innerHTML = "";
+            TARGETS.forEach((letter) => {
+                const pct = (probs[letter] * 100).toFixed(1);
+                const height = (probs[letter] / maxProb) * 100;
+                const isPredicted = letter === predicted;
 
-            const label = document.createElement("div");
-            label.className = "llm-bar-label";
-            label.textContent = letter;
+                const item = document.createElement("div");
+                item.className = "llm-bar-item";
 
-            const pctSpan = document.createElement("div");
-            pctSpan.className = "llm-bar-pct";
-            pctSpan.textContent = `${pct}%`;
+                const track = document.createElement("div");
+                track.className = "llm-bar-track";
 
-            item.append(track, label, pctSpan);
-            barChart.appendChild(item);
-        });
+                const fill = document.createElement("div");
+                fill.className = `llm-bar-fill${isPredicted ? " predicted" : ""}`;
+                fill.style.height = `${Math.max(height, 2)}%`;
+                track.appendChild(fill);
 
-        predictionDiv.innerHTML = `
-            <span class="llm-predicted-label">Predicted:</span>
-            <span class="llm-predicted-letter">${predicted}</span>
-            <span class="llm-predicted-conf">(${(probs[predicted] * 100).toFixed(1)}% confidence)</span>
-        `;
+                const label = document.createElement("div");
+                label.className = "llm-bar-label";
+                label.textContent = letter;
 
-        resultsDiv.style.display = "block";
-    } catch (e) {
-        console.error(e);
-        alert(`Inference error: ${e.message || "Unknown error"}`);
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Run Inference";
-    }
-});
+                const pctSpan = document.createElement("div");
+                pctSpan.className = "llm-bar-pct";
+                pctSpan.textContent = `${pct}%`;
+
+                item.append(track, label, pctSpan);
+                barChart.appendChild(item);
+            });
+
+            predictionDiv.innerHTML = `
+                <span class="llm-predicted-label">Predicted:</span>
+                <span class="llm-predicted-letter">${predicted}</span>
+                <span class="llm-predicted-conf">(${(probs[predicted] * 100).toFixed(1)}% confidence)</span>
+            `;
+
+            resultsDiv.style.display = "block";
+        } catch (e) {
+            console.error(e);
+            alert(`Inference error: ${e.message || "Unknown error"}`);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Run Inference";
+        }
+    });
+}
 
 window.addEventListener("beforeunload", () => {
     caches.delete("transformers-cache");
