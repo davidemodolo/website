@@ -1,10 +1,10 @@
 # davidemodolo.dev
 
-Personal website -- an interactive, brutalist-styled CV running entirely client-side. Built as a single static HTML page with no framework, hosted on GitHub Pages.
+Personal website: an interactive, brutalist-styled CV running entirely client-side. Built as a single static HTML page with no framework, hosted on GitHub Pages.
 
 ## Tech Stack
 
-- Pure HTML/CSS/JS -- no bundler, no framework
+- Pure HTML/CSS/JS, no bundler, no framework
 - **Titillium Web** for headings and UI elements, **Consolas** for body text
 - Dark brutalist theme: thick borders, hard shadows, high-contrast green accents
 
@@ -19,8 +19,8 @@ Two roles:
 - **Eurecat** (2024): Token-level uncertainty estimation for planning tasks, RAG system for user preferences, multimodal agent with LLaVA
 
 ### Education
-- **MSc in AI Systems** @ University of Trento -- thesis on LLMs for agent planning, uncertainty quantification via token log-probabilities and conformal prediction
-- **BSc in Computer Science** @ University of Trento -- thesis on Android app for healthy lifestyle monitoring
+- **MSc in AI Systems** @ University of Trento: thesis on LLMs for agent planning, uncertainty quantification via token log-probabilities and conformal prediction
+- **BSc in Computer Science** @ University of Trento: thesis on Android app for healthy lifestyle monitoring
 
 ### Projects
 Five university projects with links to slides, reports, and code:
@@ -31,7 +31,7 @@ Five university projects with links to slides, reports, and code:
 - Parallel Closest Pair of Points (C/MPI, 28x speedup on 80 cores)
 
 ### Interactive Demos
-All models run **entirely in the browser** -- no data is sent to any server.
+All models run **entirely in the browser**. No data is sent to any server.
 
 | Demo | Model | Framework | Size |
 |------|-------|-----------|------|
@@ -61,4 +61,4 @@ Links to LinkedIn and GitHub profiles, plus downloadable CV.
 └── README.md
 ```
 
-> The site is fully static -- no build step, no npm install, no server needed beyond serving files.
+The site is fully static. No build step, no npm install, no server needed beyond serving files.

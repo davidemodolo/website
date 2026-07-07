@@ -247,6 +247,12 @@ body {
     line-height: 1.7;
 }
 
+.bullet-item {
+    display: block;
+    margin-bottom: 0.35rem;
+    line-height: 1.7;
+}
+
 .card p .present {
     color: var(--green-mid);
     font-weight: 700;

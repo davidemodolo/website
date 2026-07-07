@@ -43,7 +43,7 @@
     <main class="container">
         <section id="about" class="section hero-section">
             <h1 class="hero-title">DAVIDE MODOLO</h1>
-            <p class="hero-subtitle">NLP &bull; Transformers &bull; Deep Learning &bull; RAG &bull; LLMs &bull; Computer Vision</p>
+            <p class="hero-subtitle">NLP &bull; Transformers &bull; Deep Learning &bull; LLMs &bull; Computer Vision</p>
             <p class="hero-description">
                 AI &amp; Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems. Currently building production NLP pipelines and agentic AI systems at OpenCity Labs, fine-tuning Transformer models, designing hybrid RAG architectures, and integrating LLMs into real products.<br><strong>Open to new opportunities.</strong>
             </p>
@@ -54,7 +54,7 @@
             <div class="card">
                 <h3>AI &amp; Machine Learning Engineer, R&amp;D</h3>
                 <p><strong>OpenCity Labs (Startup)</strong> | Remote | <span class="time">August 2025 - <span class="present">Present</span></span></p>
-                <p>
+                <p class="bullet-list">
                     &bull; Single-handedly engineered an NLP pipeline for RAG ingestion with PII anonymization via a fine-tuned <span class="em">Transformer-based NER model</span> and an in-memory reversible dictionary, processing <span class="hl">50k+ daily inputs</span>.<br>
                     &bull; Built a <span class="em">spaCy</span> detection + LLM fallback guard to fix a cross-lingual model failure in a RAG pipeline: despite explicit English instructions, Italian-only retrieved context caused the model to default to Italian in 35-40% of non-Italian queries, eliminating the error. Released to <span class="hl">10+ clients</span>.<br>
                     &bull; Developed an open-source agentic AI system. Designed hybrid RAG architecture <span class="em">(vector + full-text reciprocal rank fusion)</span> to solve domain-specific retrieval failures: pure embedding search missed legal acronyms and regulatory references, while keyword search failed on semantic ones. Built <span class="em">MCP</span>-based tool-calling infrastructure with human-in-the-loop approval, reducing targeted workflows from <span class="hl">days to hours</span>.<br>
@@ -67,7 +67,7 @@
             <div class="card">
                 <h3>Intern / AI Engineer</h3>
                 <p><strong>Eurecat Technology Center</strong> | Barcelona, Spain | <span class="time">April 2024 - June 2024</span></p>
-                <p>
+                <p class="bullet-list">
                     &bull; Implemented a token-level uncertainty estimation framework for planning tasks by analyzing log-probabilities, benchmarking performance across proprietary (<span class="em">GPT-4o</span>) and locally quantized models (<span class="em">Llama 3.1 via llama.cpp</span>).<br>
                     &bull; Developed a RAG system utilizing <span class="em">gte-large</span> embeddings to retrieve context-aware user preferences, significantly reducing model hallucination in recurrent decision-making scenarios.<br>
                     &bull; Prototyped a multimodal agent integrating <span class="em">LLaVA</span> for visual reasoning tasks and validated the uncertainty reconstruction approach across multiple simulated environments.
@@ -83,7 +83,7 @@
             <div class="card">
                 <h3>Master's Degree in Artificial Intelligence Systems</h3>
                 <p><strong>University of Trento</strong> | Trento, Italy | <span class="time">September 2021 - March 2025</span></p>
-                <p>
+                <p class="bullet-list">
                     &bull; <strong>Thesis:</strong> <span class="em">Exploring the Use of LLMs for Agent Planning: Strengths and Weaknesses</span> - investigated how large language models perform on planning and decision-making tasks, identifying capabilities and failure modes. Developed a rigorous uncertainty quantification methodology based on <span class="em">token log-probabilities</span> and <span class="em">conformal prediction</span>, generating heatmap visualizations across <span class="hl">36 test cases</span> (3 LLM versions, 4 map sizes, 2 tasks) to characterize spatial reasoning quality across the entire state space.<br>
                     &bull; <strong>Relevant Courses:</strong> <span class="em">Machine Learning, Deep Learning, Natural Language Understanding, Automated Planning, Law &amp; Ethics in AI, Fundamentals of AI, Signal Processing, AI for Finance, High Performance Computing.</span>
                 </p>
@@ -96,7 +96,7 @@
             <div class="card">
                 <h3>Bachelor's Degree in Computer Science</h3>
                 <p><strong>University of Trento</strong> | Trento, Italy | <span class="time">September 2017 - June 2021</span></p>
-                <p>
+                <p class="bullet-list">
                     &bull; <strong>Thesis:</strong> <span class="em">Healthy Plus - Redesign and evolution of an Android application for monitoring healthy lifestyles.</span><br>
                     &bull; <strong>Core Topics:</strong> <span class="em">Algorithms &amp; Data Structures, Software Engineering, Database Systems, Operating Systems, Computer Architectures, Distributed Networks.</span>
                 </p>
@@ -113,7 +113,7 @@
                     <h3>COVID-19 Lung Ultrasound Images Classification</h3>
                     <span class="course-label">Medical Imaging Diagnostic</span>
                 </div>
-                <p>
+                <p class="bullet-list">
                     &bull; Built a multi-stage deep learning pipeline to classify Lung Ultrasound frames into 4 severity scores (0-3) using a fine-tuned <span class="em">ResNet18</span> on <span class="hl">~47k frames</span> from 11 patients, with patient-based train/test splitting to prevent data leakage.<br>
                     &bull; Added a binary confidence classifier that detects uncertain predictions by analyzing softmax output patterns, and a <span class="em">t-SNE</span>-based image similarity retrieval module that finds visually similar training images when the primary classifier is not confident.<br>
                     &bull; Designed an aggressive augmentation pipeline <span class="em">(affine transforms, brightness scaling, Gaussian blur, horizontal flips)</span> to combat overfitting on the limited medical dataset.
@@ -130,7 +130,7 @@
                     <h3>Joint Intent Detection and Slot Filling</h3>
                     <span class="course-label">Natural Language Understanding</span>
                 </div>
-                <p>
+                <p class="bullet-list">
                     &bull; Implemented 5 neural architectures from scratch in <span class="em">PyTorch</span> for multi-task joint intent classification and slot filling on <span class="em">ATIS</span> and <span class="em">SNIPS</span> datasets: baseline LSTM, bidirectional LSTM, encoder-decoder, and fine-tuned <span class="em">BERT</span> and <span class="em">ERNIE 2.0</span>.<br>
                     &bull; Custom encoder-decoder achieved the best overall results (<span class="hl">94.95% slot F1, 96.42% intent accuracy</span> on ATIS), outperforming pretrained transformers which suffered from a vocabulary mismatch when custom slot-label tokens were added to their tokenizer.<br>
                     &bull; Each model trained 5 times with different random seeds and reported with <span class="em">mean &plusmn; standard deviation</span>; used early stopping and custom LR scheduling (halve every 3 epochs without improvement).
@@ -146,7 +146,7 @@
                     <h3>Domain Adaptation / Transfer Learning</h3>
                     <span class="course-label">Deep Learning &middot; Team Project</span>
                 </div>
-                <p>
+                <p class="bullet-list">
                     &bull; Built a full unsupervised domain adaptation pipeline in <span class="em">PyTorch</span> based on the <span class="em">HoMM</span> paper, matching 3rd and 4th-order statistical moments between source and target feature distributions to capture shape differences (skewness and kurtosis) that simpler methods like <span class="em">MMD</span> and <span class="em">CORAL</span> miss.<br>
                     &bull; Used <span class="em">ResNet34</span> pretrained on ImageNet with a modified tanh activation layer, balancing three loss terms: cross-entropy (source supervision), HoMM discrepancy (domain alignment), and discriminative clustering with moving-average centroids (target pseudo-labels).<br>
                     &bull; Achieved <span class="hl">+11.53% gain</span> over the source-only baseline on the <span class="em">Adaptiope</span> dataset (20 object classes across product_images and real_life domains).
@@ -161,7 +161,7 @@
                     <h3>Autonomous Delivery BDI Agent</h3>
                     <span class="course-label">Autonomous Software Agents &middot; Team Project</span>
                 </div>
-                <p>
+                <p class="bullet-list">
                     &bull; Developed an autonomous software agent in <span class="em">Node.js</span> for a grid-based parcel delivery game using a <span class="em">Belief-Desire-Intention</span> architecture with intention revision and plan caching.<br>
                     &bull; Integrated a <span class="em">PDDL</span> online solver (planning.domains API) for declarative path planning, replacing an earlier <span class="em">A*</span> approach that required hand-coded edge cases for each map configuration.<br>
                     &bull; Built two multi-agent coordination strategies: angular map slicing with basic communication, and intention sharing with conflict resolution via mutual scoring.
@@ -177,7 +177,7 @@
                     <h3>Parallel Closest Pair of Points</h3>
                     <span class="course-label">High Performance Computing &middot; Team Project</span>
                 </div>
-                <p>
+                <p class="bullet-list">
                     &bull; Implemented parallel solutions to the closest pair of points problem in up to 5 dimensions using <span class="em">C</span> and <span class="em">MPI</span>, with both brute-force (<span class="em">O(n&sup2;)</span>) and divide-and-conquer (<span class="em">O(n log n)</span>) algorithms under a master-worker model.<br>
                     &bull; The brute-force approach scaled near-linearly to <span class="hl">~28&times; speedup</span> on 80 cores (embarrassingly parallel), while divide-and-conquer plateaued at ~7.3&times; due to cross-boundary strip-exchange communication overhead, a tradeoff between asymptotic complexity and parallel scalability.<br>
                     &bull; Handled the INT_MAX MPI buffer limit with automatic multi-tranche serialization of variable-size Point structs via <span class="em">MPI_Pack/MPI_Unpack</span>; benchmarked up to <span class="hl">250 million points</span> across 1-80 cores on an HPC cluster.
@@ -193,7 +193,7 @@
 
         <section id="interactive" class="section">
             <h2>Interactive Projects</h2>
-            <p class="section-subtitle">All models run <strong>entirely in your browser</strong> -- no data is sent to any server.</p>
+            <p class="section-subtitle">All models run <strong>entirely in your browser</strong>. No data is sent to any server.</p>
             <div class="interactive-grid">
                 <div class="card interactive-card">
                     <h3>Digit Classifier</h3>
@@ -211,7 +211,7 @@
                             <!-- Keypad will be generated here -->
                         </div>
                     </div>
-                    <p class="small-text"><span class="em">Reshape(28,28,1) &rarr; Conv2D(32, 3x3, ReLU) &rarr; MaxPool(2x2) &rarr; Conv2D(64, 3x3, ReLU) &rarr; MaxPool(2x2) &rarr; Flatten &rarr; Dense(128, ReLU) &rarr; Dropout(0.2) &rarr; Dense(10, Softmax)</span>. Trained on the full <span class="em">MNIST</span> dataset (<span class="hl">60,000</span> training images, <span class="hl">10,000</span> test), using <span class="em">Adam</span> optimizer with <span class="em">categorical cross-entropy</span> loss for <span class="hl">10</span> epochs, converted to <span class="em">TensorFlow.js</span> format. Your canvas drawing is downscaled from 280x280 to 28x28, pixel intensities are inverted and normalized to [0,1], then fed through the model in a single forward pass via <span class="em">WebGL</span>. The keypad renders the 10-class Softmax output as per-digit confidence scores.</p>
+                    <p class="small-text">A small <span class="em">CNN</span> trained on the full <span class="em">MNIST</span> dataset (<span class="hl">60,000</span> training images, <span class="hl">10,000</span> test) for <span class="hl">10</span> epochs, converted to <span class="em">TensorFlow.js</span> format. Your canvas drawing is downscaled to 28×28, normalized, and fed through the network in a single forward pass via <span class="em">WebGL</span>. The keypad shows the confidence score for each digit.</p>
                 </div>
 
                 <div class="card interactive-card">
@@ -234,7 +234,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="small-text">A 1D convolutional text classifier running on <span class="em">ml5.js</span> scores text from <span class="hl">0.0</span> (strongly negative) to <span class="hl">1.0</span> (strongly positive). The model tokenizes input into word indices, maps them to learned embeddings, and passes them through <span class="em">Conv1D</span> filters followed by <span class="em">GlobalMaxPooling</span> and a <span class="em">Dense Sigmoid</span> output. Trained on the <span class="em">IMDB Movie Reviews</span> corpus (<span class="hl">25,000</span> labeled samples), it detects n-gram sentiment patterns entirely client-side -- no server round-trip.</p>
+                    <p class="small-text">A convolutional text classifier running on <span class="em">ml5.js</span>, trained on the <span class="em">IMDB Movie Reviews</span> corpus (<span class="hl">25,000</span> labeled samples). It scores text from <span class="hl">0.0</span> (strongly negative) to <span class="hl">1.0</span> (strongly positive) by detecting sentiment patterns in your input, entirely client-side.</p>
                 </div>
 
                 <div class="card interactive-card interactive-card-wide">
@@ -295,7 +295,7 @@
                         <div class="llm-prediction" id="llm-prediction"></div>
                     </div>
 
-                    <p class="small-text">Loads <span class="em">LaMini-Flan-T5-77M</span>, a 77-million-parameter encoder-decoder Transformer, quantized to <span class="hl">4-bit</span> precision (~<span class="hl">100 MB</span>) and executed locally on CPU via <span class="em">ONNX Runtime Web</span>. The prompt is structured as a multiple-choice question with five options (<span class="em">A-E</span>). A custom logits processor intercepts the decoder's first-step output before sampling, capturing the full <span class="hl">32,000-token</span> vocabulary distribution. Probabilities for the <span class="em">A-E</span> token IDs are extracted, renormalized via <span class="em">Softmax</span>, and rendered as a bar chart -- visualizing the model's internal confidence calibration across answer choices.</p>
+                    <p class="small-text">Runs <span class="em">LaMini-Flan-T5-77M</span>, a <span class="hl">77M</span>-parameter encoder-decoder Transformer quantized to <span class="hl">4-bit</span> (~<span class="hl">100 MB</span>), entirely in your browser via <span class="em">ONNX Runtime Web</span>. Rather than just returning the model's top answer, it captures the raw output probabilities for each option and renders them as a bar chart, showing how confident (or uncertain) the model is across all choices.</p>
                 </div>
             </div>
         </section>
@@ -334,6 +334,11 @@
         }
         updateNavbarHeight();
         window.addEventListener('resize', updateNavbarHeight);
+
+        document.querySelectorAll('.bullet-list').forEach(p => {
+            const items = p.innerHTML.split('<br>').map(s => s.trim()).filter(Boolean);
+            p.innerHTML = items.map(s => `<span class="bullet-item">${s}</span>`).join('');
+        });
     </script>
 </body>
 </html>
