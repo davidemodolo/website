@@ -402,6 +402,42 @@
 
                     <p class="small-text">Runs <span class="em">LaMini-Flan-T5-77M</span>, a <span class="hl">77M</span>-parameter encoder-decoder Transformer quantized to <span class="hl">4-bit</span> (~<span class="hl">100 MB</span>), entirely in your browser via <span class="em">ONNX Runtime Web</span>. Rather than just returning the model's top answer, it captures the raw output probabilities for each option and renders them as a bar chart, showing how confident (or uncertain) the model is across all choices.</p>
                 </div>
+
+                <div class="card interactive-card interactive-card-wide">
+                    <h3>LLM Delivery Agent</h3>
+                    <p>A minimal, simplified excerpt from my thesis: a 77M-parameter LLM controls an agent on a 5×5 grid to pick up and deliver a parcel.</p>
+
+                    <div class="thesis-load-area" id="thesis-load-area">
+                        <div class="llm-load-row">
+                            <button id="thesis-load-btn" class="btn">Load LaMini-Flan-T5-77M (~100 MB)</button>
+                            <span id="thesis-status" class="llm-status">Load the model to begin.</span>
+                        </div>
+                        <div id="thesis-load-progress" class="llm-progress" style="display:none">
+                            <div class="llm-progress-track">
+                                <div class="thesis-progress-bar llm-progress-bar"></div>
+                            </div>
+                            <span class="thesis-progress-text llm-progress-text">Downloading model...</span>
+                        </div>
+                    </div>
+
+                    <div class="thesis-game-area">
+                        <div class="thesis-legend">
+                            <span><span class="thesis-agent-legend">&#9650;</span> Agent</span>
+                            <span><span class="thesis-parcel-legend">&#9679;</span> Parcel</span>
+                            <span><span class="thesis-delivery-legend"></span> Delivery Zone</span>
+                        </div>
+                        <div id="thesis-grid" class="thesis-grid"></div>
+                        <div id="thesis-dist" class="thesis-dist" style="display:none"></div>
+                        <div class="thesis-controls">
+                            <button id="thesis-step-btn" class="btn" disabled>Step</button>
+                            <button id="thesis-auto-btn" class="btn" disabled>Start</button>
+                            <button id="thesis-reset-btn" class="btn btn-secondary" disabled>Reset</button>
+                            <button id="thesis-speed-btn" class="btn btn-secondary">Speed: 1x</button>
+                        </div>
+                    </div>
+
+                    <p class="small-text">A stripped-down, minimal demo of one small slice of my <span class="em">thesis</span>. Uses the same <span class="em">LaMini-Flan-T5-77M</span> model as the LLM Playground (shared session). The agent navigates a 5×5 grid to pick up a parcel and deliver it to the yellow zone. Each visited cell shows the model's <span class="hl">action confidence</span> (%). Click any cell to place the parcel, then press Start for auto-play or Step for manual control. Click a visited cell to inspect the full probability distribution.</p>
+                </div>
             </div>
         </section>
 
@@ -443,6 +479,7 @@
     }
     </script>
     <script src="js/llm-playground.js" type="module"></script>
+    <script src="js/mini-thesis.js" type="module"></script>
     <script>
         const navbar = document.querySelector('.navbar');
 
