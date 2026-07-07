@@ -9,7 +9,8 @@
     --green-light: #142B14;
     --surface: #1A1A1A;
     --surface-2: #212121;
-    --yellow: #FEF08A;
+    --yellow: #FACC15;
+    --yellow-dark: #A16207;
 
     /* Hard offset shadows. Green is the signature accent; on the dark background these read
        as crisp, branded offsets (a plain black shadow would be invisible on near-black). */
@@ -19,6 +20,11 @@
     /* For green-filled boxes (section titles, hero): a darker-green offset stays visible
        behind the bright green fill. */
     --shadow-box: 5px 5px 0 var(--green-dark);
+
+    /* Offsets for the yellow-filled boxes: a darker yellow/amber reads as a branded
+       shadow instead of clashing with the green accent. */
+    --shadow-yellow-sm: 2px 2px 0 var(--yellow-dark);
+    --shadow-yellow: 4px 4px 0 var(--yellow-dark);
 
     /* Aliases referenced by the JS demo files and a few older rules. */
     --accent-green: var(--green);
@@ -220,9 +226,15 @@ body {
     color: #333;
     background: var(--yellow);
     border: 2px solid var(--black);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-yellow-sm);
     padding: 1rem 1.5rem;
     line-height: 1.7;
+}
+
+.opportunities-link {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /* ===== CARDS ===== */
@@ -501,7 +513,7 @@ body {
     text-align: center;
     background: var(--yellow);
     border: 3px solid var(--black);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-yellow);
     padding: 1rem 1.5rem;
     min-width: 160px;
     color: var(--black);

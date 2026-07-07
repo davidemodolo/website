@@ -1,0 +1,34 @@
+# Davide Modolo
+
+> AI & Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems. Specializes in Deep Learning, NLP, Transformers, LLMs, RAG, and MLOps (Docker, CI/CD, model deployment & monitoring). Currently building production NLP pipelines and agentic AI systems. Open to new opportunities.
+
+- Website: https://www.davidemodolo.dev/
+- LinkedIn: https://www.linkedin.com/in/davide-modolo
+- GitHub: https://github.com/davidemodolo
+- Resume: https://www.davidemodolo.dev/Davide_Modolo_Resume.pdf
+
+## Experience
+
+- **AI & Machine Learning Engineer, R&D - OpenCity Labs** (Aug 2025 - Present, Remote): NLP pipelines for RAG ingestion with PII anonymization via a fine-tuned Transformer NER model (50k+ daily inputs); cross-lingual guardrails with spaCy + LLM fallback; open-source agentic AI with hybrid RAG (vector + full-text reciprocal rank fusion) and MCP tool-calling with human-in-the-loop; Dockerized services with GitLab CI.
+- **Intern / AI Engineer - Eurecat Technology Center** (Apr 2024 - Jun 2024, Barcelona): Token-level uncertainty estimation for planning tasks (GPT-4o, Llama 3.1 via llama.cpp); RAG with gte-large embeddings to reduce hallucination; multimodal agent with LLaVA.
+
+## Education
+
+- **Master's Degree in Artificial Intelligence Systems - University of Trento** (2021 - 2025). Thesis: "Exploring the Use of LLMs for Agent Planning: Strengths and Weaknesses".
+- **Bachelor's Degree in Computer Science - University of Trento** (2017 - 2021).
+
+## Skills
+
+- AI/ML: Deep Learning, NLP, Transformers, LLMs, RAG, Computer Vision, Multimodal AI, Automated Planning
+- Frameworks/Tools: PyTorch, Hugging Face, spaCy, ONNX Runtime, FastAPI
+- MLOps/Infra: Docker, CI/CD (GitLab CI), AWS EC2, Prometheus, Grafana, SurrealDB, HPC/MPI
+- Languages: Python, C, Java, JavaScript/Node.js
+
+## Projects
+
+- COVID-19 Lung Ultrasound Image Classification (ResNet18): https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier
+- Joint Intent Detection and Slot Filling (PyTorch, BERT): https://github.com/davidemodolo/NLU_Intent_and_Slot
+- HoMM Domain Adaptation / Transfer Learning: https://github.com/davidemodolo/HoMM-DomainAdaptation
+- Autonomous Delivery BDI Agent (Node.js, PDDL): https://github.com/davidemodolo/ASA_Delivery_Bot
+- Parallel Closest Pair of Points (C, MPI): https://github.com/davidemodolo/Closest-pair-of-points-HPC
+- Master's Thesis - LLMs for Agent Planning: https://github.com/davidemodolo/LLMs_for_Agent_Planning

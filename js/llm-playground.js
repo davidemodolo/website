@@ -110,12 +110,18 @@ loadBtn.addEventListener("click", async () => {
 function buildTokenMap() {
     for (const letter of TARGETS) {
         tokenMap[letter] = [];
-        for (const text of [` ${letter}`, letter, letter.toLowerCase()]) {
-            const encoded = tokenizer(text, { add_special_tokens: false });
-            if (encoded.input_ids.dims[1] === 1) {
-                const arr = encoded.input_ids.tolist();
-                const id = Number(arr[0][0]);
-                if (!isNaN(id) && id >= 0 && !tokenMap[letter].includes(id)) {
+        const forms = [
+            letter,
+            ` ${letter}`,
+            letter.toLowerCase(),
+            ` ${letter.toLowerCase()}`,
+        ];
+        for (const text of forms) {
+            const ids = tokenizer(text, { add_special_tokens: false }).input_ids.tolist()[0];
+            for (const raw of ids) {
+                const id = Number(raw);
+                if (isNaN(id) || id < 0 || tokenMap[letter].includes(id)) continue;
+                if (tokenizer.decode([id]).trim().toLowerCase() === letter.toLowerCase()) {
                     tokenMap[letter].push(id);
                 }
             }
