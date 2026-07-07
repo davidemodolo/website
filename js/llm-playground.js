@@ -273,7 +273,3 @@ submitBtn.addEventListener("click", async () => {
         submitBtn.textContent = "Run Inference";
     }
 });
-
-window.addEventListener("beforeunload", () => {
-    caches.delete("transformers-cache");
-});

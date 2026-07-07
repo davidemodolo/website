@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Davide Modolo: AI &amp; Machine Learning Engineer. Master's in AI Systems, experienced in Deep Learning, NLP, Transformers, PyTorch, LLMs, RAG. Open to new opportunities.">
-    <meta name="keywords" content="Davide Modolo, AI Engineer, Machine Learning Engineer, Deep Learning Engineer, NLP Engineer, Computer Vision, PyTorch, Transformers, LLM Engineer, RAG, Artificial Intelligence, Hire AI Engineer">
+    <meta name="description" content="Davide Modolo: AI &amp; Machine Learning Engineer. Master's in AI Systems, experienced in Deep Learning, NLP, Transformers, PyTorch, LLMs, RAG, and MLOps (Docker, CI/CD, model deployment &amp; monitoring). Open to new opportunities.">
+    <meta name="keywords" content="Davide Modolo, AI Engineer, Machine Learning Engineer, MLOps Engineer, Deep Learning Engineer, NLP Engineer, Computer Vision, PyTorch, Transformers, LLM Engineer, RAG, MLOps, CI/CD, Docker, Model Deployment, Model Monitoring, Artificial Intelligence, Hire AI Engineer">
     <meta name="author" content="Davide Modolo">
     <meta property="og:title" content="Davide Modolo - AI &amp; ML Engineer">
-    <meta property="og:description" content="AI &amp; Machine Learning Engineer with a Master's in AI Systems. Experienced in Deep Learning, NLP, Transformers, LLMs, and RAG. Open to new opportunities.">
+    <meta property="og:description" content="AI &amp; Machine Learning Engineer with a Master's in AI Systems. Experienced in Deep Learning, NLP, Transformers, LLMs, RAG, and MLOps (Docker, CI/CD, deployment &amp; monitoring). Open to new opportunities.">
     <meta property="og:type" content="website">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>Davide Modolo | AI &amp; ML Engineer</title>
@@ -15,8 +15,45 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.10.0/tf.min.js"></script>
-    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
+    <!--
+      KNOWN ISSUE / INTENTIONAL WORKAROUND: TensorFlow.js is loaded twice on this page - the
+      standalone tf.min.js below (used by the MNIST digit classifier) and the copy that ml5.js
+      bundles internally (used by the sentiment demo). Two TFJS cores register into TFJS's shared
+      global registry, producing a burst of "kernel/backend already registered" and "Platform ...
+      already been set" console messages. The filter below hides ONLY those specific
+      duplicate-registration messages so they don't drown the console; every OTHER warning/error
+      is left visible. We keep the two-library setup on purpose (tfjs for MNIST, ml5 for sentiment)
+      and simply suppress this known noise - to be revisited if we ever consolidate on one runtime.
+    -->
+    <script>
+        (function () {
+            const DUP_REGISTRATION = [
+                /kernel .* already registered/i,
+                /backend was already registered/i,
+                /reusing existing backend factory/i,
+                /platform .* has already been set/i
+            ];
+            const isDup = (args) =>
+                args.length > 0 &&
+                typeof args[0] === 'string' &&
+                DUP_REGISTRATION.some((re) => re.test(args[0]));
+            for (const method of ['warn', 'error', 'log']) {
+                const original = console[method].bind(console);
+                console[method] = function (...args) {
+                    if (isDup(args)) return;
+                    original(...args);
+                };
+            }
+        })();
+    </script>
+
+    <!-- tfjs pinned to 1.7.4 for the MNIST demo: this MATCHES the tfjs version bundled inside
+         ml5 0.12.2, so the two copies share a compatible engine and ml5's sentiment predict()
+         works (a newer standalone tfjs corrupts ml5's older engine). ml5 0.12.2 is the last
+         release shipping the `sentiment` model (ml5 1.x "next-gen" dropped it). -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
+    <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0B1R5DZQGV"></script>
@@ -29,23 +66,30 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="nav-links">
-            <a href="#about">About</a>
-            <a href="#experience">Experience</a>
-            <a href="#education">Education</a>
-            <a href="#projects">Projects</a>
-            <a href="#interactive">Interactive</a>
-            <a href="#contact">Contact</a>
-            <a href="Davide_Modolo_Resume.pdf" download="Davide_Modolo_Resume.pdf" class="download-cv">Download CV</a>
+        <div class="nav-inner">
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#experience">Experience</a>
+                <a href="#education">Education</a>
+                <a href="#projects">Projects</a>
+                <a href="#interactive">Interactive</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <a href="Davide_Modolo_Resume.pdf" download="Davide_Modolo_Resume.pdf" class="download-cv">
+                <svg class="cv-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                    <path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v11m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+                </svg>
+                <span>Download CV</span>
+            </a>
         </div>
     </nav>
 
     <main class="container">
         <section id="about" class="section hero-section">
             <h1 class="hero-title">DAVIDE MODOLO</h1>
-            <p class="hero-subtitle">NLP &bull; Transformers &bull; Deep Learning &bull; LLMs &bull; Computer Vision</p>
+            <p class="hero-subtitle">NLP &bull; Transformers &bull; LLMs &bull; MLOps &bull; Machine Learning &bull; Deep Learning &bull; Computer Vision</p>
             <p class="hero-description">
-                AI &amp; Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems. Currently building production NLP pipelines and agentic AI systems at OpenCity Labs, fine-tuning Transformer models, designing hybrid RAG architectures, and integrating LLMs into real products.<br><strong>Open to new opportunities.</strong>
+                AI &amp; Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems. Currently building production NLP pipelines and agentic AI systems at OpenCity Labs, fine-tuning Transformer models, designing hybrid RAG architectures, and integrating LLMs into real products. On the MLOps side, I containerize services with Docker and set up CI/CD pipelines to get models into production.<br><strong>Open to new opportunities.</strong>
             </p>
         </section>
 
@@ -229,8 +273,8 @@
                         <div class="sentiment-result-section">
                             <div class="sentiment-score" id="sentiment-score">
                                 <div>Sentiment Score:</div>
-                                <div id="score-value" style="font-size: 2.5rem; font-weight: bold; margin: 10px 0;">-</div>
-                                <div id="score-description" style="font-size: 1.2rem;">-</div>
+                                <div id="score-value">-</div>
+                                <div id="score-description">-</div>
                             </div>
                         </div>
                     </div>
@@ -304,14 +348,24 @@
             <h2>Contact Information</h2>
             <div class="contact-cards">
                 <div class="card contact-card">
+                    <span class="contact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="40" height="40" role="img" aria-label="LinkedIn">
+                            <path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/>
+                        </svg>
+                    </span>
                     <h3>LinkedIn</h3>
-                    <p>Professional network & career</p>
-                    <a href="https://www.linkedin.com/in/davide-modolo" target="_blank" class="btn">View Profile</a>
+                    <p>Professional network &amp; career</p>
+                    <a href="https://www.linkedin.com/in/davide-modolo" target="_blank" rel="noopener noreferrer" class="btn">View Profile</a>
                 </div>
                 <div class="card contact-card">
+                    <span class="contact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="40" height="40" role="img" aria-label="GitHub">
+                            <path fill="currentColor" d="M12 .3a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58l-.01-2.04c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.93.43.37.82 1.1.82 2.22l-.01 3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .3z"/>
+                        </svg>
+                    </span>
                     <h3>GitHub</h3>
-                    <p>Code repositories & open source projects</p>
-                    <a href="https://github.com/davidemodolo" target="_blank" class="btn">View Code</a>
+                    <p>Code repositories &amp; open source projects</p>
+                    <a href="https://github.com/davidemodolo" target="_blank" rel="noopener noreferrer" class="btn">View Code</a>
                 </div>
             </div>
         </section>
@@ -319,26 +373,52 @@
 
     <script src="js/mnist-classifier.js"></script>
     <script src="js/sentiment-analyzer.js"></script>
+    <!-- Import map must precede the module script that imports "@huggingface/transformers". -->
     <script type="importmap">
     {
         "imports": {
-            "@huggingface/transformers": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.0/dist/transformers.min.js"
+            "@huggingface/transformers": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0/dist/transformers.min.js"
         }
     }
     </script>
     <script src="js/llm-playground.js" type="module"></script>
     <script>
+        const navbar = document.querySelector('.navbar');
+
         function updateNavbarHeight() {
-            const h = document.querySelector('.navbar').offsetHeight;
-            document.documentElement.style.setProperty('--navbar-height', h + 'px');
+            document.documentElement.style.setProperty('--navbar-height', navbar.offsetHeight + 'px');
         }
         updateNavbarHeight();
         window.addEventListener('resize', updateNavbarHeight);
 
+        // Split "&bull;"-separated bullet lists into styled block items.
         document.querySelectorAll('.bullet-list').forEach(p => {
             const items = p.innerHTML.split('<br>').map(s => s.trim()).filter(Boolean);
             p.innerHTML = items.map(s => `<span class="bullet-item">${s}</span>`).join('');
         });
+
+        // Scroll-spy: highlight the nav link for the section currently in view.
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('main section[id]');
+
+        function updateActiveNav() {
+            const scrollPos = window.scrollY + navbar.offsetHeight + 24;
+            let currentId = sections.length ? sections[0].id : null;
+            sections.forEach(sec => {
+                if (sec.offsetTop <= scrollPos) currentId = sec.id;
+            });
+            // At the very bottom, force the last section active.
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2) {
+                currentId = sections[sections.length - 1].id;
+            }
+            navLinks.forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + currentId);
+            });
+        }
+
+        updateActiveNav();
+        window.addEventListener('scroll', updateActiveNav, { passive: true });
+        window.addEventListener('resize', updateActiveNav);
     </script>
 </body>
 </html>
