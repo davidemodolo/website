@@ -28,10 +28,6 @@ const EXAMPLES = [
         a: "Michelangelo", b: "Raphael", c: "Donatello", d: "Leonardo da Vinci",
     },
     {
-        q: "How many continents are there on Earth?",
-        a: "Five", b: "Six", c: "Seven", d: "Eight",
-    },
-    {
         q: "What is the largest organ in the human body?",
         a: "Heart", b: "Brain", c: "Liver", d: "Skin",
     },
@@ -40,12 +36,8 @@ const EXAMPLES = [
         a: "1943", b: "1944", c: "1945", d: "1946",
     },
     {
-        q: "What language has the most native speakers worldwide?",
-        a: "English", b: "Spanish", c: "Hindi", d: "Mandarin Chinese",
-    },
-    {
-        q: "Which element has the atomic number 1?",
-        a: "Sodium", b: "Oxygen", c: "Carbon", d: "Calcium",
+        q: 'Which element has the atomic number 1 (hint, it starts with "H")?',
+        a: "Sodium", b: "Oxygen", c: "Carbon", d: "Hydrogen",
     },
     {
         q: "What is the speed of light in vacuum approximately?",
@@ -152,8 +144,11 @@ async function getCacheSize() {
 exampleBtn.addEventListener("click", loadExample);
 resetBtn.addEventListener("click", resetAll);
 
+let exampleIndex = 0;
+
 function loadExample() {
-    const ex = EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)];
+    const ex = EXAMPLES[exampleIndex];
+    exampleIndex = (exampleIndex + 1) % EXAMPLES.length;
     el("llm-question").value = ex.q;
     el("llm-opt-a").value = ex.a;
     el("llm-opt-b").value = ex.b;
@@ -168,6 +163,47 @@ function resetAll() {
     el("llm-opt-c").value = "";
     el("llm-opt-d").value = "";
     resultsDiv.style.display = "none";
+}
+
+async function runInference(question, optA, optB, optC, optD) {
+    const prompt = `question: ${question} options: A) ${optA} B) ${optB} C) ${optC} D) ${optD} E) none of the above. Answer with only the letter:`;
+    const encoded = tokenizer(prompt);
+
+    let capturedProbs = null;
+    const processor = (_input_ids, logits) => {
+        const flat = logits.tolist()[0];
+        const maxL = Math.max(...flat);
+        const expVals = flat.map((v) => Math.exp(v - maxL));
+        const sum = expVals.reduce((a, b) => a + b, 0);
+        capturedProbs = expVals.map((v) => v / sum);
+        return logits;
+    };
+
+    await model.generate({
+        inputs: encoded.input_ids,
+        attention_mask: encoded.attention_mask,
+        max_new_tokens: 1,
+        logits_processor: [processor],
+    });
+
+    if (!capturedProbs) return null;
+
+    const probs = {};
+    for (const letter of TARGETS) {
+        let p = 0;
+        for (const id of tokenMap[letter]) {
+            p += capturedProbs[id] || 0;
+        }
+        probs[letter] = p;
+    }
+
+    const total = Object.values(probs).reduce((s, v) => s + v, 0);
+    if (total > 0) {
+        for (const letter of TARGETS) probs[letter] /= total;
+    }
+
+    const predicted = TARGETS.reduce((a, b) => (probs[a] >= probs[b] ? a : b));
+    return { probs, predicted };
 }
 
 submitBtn.addEventListener("click", async () => {
@@ -187,46 +223,14 @@ submitBtn.addEventListener("click", async () => {
     resultsDiv.style.display = "none";
 
     try {
-        const prompt = `question: ${question} options: A) ${optA} B) ${optB} C) ${optC} D) ${optD} E) none of the above`;
-        const encoded = tokenizer(prompt);
+        const res = await runInference(question, optA, optB, optC, optD);
 
-        let capturedProbs = null;
-        const processor = (_input_ids, logits) => {
-            const flat = logits.tolist()[0];
-            const maxL = Math.max(...flat);
-            const expVals = flat.map((v) => Math.exp(v - maxL));
-            const sum = expVals.reduce((a, b) => a + b, 0);
-            capturedProbs = expVals.map((v) => v / sum);
-            return logits;
-        };
-
-        await model.generate({
-            inputs: encoded.input_ids,
-            attention_mask: encoded.attention_mask,
-            max_new_tokens: 1,
-            logits_processor: [processor],
-        });
-
-        if (!capturedProbs) {
+        if (!res) {
             alert("Failed to capture model output.");
             return;
         }
 
-        const probs = {};
-        for (const letter of TARGETS) {
-            let p = 0;
-            for (const id of tokenMap[letter]) {
-                p += capturedProbs[id] || 0;
-            }
-            probs[letter] = p;
-        }
-
-        const total = Object.values(probs).reduce((s, v) => s + v, 0);
-        if (total > 0) {
-            for (const letter of TARGETS) probs[letter] /= total;
-        }
-
-        const predicted = TARGETS.reduce((a, b) => (probs[a] >= probs[b] ? a : b));
+        const { probs, predicted } = res;
         const maxProb = Math.max(...Object.values(probs), 0.01);
 
         barChart.innerHTML = "";
@@ -272,4 +276,8 @@ submitBtn.addEventListener("click", async () => {
         submitBtn.disabled = false;
         submitBtn.textContent = "Run Inference";
     }
+});
+
+window.addEventListener("beforeunload", () => {
+    caches.delete("transformers-cache");
 });

@@ -780,7 +780,9 @@ body {
 
 /* Results */
 .llm-results {
-    margin-top: 0.75rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-color);
     width: 100%;
 }
 
