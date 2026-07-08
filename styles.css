@@ -1,16 +1,14 @@
 /* ===== NEOBRUTALISM DARK THEME ===== */
 :root {
     /* Neobrutalism palette */
-    --bg: #0D0D0D;
+    --bg: #141514;
     --black: #000000;
     --green: #4ADE80;
     --green-mid: #22C55E;
     --green-dark: #15803D;
-    --green-light: #142B14;
-    --surface: #1A1A1A;
-    --surface-2: #212121;
-    --yellow: #FACC15;
-    --yellow-dark: #A16207;
+    --green-light: #1a331a;
+    --surface: #1E201E;
+    --surface-2: #262826;
 
     /* Hard offset shadows. Green is the signature accent; on the dark background these read
        as crisp, branded offsets (a plain black shadow would be invisible on near-black). */
@@ -21,14 +19,9 @@
        behind the bright green fill. */
     --shadow-box: 5px 5px 0 var(--green-dark);
 
-    /* Offsets for the yellow-filled boxes: a darker yellow/amber reads as a branded
-       shadow instead of clashing with the green accent. */
-    --shadow-yellow-sm: 2px 2px 0 var(--yellow-dark);
-    --shadow-yellow: 4px 4px 0 var(--yellow-dark);
-
     /* Aliases referenced by the JS demo files and a few older rules. */
     --accent-green: var(--green);
-    --border-color: #6b6b6b;
+    --border-color: #5a5a5a;
     --card-bg: var(--surface);
     --text-color: #E6E6E6;
     --muted-text: #9c9c9c;
@@ -51,7 +44,7 @@ body {
     background: var(--bg);
     font-family: 'Consolas', 'Lucida Console', 'Courier New', monospace;
     color: var(--text-color);
-    line-height: 1.6;
+    line-height: 1.75;
     overflow-x: hidden;
 }
 
@@ -146,12 +139,12 @@ body {
 .container {
     max-width: 1100px;
     margin: 0 auto;
-    padding: var(--navbar-height, 80px) 1.5rem 3rem;
+    padding: var(--navbar-height, 80px) 1.5rem 4rem;
 }
 
 /* ===== SECTIONS ===== */
 .section {
-    padding: 4rem 0;
+    padding: 5rem 0;
     border-bottom: 3px solid var(--border-color);
 }
 
@@ -161,8 +154,7 @@ body {
 
 .section h2 {
     color: var(--black);
-    margin-bottom: 2rem;
-    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: -0.01em;
@@ -179,7 +171,7 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
     margin-top: -1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     font-family: Consolas, 'Courier New', monospace;
     background: var(--green-light);
     border: 2px solid var(--border-color);
@@ -189,7 +181,7 @@ body {
 /* ===== HERO ===== */
 .hero-section {
     text-align: center;
-    padding: 5rem 0 4rem;
+    padding: 6rem 0 5rem;
     border-bottom: 3px solid var(--border-color);
 }
 
@@ -200,7 +192,7 @@ body {
     text-transform: uppercase;
     letter-spacing: -0.03em;
     line-height: 1;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     display: inline-block;
     background: var(--green);
     border: 3px solid var(--black);
@@ -213,7 +205,7 @@ body {
     font-size: 1.1rem;
     color: var(--heading-color);
     font-weight: 700;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
@@ -223,12 +215,12 @@ body {
     font-size: 1.05rem;
     max-width: 700px;
     margin: 0 auto;
-    color: #333;
-    background: var(--yellow);
-    border: 2px solid var(--black);
-    box-shadow: var(--shadow-yellow-sm);
+    color: var(--text-color);
+    background: var(--green-light);
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow);
     padding: 1rem 1.5rem;
-    line-height: 1.7;
+    line-height: 1.8;
 }
 
 .opportunities-link {
@@ -242,8 +234,8 @@ body {
     background: var(--surface);
     border: 3px solid var(--border-color);
     box-shadow: var(--shadow);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
     transition: transform 0.1s, box-shadow 0.1s;
 }
 
@@ -271,7 +263,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--black);
-    background: var(--yellow);
+    background: var(--green);
     border: 2px solid var(--black);
     padding: 0.15rem 0.5rem;
     white-space: nowrap;
@@ -292,13 +284,13 @@ body {
 .card p {
     margin-bottom: 0.75rem;
     color: var(--text-color);
-    line-height: 1.7;
+    line-height: 1.8;
 }
 
 .bullet-item {
     display: block;
-    margin-bottom: 0.35rem;
-    line-height: 1.7;
+    margin-bottom: 0.5rem;
+    line-height: 1.8;
 }
 
 .card p .present {
@@ -383,14 +375,14 @@ body {
 .interactive-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
-    gap: 2rem;
+    gap: 2.5rem;
 }
 
 .interactive-card {
     background: var(--surface);
     border: 3px solid var(--border-color);
     box-shadow: var(--shadow);
-    padding: 1.5rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -511,12 +503,12 @@ body {
 
 .sentiment-score {
     text-align: center;
-    background: var(--yellow);
-    border: 3px solid var(--black);
-    box-shadow: var(--shadow-yellow);
+    background: var(--green-light);
+    border: 3px solid var(--green-mid);
+    box-shadow: var(--shadow);
     padding: 1rem 1.5rem;
     min-width: 160px;
-    color: var(--black);
+    color: var(--heading-color);
     font-weight: 700;
 }
 
@@ -537,7 +529,7 @@ body {
 .contact-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .contact-card {
@@ -928,7 +920,7 @@ body {
 }
 
 .thesis-parcel-legend {
-    color: var(--yellow);
+    color: var(--accent-green);
     font-size: 1.1rem;
 }
 
@@ -936,8 +928,8 @@ body {
     display: inline-block;
     width: 14px;
     height: 14px;
-    background: var(--yellow);
-    border: 2px solid var(--yellow-dark);
+    background: var(--green-light);
+    border: 2px solid var(--green-mid);
 }
 
 .thesis-grid {
@@ -961,8 +953,8 @@ body {
 }
 
 .thesis-cell.delivery {
-    background: var(--yellow);
-    border: 2px solid var(--yellow-dark);
+    background: var(--green-light);
+    border: 2px solid var(--green-mid);
 }
 
 .thesis-cell.clickable {
@@ -982,7 +974,7 @@ body {
 }
 
 .thesis-parcel {
-    color: #f59e0b;
+    color: var(--accent-green);
     font-size: 1.2rem;
     line-height: 1;
     position: absolute;
@@ -1047,7 +1039,7 @@ body {
     }
 
     .section {
-        padding: 2.5rem 0;
+        padding: 3.5rem 0;
     }
 
     /* Stack the navbar: section links centered on top, CV button centered below. */
@@ -1069,7 +1061,7 @@ body {
     }
 
     .container {
-        padding-top: var(--navbar-height, 90px);
+        padding-top: var(--navbar-height, 100px);
     }
 
     .interactive-grid {
