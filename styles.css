@@ -574,10 +574,31 @@ body {
 }
 
 .small-text {
-    font-size: 0.8rem;
-    color: var(--muted-text);
-    font-weight: 600;
-    margin-top: 0.5rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    font-weight: 500;
+    text-align: left;
+    /* Push the explainer to the bottom so cards of different heights line up. */
+    margin-top: auto;
+    padding: 1rem 1.1rem;
+    background: var(--surface-2);
+    border: 2px solid var(--border-color);
+    border-left: 5px solid var(--green);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+}
+
+/* "How it works" cue above the explainer body. */
+.small-text::before {
+    content: "How it works";
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 0.4rem;
 }
 
 /* ===== KEYPAD (MNIST predictions) ===== */
@@ -880,6 +901,7 @@ body {
 
 .em {
     font-style: italic;
+    font-weight: 600;
     color: var(--heading-color);
 }
 

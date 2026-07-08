@@ -161,7 +161,7 @@
                 <p><strong>OpenCity Labs (Startup)</strong> | Remote | <span class="time">August 2025 - <span class="present">Present</span></span></p>
                 <p class="bullet-list">
                     &bull; Single-handedly engineered an NLP pipeline for RAG ingestion with PII anonymization via a fine-tuned <span class="em">Transformer-based NER model</span> and an in-memory reversible dictionary, processing <span class="hl">50k+ daily inputs</span>.<br>
-                    &bull; Built a <span class="em">spaCy</span> detection + LLM fallback guard to fix a cross-lingual model failure in a RAG pipeline: despite explicit English instructions, Italian-only retrieved context caused the model to default to Italian in 35-40% of non-Italian queries, eliminating the error. Released to <span class="hl">10+ clients</span>.<br>
+                    &bull; Built a <span class="em">spaCy</span> detection + LLM fallback guard to fix a cross-lingual model failure in a RAG pipeline: despite explicit English instructions, Italian-only retrieved context caused the model to default to Italian in <span class="hl">35-40%</span> of non-Italian queries, eliminating the error. Released to <span class="hl">10+ clients</span>.<br>
                     &bull; Developed an open-source agentic AI system. Designed hybrid RAG architecture <span class="em">(vector + full-text reciprocal rank fusion)</span> to solve domain-specific retrieval failures: pure embedding search missed legal acronyms and regulatory references, while keyword search failed on semantic ones. Built <span class="em">MCP</span>-based tool-calling infrastructure with human-in-the-loop approval, reducing targeted workflows from <span class="hl">days to hours</span>.<br>
                     &bull; Dockerized all services with <span class="em">GitLab CI</span> pipelines automating testing and Docker image builds for consistent, reliable deployments.
                 </p>
@@ -190,7 +190,7 @@
                 <p><strong>University of Trento</strong> | Trento, Italy | <span class="time">September 2021 - March 2025</span></p>
                 <p class="bullet-list">
                     &bull; <strong>Thesis:</strong> <span class="em">Exploring the Use of LLMs for Agent Planning: Strengths and Weaknesses</span> - investigated how large language models perform on planning and decision-making tasks, identifying capabilities and failure modes. Developed a rigorous uncertainty quantification methodology based on <span class="em">token log-probabilities</span> and <span class="em">conformal prediction</span>, generating heatmap visualizations across <span class="hl">36 test cases</span> (3 LLM versions, 4 map sizes, 2 tasks) to characterize spatial reasoning quality across the entire state space.<br>
-                    &bull; <strong>Relevant Courses:</strong> <span class="em">Machine Learning, Deep Learning, Natural Language Understanding, Automated Planning, Law &amp; Ethics in AI, Fundamentals of AI, Signal Processing, AI for Finance, High Performance Computing.</span>
+                    &bull; <strong>Relevant Courses:</strong> Machine Learning, Deep Learning, Natural Language Understanding, Automated Planning, Law &amp; Ethics in AI, Fundamentals of AI, Signal Processing, AI for Finance, High Performance Computing.
                 </p>
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/master_thesis/blob/main/modolo_davide_ais_2023_2024.pdf" target="_blank" class="tag link">Thesis Report</a>
@@ -203,7 +203,7 @@
                 <p><strong>University of Trento</strong> | Trento, Italy | <span class="time">September 2017 - June 2021</span></p>
                 <p class="bullet-list">
                     &bull; <strong>Thesis:</strong> <span class="em">Healthy Plus - Redesign and evolution of an Android application for monitoring healthy lifestyles.</span><br>
-                    &bull; <strong>Core Topics:</strong> <span class="em">Algorithms &amp; Data Structures, Software Engineering, Database Systems, Operating Systems, Computer Architectures, Distributed Networks.</span>
+                    &bull; <strong>Core Topics:</strong> Algorithms &amp; Data Structures, Software Engineering, Database Systems, Operating Systems, Computer Architectures, Distributed Networks.
                 </p>
                 <div class="tags">
                     <span class="tag">Java</span> <span class="tag">Android</span> <span class="tag">SQL</span> <span class="tag">Software Engineering</span> <span class="tag">Data Structures</span> <span class="tag">Operating Systems</span> <span class="tag">Computer Networks</span>
@@ -221,7 +221,7 @@
                 <p class="bullet-list">
                     &bull; Built a multi-stage deep learning pipeline to classify Lung Ultrasound frames into 4 severity scores (0-3) using a fine-tuned <span class="em">ResNet18</span> on <span class="hl">~47k frames</span> from 11 patients, with patient-based train/test splitting to prevent data leakage.<br>
                     &bull; Added a binary confidence classifier that detects uncertain predictions by analyzing softmax output patterns, and a <span class="em">t-SNE</span>-based image similarity retrieval module that finds visually similar training images when the primary classifier is not confident.<br>
-                    &bull; Designed an aggressive augmentation pipeline <span class="em">(affine transforms, brightness scaling, Gaussian blur, horizontal flips)</span> to combat overfitting on the limited medical dataset.
+                    &bull; Designed an aggressive augmentation pipeline (affine transforms, brightness scaling, Gaussian blur, horizontal flips) to combat overfitting on the limited medical dataset.
                 </p>
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/Lung-Ultrasound-Image-Classifier/blob/master/ProjectPresentation.pdf" target="_blank" class="tag link">Slides</a>
@@ -238,7 +238,7 @@
                 <p class="bullet-list">
                     &bull; Implemented 5 neural architectures from scratch in <span class="em">PyTorch</span> for multi-task joint intent classification and slot filling on <span class="em">ATIS</span> and <span class="em">SNIPS</span> datasets: baseline LSTM, bidirectional LSTM, encoder-decoder, and fine-tuned <span class="em">BERT</span> and <span class="em">ERNIE 2.0</span>.<br>
                     &bull; Custom encoder-decoder achieved the best overall results (<span class="hl">94.95% slot F1, 96.42% intent accuracy</span> on ATIS), outperforming pretrained transformers which suffered from a vocabulary mismatch when custom slot-label tokens were added to their tokenizer.<br>
-                    &bull; Each model trained 5 times with different random seeds and reported with <span class="em">mean &plusmn; standard deviation</span>; used early stopping and custom LR scheduling (halve every 3 epochs without improvement).
+                    &bull; Each model trained 5 times with different random seeds and reported with mean &plusmn; standard deviation; used early stopping and custom LR scheduling (halve every 3 epochs without improvement).
                 </p>
                 <div class="tags">
                     <a href="https://github.com/davidemodolo/NLU_Intent_and_Slot/blob/master/NLU_Report_Modolo.pdf" target="_blank" class="tag link">Report</a>
@@ -436,7 +436,7 @@
                         </div>
                     </div>
 
-                    <p class="small-text">A stripped-down, minimal demo of one small slice of my <span class="em">thesis</span>. Uses the same <span class="em">LaMini-Flan-T5-77M</span> model as the LLM Playground (shared session). The agent navigates a 5×5 grid to pick up a parcel and deliver it to the delivery zone. Each visited cell shows the model's <span class="hl">action confidence</span> (%). Click any cell to place the parcel, then press Start for auto-play or Step for manual control. Click a visited cell to inspect the full probability distribution.</p>
+                    <p class="small-text">A stripped-down, minimal demo of one small slice of my <span class="em">thesis</span>. Uses the same <span class="em">LaMini-Flan-T5-77M</span> model as the LLM Playground (shared session). The agent navigates a 5×5 grid to pick up a parcel and deliver it to the delivery zone. Each visited cell shows the model's action confidence as a percentage. Click any cell to place the parcel, then press Start for auto-play or Step for manual control. Click a visited cell to inspect the full probability distribution.</p>
                 </div>
             </div>
         </section>
