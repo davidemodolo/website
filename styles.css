@@ -155,7 +155,7 @@ body {
 .section h2 {
     color: var(--black);
     margin-bottom: 2.5rem;
-    font-weight: 900;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: -0.01em;
     display: inline-block;
@@ -275,7 +275,7 @@ body {
     color: var(--heading-color);
     margin-bottom: 0.4rem;
     font-size: 1.25rem;
-    font-weight: 800;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.01em;
     font-family: 'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
