@@ -15,8 +15,8 @@ Professional summary: AI/ML Engineer with a Master's in AI Systems, focused on N
 
 ### Experience
 Two roles:
-- **OpenCity Labs** (2025-present): NLP pipeline engineering, RAG ingestion with PII anonymization, cross-lingual guard, agentic AI system with MCP tool-calling, Docker/GitLab CI deployment
-- **Eurecat** (2024): Token-level uncertainty estimation for planning tasks, RAG system for user preferences, multimodal agent with LLaVA
+- **OpenCity Labs** (2025-present): RAG ingestion pipeline with PII anonymization (50k+ daily inputs), cross-lingual chatbot fix, agentic AI platform with MCP tool-calling, serverless AI automation flows (Windmill), Docker/GitLab CI deployment
+- **Eurecat** (2024): KnowNo-based uncertainty alignment for LLM planners (token log-probabilities, GPT-4o / Llama 3.1), uncertainty-driven ask-or-act loop with RAG over user preferences, LLaVA multimodal exploration
 
 ### Education
 - **MSc in AI Systems** @ University of Trento: thesis on LLMs for agent planning, uncertainty quantification via token log-probabilities and conformal prediction

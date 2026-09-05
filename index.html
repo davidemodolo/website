@@ -162,27 +162,33 @@
             <div class="card">
                 <h3>Machine Learning Engineer, R&amp;D</h3>
                 <p><strong>OpenCity Labs (Startup)</strong> | Remote | <span class="time">August 2025 - <span class="present">Present</span></span></p>
+                <!-- METRIC TODO: check the actual false-positive reduction numbers from the fine-tuning experiments and add them to the first bullet (e.g. "cutting false positives by X% vs the stock model"). -->
                 <p class="bullet-list">
-                    &bull; Engineered an NLP pipeline for RAG ingestion with PII anonymization via a fine-tuned <span class="em">Transformer-based NER model</span> and an in-memory reversible dictionary, processing <span class="hl">50k+ daily inputs</span>.<br>
-                    &bull; Built a guard to fix a cross-lingual model failure in a RAG pipeline, combining <span class="em">spaCy</span> detection with an LLM fallback: despite explicit English instructions, Italian-only retrieved context caused the model to default to Italian in <span class="hl">35-40%</span> of non-Italian queries, resolving the failure. Released to <span class="hl">10+ clients</span>.<br>
-                    &bull; Developing an open-source agentic AI system with an orchestrator coordinating specialized <span class="em">subagents</span>. Designed a hybrid RAG architecture <span class="em">(vector + full-text reciprocal rank fusion)</span> to fix domain-specific retrieval failures. Built <span class="em">MCP</span>-based tool-calling infrastructure with human-in-the-loop approval, cutting targeted workflows from <span class="hl">days to hours</span>.<br>
-                    &bull; Centralized AI tooling scattered across repositories into a unified <span class="em">serverless</span> service on <span class="em">Windmill</span>, simplifying maintenance and deployment.<br>
-                    &bull; Dockerized all services with <span class="em">GitLab CI</span> pipelines automating testing and Docker image builds for consistent, reliable deployments.
+                    &bull; Fine-tuned a <span class="em">spaCy multilingual NER model</span> (<span class="em">xx_ent_wiki_sm</span>) for PII detection on Italian citizen messages: ran error analysis over real queries to diagnose false positives (e.g., sentence-initial verbs tagged as entities), improving precision on names, locations, and organizations, and paired the model with regex rules for structured PII (emails, phone numbers); currently running in-process in the production service.<br>
+                    &bull; Engineered the RAG pipeline over <span class="em">public-administration websites</span>: nightly crawls syncing <span class="hl">50k+ pages</span> (added/changed/removed) into the knowledge base, with a PII anonymization layer — regex rules for structured data (emails, phone numbers), a whitelist of entity names found on the public pages so legitimate names stay intact, and reversible in-memory anonymization of citizen messages.<br>
+                    &bull; Fixed a cross-lingual failure in the client chatbot, where Italian-only retrieved context caused <span class="hl">35% of non-Italian queries</span> to be answered in Italian: added answer-language mismatch detection with LLM translation fallback (<span class="em">AWS Bedrock</span>), cutting the failure rate to <span class="hl">~1%</span>.<br>
+                    &bull; Co-designed an open-source agentic AI platform in which an orchestrator coordinates specialized subagents: architected the agentic loop and <span class="em">MCP</span>-based tool-calling with human-in-the-loop approval.<br>
+                    &bull; Centralized AI automation flows scattered across repositories into <span class="em">Windmill</span>, a serverless automation platform (issue reviews, MR reviews, sales analytics), including agentic loops with sandboxed coding agents that run code and open MRs; exposed some flows to clients as MCP tools. Dockerized all services with <span class="em">GitLab CI</span> automating tests and image builds.
                 </p>
                 <div class="tags">
-                    <span class="tag">Python</span> <span class="tag">AI</span> <span class="tag">NLP</span> <span class="tag">RAG</span> <span class="tag">LLM</span> <span class="tag">Docker</span> <span class="tag">AWS</span> <span class="tag">Serverless</span> <span class="tag">FastAPI</span>
+                    <span class="tag">Python</span> <span class="tag">FastAPI</span> <span class="tag">Docker</span> <span class="tag">AWS Bedrock</span> <span class="tag">Windmill</span> <span class="tag">GitLab CI</span>
+                    <a href="https://gitlab.com/opencity-labs/opencity-ai/anonimizzazione_pa" target="_blank" class="tag link">NER Model</a>
+                    <a href="https://gitlab.com/opencity-labs/opencity-ai/chatbotv2" target="_blank" class="tag link">Chatbot</a>
+                    <a href="https://gitlab.com/opencity-labs/opencity-ai/ai-orchestrator" target="_blank" class="tag link">AI Orchestrator</a>
                 </div>
+                <!-- FUTURE IDEA: continuous-learning setup for a chat classifier ("goal achieved" / "goal not achieved" / "no goal"); training loop will live in GitLab CI. -->
             </div>
             <div class="card">
                 <h3>Intern / AI Engineer</h3>
                 <p><strong>Eurecat Technology Center</strong> | Barcelona, Spain | <span class="time">April 2024 - June 2024</span></p>
                 <p class="bullet-list">
-                    &bull; Implemented a token-level uncertainty estimation framework for planning tasks by analyzing log-probabilities, benchmarking performance across proprietary (<span class="em">GPT-4o</span>) and locally quantized models (<span class="em">Llama 3.1 via llama.cpp</span>).<br>
-                    &bull; Developed a RAG system utilizing <span class="em">gte-large</span> embeddings to retrieve context-aware user preferences, reducing model hallucination in recurrent decision-making scenarios.<br>
-                    &bull; Prototyped a multimodal agent integrating <span class="em">LLaVA</span> for visual reasoning tasks and validated the uncertainty reconstruction approach across multiple simulated environments.
+                    &bull; Implemented <span class="em">KnowNo</span>, an uncertainty alignment framework for LLM planners (Google's "Robots That Ask For Help" paper): token-level log-probability analysis across <span class="em">GPT-4o</span> and locally quantized <span class="em">Llama 3.1</span> (llama.cpp), delivered as a reusable Python package.<br>
+                    &bull; Researched an uncertainty-driven action-selection loop for a robotic assistant in elderly care: when several candidate actions pass the calibrated threshold, the planner is re-prompted with only the most probable options, or it stops and waits for user input — which is then saved via RAG (<span class="em">gte-large</span> embeddings) to inform future decisions.<br>
+                    &bull; Extending beyond text: tested <span class="em">LLaVA</span> on photos of real-life scenes to bring visual input into the uncertainty framework.
                 </p>
                 <div class="tags">
-                    <span class="tag">Python</span> <span class="tag">PyTorch</span> <span class="tag">Hugging Face</span> <span class="tag">OpenAI API</span> <span class="tag">LLMs</span> <span class="tag">RAG</span> <span class="tag">llama.cpp</span> <span class="tag">Ollama</span> <span class="tag">Multimodal AI</span>
+                    <span class="tag">Python</span> <span class="tag">PyTorch</span> <span class="tag">Hugging Face</span> <span class="tag">OpenAI API</span> <span class="tag">llama.cpp</span> <span class="tag">Ollama</span> <span class="tag">LLaVA</span>
+                    <a href="https://arxiv.org/abs/2307.01928" target="_blank" class="tag link">KnowNo Paper</a>
                 </div>
             </div>
         </section>
