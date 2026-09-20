@@ -15,7 +15,7 @@ Professional summary: AI/ML Engineer with a Master's in AI Systems, focused on N
 
 ### Experience
 Two roles:
-- **OpenCity Labs** (2025-present): RAG ingestion pipeline with PII anonymization (50k+ daily inputs), cross-lingual chatbot fix, agentic AI platform with MCP tool-calling, serverless AI automation flows (Windmill), Docker/GitLab CI deployment
+- **OpenCity Labs** (2025-present): 50k+ public-administration pages ingested daily into the chatbot knowledge base, fine-tuned spaCy NER model + regex allowed-list for PII anonymization of citizen messages, cross-lingual chatbot fix (35% → ~1%), agentic AI chat platform plugging into municipal officers' workflows (MCP tool-calling with human-in-the-loop), AI automation flows centralized in Windmill (open-source orchestration framework), chatbot on AWS EC2, Docker/GitLab CI deployment
 - **Eurecat** (2024): KnowNo-based uncertainty alignment for LLM planners (token log-probabilities, GPT-4o / Llama 3.1), uncertainty-driven ask-or-act loop with RAG over user preferences, LLaVA multimodal exploration
 
 ### Education

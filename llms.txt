@@ -1,16 +1,36 @@
 # Davide Modolo
 
-> AI & Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems. Specializes in Deep Learning, NLP, Transformers, LLMs, RAG, and MLOps (Docker, CI/CD, model deployment & monitoring). Currently building production NLP pipelines and agentic AI systems. Open to new opportunities.
+> AI & Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems, focused on owning models end to end: training, fine-tuning, evaluation, deployment, and serving. Production experience across NLP, LLMs, RAG, and computer vision, with a bias for systems that know when they are unsure, keep humans in the loop, and treat privacy as a design constraint. Goal: work on machine learning models at scale, across language, vision, and prediction. Open to new opportunities.
 
 - Website: https://www.davidemodolo.dev/
 - LinkedIn: https://www.linkedin.com/in/davide-modolo
 - GitHub: https://github.com/davidemodolo
 - Resume: https://www.davidemodolo.dev/Davide_Modolo_Resume.pdf
+- Location: Italy (remote today); open to relocation within the EU. EU citizen, no visa sponsorship required for EU roles.
+
+## What I'm looking for
+
+- Roles: Machine Learning Engineer, AI Engineer, Applied ML Engineer, Research Engineer, Model Serving / ML Platform Engineer.
+- Work: training, fine-tuning, evaluating, and serving models (LLMs, NLP, computer vision, prediction), in production and at scale.
+- Areas I'm excited about: LLMs, computer vision, prediction and recommender systems.
+
+## Why I'm a good fit
+
+- End-to-end ownership: from data and fine-tuning to deployment and monitoring — production systems real people use (in-process NER on Italian citizen messages; chatbot on AWS EC2 with Grafana/Prometheus monitoring).
+- Production NLP/LLM engineering: 50k+ pages ingested daily through an NER + regex allowed-list anonymization layer; cross-lingual failure cut from 35% to ~1%, released to 10+ clients; tool-calling with human-in-the-loop approval; hybrid RAG (vector + full-text fused with reciprocal rank fusion).
+- Breadth across model families: LLM planners (GPT-4o, Llama 3.1 via llama.cpp), encoders (BERT, ERNIE, spaCy), vision (ResNet18/34, LLaVA, domain adaptation, medical imaging).
+- Safety and privacy by design: uncertainty alignment (KnowNo, calibrated thresholds, ask-the-user policy), PII anonymization shipped in production.
+- Engineering, not just notebooks: Docker, GitLab CI, AWS (EC2, Bedrock), FastAPI, Prometheus, Grafana.
+- Open source: merged fix in the Windmill orchestration engine (18k+ stars), plus contributions to cc_scrapycat and ccat-dietician.
+
+## Currently
+
+- Preparing two AWS Associate-level certifications: Cloud and Machine Learning (in progress).
 
 ## Experience
 
-- **AI & Machine Learning Engineer, R&D - OpenCity Labs** (Aug 2025 - Present, Remote): NLP pipelines for RAG ingestion with PII anonymization via a fine-tuned Transformer NER model (50k+ daily inputs); cross-lingual guardrails with spaCy + LLM fallback; open-source agentic AI with hybrid RAG (vector + full-text reciprocal rank fusion) and MCP tool-calling with human-in-the-loop; Dockerized services with GitLab CI.
-- **Intern / AI Engineer - Eurecat Technology Center** (Apr 2024 - Jun 2024, Barcelona): Token-level uncertainty estimation for planning tasks (GPT-4o, Llama 3.1 via llama.cpp); RAG with gte-large embeddings to reduce hallucination; multimodal agent with LLaVA.
+- **AI & Machine Learning Engineer, R&D - OpenCity Labs** (Aug 2025 - Present, Remote): developed and fine-tuned a spaCy multilingual NER model for PII detection, deployed in-process in production on Italian citizen messages; engineered the chatbot data pipeline (50k+ public-administration pages ingested daily), where the NER model + regex rules build an allowed-list so that citizen messages are anonymized only outside it, keeping them meaningful; cut a cross-lingual failure from 35% to ~1% of non-Italian queries with LLM translation fallback (AWS Bedrock) — a fix released to 10+ clients; co-designed an open-source AI platform for municipal officers — an orchestrator coordinating specialized subagents, with tool-calling and human-in-the-loop approval on proposed actions, reducing targeted workflows from days to hours — including hybrid RAG retrieval (vector + full-text reciprocal rank fusion); centralized AI automation flows in Windmill, an open-source orchestration framework, exposing some as callable tools to the platform and contributing an upstream fix to its Rust engine; chatbot on AWS EC2, Dockerized services with GitLab CI.
+- **Machine Learning Research Intern - Eurecat Technology Center** (Apr 2024 - Jun 2024, Barcelona): token-level uncertainty estimation for planning tasks (GPT-4o, Llama 3.1 via llama.cpp); RAG with gte-large embeddings to reduce hallucination; LLaVA multimodal experiments validated across ~10 simulated environments.
 
 ## Education
 
@@ -19,10 +39,14 @@
 
 ## Skills
 
-- AI/ML: Deep Learning, NLP, Transformers, LLMs, RAG, Computer Vision, Multimodal AI, Automated Planning
-- Frameworks/Tools: PyTorch, Hugging Face, spaCy, ONNX Runtime, FastAPI
-- MLOps/Infra: Docker, CI/CD (GitLab CI), AWS EC2, Prometheus, Grafana, SurrealDB, HPC/MPI
-- Languages: Python, C, Java, JavaScript/Node.js
+- AI/ML: Deep Learning, Machine Learning, NLP, LLMs, RAG, Computer Vision, Image Classification, Multimodal AI, Uncertainty Quantification, Automated Planning, Transfer Learning, Domain Adaptation
+- Frameworks/Tools: PyTorch, Hugging Face, Transformers, spaCy, llama.cpp, ONNX Runtime, FastAPI
+- MLOps/Infra: Docker, CI/CD (GitLab CI), AWS (EC2, Bedrock), Model Deployment & Serving, Prometheus, Grafana, SurrealDB, HPC/MPI
+- Languages: Python, C, Java, JavaScript/Node.js, SQL, Bash
+
+## Keywords
+
+Machine Learning Engineer, AI Engineer, Applied Scientist, Research Engineer, Deep Learning, PyTorch, Transformers, Large Language Models, LLM, Fine-Tuning, Model Training, Model Evaluation, Model Serving, Model Deployment, Inference, Quantization, llama.cpp, Retrieval-Augmented Generation, RAG, NLP, Named Entity Recognition, NER, PII Anonymization, Computer Vision, Image Classification, Medical Imaging, Domain Adaptation, Uncertainty Quantification, Human-in-the-Loop, MLOps, Docker, GitLab CI, AWS, EC2, Bedrock, Prometheus, Grafana, Python, SQL, Open Source.
 
 ## Projects
 
