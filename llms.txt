@@ -1,6 +1,6 @@
 # Davide Modolo
 
-> AI & Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems, focused on owning models end to end: training, fine-tuning, evaluation, deployment, and serving. Production experience across NLP, LLMs, RAG, and computer vision, with a bias for systems that know when they are unsure, keep humans in the loop, and treat privacy as a design constraint. Goal: work on machine learning models at scale, across language, vision, and prediction. Open to new opportunities.
+> AI & Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems, building and shipping NLP and LLM systems: fine-tuning, evaluation, deployment, and serving in production. Experience across NLP, LLMs, RAG, and computer vision, with a bias for systems that know when they are unsure, keep humans in the loop, and treat privacy as a design constraint. Goal: grow into end-to-end model ownership at scale, across language, vision, and prediction. Open to new opportunities.
 
 - Website: https://www.davidemodolo.dev/
 - LinkedIn: https://www.linkedin.com/in/davide-modolo
@@ -16,7 +16,7 @@
 
 ## Why I'm a good fit
 
-- End-to-end ownership: from data and fine-tuning to deployment and monitoring — production systems real people use (in-process NER on Italian citizen messages; chatbot on AWS EC2 with Grafana/Prometheus monitoring).
+- From fine-tuning to production: took models through error analysis, fine-tuning, in-process deployment, and monitoring — systems real people use (NER on Italian citizen messages; chatbot on AWS EC2 with Grafana/Prometheus monitoring).
 - Production NLP/LLM engineering: 50k+ pages ingested daily through an NER + regex allowed-list anonymization layer; cross-lingual failure cut from 35% to ~1%, released to 10+ clients; tool-calling with human-in-the-loop approval; hybrid RAG (vector + full-text fused with reciprocal rank fusion).
 - Breadth across model families: LLM planners (GPT-4o, Llama 3.1 via llama.cpp), encoders (BERT, ERNIE, spaCy), vision (ResNet18/34, LLaVA, domain adaptation, medical imaging).
 - Safety and privacy by design: uncertainty alignment (KnowNo, calibrated thresholds, ask-the-user policy), PII anonymization shipped in production.
