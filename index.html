@@ -79,21 +79,10 @@
         ]
     }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="preload" href="fonts/titillium-web-700.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/titillium-web-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css">
 
-    <!--
-      KNOWN ISSUE / INTENTIONAL WORKAROUND: TensorFlow.js is loaded twice on this page - the
-      standalone tf.min.js below (used by the MNIST digit classifier) and the copy that ml5.js
-      bundles internally (used by the sentiment demo). Two TFJS cores register into TFJS's shared
-      global registry, producing a burst of "kernel/backend already registered" and "Platform ...
-      already been set" console messages. The filter below hides ONLY those specific
-      duplicate-registration messages so they don't drown the console; every OTHER warning/error
-      is left visible. We keep the two-library setup on purpose (tfjs for MNIST, ml5 for sentiment)
-      and simply suppress this known noise - to be revisited if we ever consolidate on one runtime.
-    -->
     <script>
         (function () {
             const DUP_REGISTRATION = [
@@ -115,13 +104,6 @@
             }
         })();
     </script>
-
-    <!-- tfjs pinned to 1.7.4 for the MNIST demo: this MATCHES the tfjs version bundled inside
-         ml5 0.12.2, so the two copies share a compatible engine and ml5's sentiment predict()
-         works (a newer standalone tfjs corrupts ml5's older engine). ml5 0.12.2 is the last
-         release shipping the `sentiment` model (ml5 1.x "next-gen" dropped it). -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
-    <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0B1R5DZQGV"></script>
@@ -157,10 +139,10 @@
             <h1 id="about-heading" class="hero-title">DAVIDE MODOLO</h1>
             <p class="hero-subtitle">AI &bull; Machine Learning &bull; Deep Learning</p>
             <p class="hero-description">
-                AI &amp; Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems. Currently building production NLP and agentic AI systems at OpenCity Labs: fine-tuned NER models, RAG pipelines, and MCP tool-calling deployed on AWS. Services containerized with Docker, shipped through GitLab CI.<br><a href="https://www.linkedin.com/in/davide-modolo" target="_blank" rel="noopener noreferrer" class="opportunities-link"><strong>Open to new opportunities.</strong></a>
+                AI &amp; Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems. Currently building production ML at OpenCity Labs: fine-tuning and evaluating NLP models for PII detection, and the retrieval behind a citizen-support chatbot on AWS. Services containerized with Docker, shipped through GitLab CI.<br><a href="https://www.linkedin.com/in/davide-modolo" target="_blank" rel="noopener noreferrer" class="opportunities-link"><strong>Open to new opportunities.</strong></a>
             </p>
             <p class="hero-description">
-                <strong>What drives me:</strong> shipping ML systems, not demos. I fine-tune and evaluate NLP and vision models, take them into production, and monitor them there; I care most about systems that know when they're unsure, keep humans in the loop, and treat privacy as a design constraint. My goal is to grow into end-to-end model ownership, at scale, across language, vision, and prediction.
+                <strong>What drives me:</strong> getting models from notebooks into production. I care about evaluation, monitoring, and systems that know when they're unsure. I'm early in my career and still learning, and my goal is to keep working on production ML and get better at all of it, from data to deployment and monitoring. Keeping humans in the loop and treating privacy as a design constraint are requirements of my current job.
             </p>
         </section>
 
@@ -319,7 +301,7 @@
                 <div class="card interactive-card">
                     <h3>Digit Classifier</h3>
                     <p>CNN trained on MNIST, running in your browser via TensorFlow.js</p>
-                    <div class="mnist-status" id="mnist-status">Loading model...</div>
+                    <div class="mnist-status" id="mnist-status">Model loads as this section scrolls into view.</div>
                     <div class="mnist-container">
                         <div class="mnist-input-area">
                             <canvas id="mnist-canvas" class="mnist-canvas" width="280" height="280"></canvas>
@@ -338,7 +320,7 @@
                 <div class="card interactive-card">
                     <h3>Sentiment Analysis</h3>
                     <p>In-browser sentiment scoring with a pre-trained neural network</p>
-                    <div class="sentiment-status" id="sentiment-status">Loading sentiment model...</div>
+                    <div class="sentiment-status" id="sentiment-status">Model loads on first analysis.</div>
                     <div class="sentiment-container">
                         <div class="sentiment-input-area">
                             <textarea id="sentiment-input" class="sentiment-textarea" placeholder="Type your sentence here..." maxlength="500" rows="3">We should hire Davide Modolo!</textarea>
@@ -484,8 +466,8 @@
         </section>
     </main>
 
-    <script src="js/mnist-classifier.js"></script>
-    <script src="js/sentiment-analyzer.js"></script>
+    <script defer src="js/mnist-classifier.js"></script>
+    <script defer src="js/sentiment-analyzer.js"></script>
     <!-- Import map must precede the module script that imports "@huggingface/transformers". -->
     <script type="importmap">
     {

@@ -1,6 +1,6 @@
 # Davide Modolo
 
-> AI & Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems, building and shipping NLP and LLM systems: fine-tuning, evaluation, deployment, and serving in production. Experience across NLP, LLMs, RAG, and computer vision, with a bias for systems that know when they are unsure, keep humans in the loop, and treat privacy as a design constraint. Goal: grow into end-to-end model ownership at scale, across language, vision, and prediction. Open to new opportunities.
+> AI & Machine Learning Engineer with a Master's degree in Artificial Intelligence Systems, building and shipping NLP and LLM systems: fine-tuning, evaluation, deployment, and serving in production. Experience across NLP, LLMs, RAG, and computer vision, with a bias for systems that know when they are unsure, keep humans in the loop, and treat privacy as a design constraint. Goal: keep working on production ML and get better at all of it, from data to deployment and monitoring. Open to new opportunities.
 
 - Website: https://www.davidemodolo.dev/
 - LinkedIn: https://www.linkedin.com/in/davide-modolo
@@ -11,12 +11,12 @@
 ## What I'm looking for
 
 - Roles: Machine Learning Engineer, AI Engineer, Applied ML Engineer, Research Engineer, Model Serving / ML Platform Engineer.
-- Work: training, fine-tuning, evaluating, and serving models (LLMs, NLP, computer vision, prediction), in production and at scale.
+- Work: training, fine-tuning, evaluating, and serving models (LLMs, NLP, computer vision, prediction), in production.
 - Areas I'm excited about: LLMs, computer vision, prediction and recommender systems.
 
 ## Why I'm a good fit
 
-- From fine-tuning to production: took models through error analysis, fine-tuning, in-process deployment, and monitoring — systems real people use (NER on Italian citizen messages; chatbot on AWS EC2 with Grafana/Prometheus monitoring).
+- From fine-tuning to production: took models through error analysis, fine-tuning, in-process deployment, and monitoring, in systems real people use (NER on Italian citizen messages; chatbot on AWS EC2 with Grafana/Prometheus monitoring).
 - Production NLP/LLM engineering: 50k+ pages ingested daily through an NER + regex allowed-list anonymization layer; cross-lingual failure cut from 35% to ~1%, released to 10+ clients; tool-calling with human-in-the-loop approval; hybrid RAG (vector + full-text fused with reciprocal rank fusion).
 - Breadth across model families: LLM planners (GPT-4o, Llama 3.1 via llama.cpp), encoders (BERT, ERNIE, spaCy), vision (ResNet18/34, LLaVA, domain adaptation, medical imaging).
 - Safety and privacy by design: uncertainty alignment (KnowNo, calibrated thresholds, ask-the-user policy), PII anonymization shipped in production.
@@ -29,7 +29,7 @@
 
 ## Experience
 
-- **AI & Machine Learning Engineer, R&D - OpenCity Labs** (Aug 2025 - Present, Remote): developed and fine-tuned a spaCy multilingual NER model for PII detection, deployed in-process in production on Italian citizen messages; engineered the chatbot data pipeline (50k+ public-administration pages ingested daily), where the NER model + regex rules build an allowed-list so that citizen messages are anonymized only outside it, keeping them meaningful; cut a cross-lingual failure from 35% to ~1% of non-Italian queries with LLM translation fallback (AWS Bedrock) — a fix released to 10+ clients; co-designed an open-source AI platform for municipal officers — an orchestrator coordinating specialized subagents, with tool-calling and human-in-the-loop approval on proposed actions, reducing targeted workflows from days to hours — including hybrid RAG retrieval (vector + full-text reciprocal rank fusion); centralized AI automation flows in Windmill, an open-source orchestration framework, exposing some as callable tools to the platform and contributing an upstream fix to its Rust engine; chatbot on AWS EC2, Dockerized services with GitLab CI.
+- **AI & Machine Learning Engineer, R&D - OpenCity Labs** (Aug 2025 - Present, Remote): developed and fine-tuned a spaCy multilingual NER model for PII detection, deployed in-process in production on Italian citizen messages; engineered the chatbot data pipeline (50k+ public-administration pages ingested daily), where the NER model + regex rules build an allowed-list so that citizen messages are anonymized only outside it, keeping them meaningful; cut a cross-lingual failure from 35% to ~1% of non-Italian queries with LLM translation fallback (AWS Bedrock); the fix was released to 10+ clients; co-designed an open-source AI platform for municipal officers: an orchestrator coordinating specialized subagents, with tool-calling and human-in-the-loop approval on proposed actions, reducing targeted workflows from days to hours, including hybrid RAG retrieval (vector + full-text reciprocal rank fusion); centralized AI automation flows in Windmill, an open-source orchestration framework, exposing some as callable tools to the platform and contributing an upstream fix to its Rust engine; chatbot on AWS EC2, Dockerized services with GitLab CI.
 - **Machine Learning Research Intern - Eurecat Technology Center** (Apr 2024 - Jun 2024, Barcelona): token-level uncertainty estimation for planning tasks (GPT-4o, Llama 3.1 via llama.cpp); RAG with gte-large embeddings to reduce hallucination; LLaVA multimodal experiments validated across ~10 simulated environments.
 
 ## Education

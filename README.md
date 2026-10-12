@@ -5,8 +5,9 @@ Personal website: an interactive, brutalist-styled CV running entirely client-si
 ## Tech Stack
 
 - Pure HTML/CSS/JS, no bundler, no framework
-- **Titillium Web** for headings and UI elements, **Consolas** for body text
+- **Titillium Web** (self-hosted, latin subset, preloaded) for headings and UI elements, **Consolas** for body text
 - Dark brutalist theme: thick borders, hard shadows, high-contrast green accents
+- All ML libraries and model weights are **lazy-loaded**: nothing heavy is fetched with the page
 
 ## Sections
 
@@ -50,6 +51,7 @@ Links to LinkedIn and GitHub profiles, plus downloadable CV.
 .
 ├── index.html                     # single-page site
 ├── styles.css                     # all styles (dark brutalist theme)
+├── fonts/                         # self-hosted Titillium Web woff2 (latin subset)
 ├── js/
 │   ├── mnist-classifier.js        # CNN digit recognition
 │   ├── sentiment-analyzer.js      # sentiment scoring via ml5.js

@@ -1,3 +1,39 @@
+/* ===== FONTS (self-hosted, latin subset) =====
+   Self-hosting removes the render-blocking Google Fonts CSS request and the two
+   third-party connections (fonts.googleapis.com + fonts.gstatic.com). The latin
+   subset is all this site needs; font-display: swap keeps text visible while loading. */
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/titillium-web-400.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('fonts/titillium-web-600.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('fonts/titillium-web-700.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url('fonts/titillium-web-900.woff2') format('woff2');
+}
+
 /* ===== NEOBRUTALISM DARK THEME ===== */
 :root {
     /* Neobrutalism palette */
